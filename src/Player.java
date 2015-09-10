@@ -10,5 +10,14 @@ public class Player extends Entity
     super("Player", x, y);
   }
 
+  public void addSpeed()
+  {
+
+  }
+
+  public void setSpeedZero()
+  {
+
+  }
 
 }
