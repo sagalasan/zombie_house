@@ -30,8 +30,8 @@ public class ZombiePanel extends JPanel {
   public void paintComponent(Graphics g)
   {
     //this is just copy pasted code from conways GoL
-    BufferedImage liveBlock = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D liveDraw = liveBlock.createGraphics();
+    BufferedImage floor = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D liveDraw = floor.createGraphics();
     liveDraw.setColor(Color.BLACK);
     liveDraw.fillRect(0, 0, pixelSize, pixelSize);
     liveDraw.setColor(Color.ORANGE);
@@ -50,7 +50,7 @@ public class ZombiePanel extends JPanel {
       {
         if (Level.map[i][j].type == Constants.FLOOR)
         {
-          g.drawImage(liveBlock, i * pixelSize, j * pixelSize, null);
+          g.drawImage(floor, i * pixelSize, j * pixelSize, null);
         }
         else if (Level.map[i][j].type == Constants.WALL)
         {
@@ -59,4 +59,5 @@ public class ZombiePanel extends JPanel {
       }
     }
   }
+
 }
