@@ -3,12 +3,10 @@
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class Player extends Entity
+public class Zombie extends Entity
 {
-    public Player(int x, int y)
+    public Zombie(int x, int y)
     {
-        super("Player", x, y);
+        super("Zombie", x, y);
     }
-
-
 }
