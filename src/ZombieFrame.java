@@ -6,4 +6,9 @@ import javax.swing.*;
 public class ZombieFrame extends JFrame{
   //have mouse listeners keyboard listeners
   //frame
+  public ZombieFrame()
+  {
+
+  }
+
 }

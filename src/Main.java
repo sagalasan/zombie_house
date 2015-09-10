@@ -3,4 +3,19 @@
  */
 public class Main {
   //create frame, invoke runnable
+  private static void createAndShowGUI()
+  {
+    ZombieFrame frame = new ZombieFrame();
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+  }
+  public static void main(String[] args)
+  {
+    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      public void run()
+      {
+        createAndShowGUI();
+      }
+    });
+  }
+
 }
