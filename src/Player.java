@@ -10,5 +10,5 @@ public class Player extends Entity
         super("Player", x, y);
     }
 
-    
+
 }
