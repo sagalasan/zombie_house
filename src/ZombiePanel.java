@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class ZombiePanel extends JPanel {
+public class ZombiePanel extends JPanel  {
   int pixelSize = 8;
   Level level = new Level();
   //paints buffered image of map and characters on top
