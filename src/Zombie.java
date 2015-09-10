@@ -5,8 +5,8 @@
  */
 public class Zombie extends Entity
 {
-    public Zombie(int x, int y)
-    {
-        super("Zombie", x, y);
-    }
+  public Zombie(int x, int y)
+  {
+    super("Zombie", x, y);
+  }
 }

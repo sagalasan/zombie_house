@@ -5,10 +5,10 @@
  */
 public class Player extends Entity
 {
-    public Player(int x, int y)
-    {
-        super("Player", x, y);
-    }
+  public Player(int x, int y)
+  {
+    super("Player", x, y);
+  }
 
 
 }
