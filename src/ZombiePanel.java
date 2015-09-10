@@ -31,18 +31,18 @@ public class ZombiePanel extends JPanel {
   {
     //this is just copy pasted code from conways GoL
     BufferedImage floor = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D liveDraw = floor.createGraphics();
-    liveDraw.setColor(Color.BLACK);
-    liveDraw.fillRect(0, 0, pixelSize, pixelSize);
-    liveDraw.setColor(Color.ORANGE);
-    liveDraw.fillRect(1, 1, pixelSize - 1, pixelSize - 1);
+    Graphics2D floorDraw = floor.createGraphics();
+    floorDraw.setColor(Color.BLACK);
+    floorDraw.fillRect(0, 0, pixelSize, pixelSize);
+    floorDraw.setColor(Color.ORANGE);
+    floorDraw.fillRect(1, 1, pixelSize - 1, pixelSize - 1);
 
-    BufferedImage deadBlock = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D deadDraw = deadBlock.createGraphics();
-    deadDraw.setColor(Color.BLACK);
-    deadDraw.fillRect(0, 0, pixelSize, pixelSize);
-    deadDraw.setColor(Color.gray);
-    deadDraw.fillRect(1, 1, pixelSize, pixelSize);
+    BufferedImage wallBlock = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D wallDraw = wallBlock.createGraphics();
+    wallDraw.setColor(Color.BLACK);
+    wallDraw.fillRect(0, 0, pixelSize, pixelSize);
+    wallDraw.setColor(Color.gray);
+    wallDraw.fillRect(1, 1, pixelSize, pixelSize);
 
     for (int i = 0; i < Level.width; i++)
     {
@@ -54,7 +54,7 @@ public class ZombiePanel extends JPanel {
         }
         else if (Level.map[i][j].type == Constants.WALL)
         {
-          g.drawImage(deadBlock, i * pixelSize, j * pixelSize, null);
+          g.drawImage(wallBlock, i * pixelSize, j * pixelSize, null);
         }
       }
     }
