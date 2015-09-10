@@ -9,8 +9,6 @@ public class Constants {
   static final int EXIT = 3;
   static final int SCORCHED_FLOOR = 5;
   static final int BLACKNESS = 6;
-  int hello;
-  int hi = 1;
-  int world;
+
   static final int SIZE = 80;
 }
