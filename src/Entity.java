@@ -18,6 +18,9 @@ public abstract class Entity
     this.x = x;
     this.y = y;
   }
+  public void move(String direction){
+    //moves east, north, south, west depending on string.
+  }
 
 
 }

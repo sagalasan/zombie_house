@@ -11,4 +11,5 @@ public class Constants {
   static final int BLACKNESS = 6;
 
   static final int SIZE = 80;
+
 }
