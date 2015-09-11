@@ -16,6 +16,8 @@ public class ZombieFrame extends JFrame{
 
     this.setVisible(true);
     this.pack();
+    //if frame is packed elsewhere and key pressed does not work
+    //make sure to panel.requestFocus();
     panel.requestFocus();
 
   }

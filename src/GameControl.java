@@ -8,4 +8,6 @@ public class GameControl {
   {
     userPlayer = new Player(5,5);
   }
+  //astar probably will go here.  Zombie arrays and players can be referenced from here
+
 }
