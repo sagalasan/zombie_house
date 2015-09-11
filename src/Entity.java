@@ -18,9 +18,36 @@ public abstract class Entity
     this.x = x;
     this.y = y;
   }
-  public void move(String direction){
+  public int getX()
+  {
+    return x;
+  }
+  public int getY()
+  {
+    return y;
+  }
+  public void move(String direction)
+  {
+    if (direction.toLowerCase() == "left")
+    {
+      x -= 1;
+    }
+    else if (direction.toLowerCase() == "right")
+    {
+      x+= 1;
+    }
+    else if (direction.toLowerCase() == "down")
+    {
+      y+=1;
+    }
+    else if (direction.toLowerCase() == "up")
+    {
+      y-=1;
+    }
+
     //moves east, north, south, west depending on string.
   }
+
 
 
 }

@@ -3,5 +3,9 @@
  * will hold the player/zombie objects/arrays, etc
  */
 public class GameControl {
-
+  Player userPlayer;
+  public GameControl()
+  {
+    userPlayer = new Player(5,5);
+  }
 }

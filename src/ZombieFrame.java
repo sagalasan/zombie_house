@@ -13,8 +13,10 @@ public class ZombieFrame extends JFrame{
     panel = new ZombiePanel();
     add(panel);
     panel.setPreferredSize(new Dimension(400, 400));
+
     this.setVisible(true);
     this.pack();
+    panel.requestFocus();
 
   }
 

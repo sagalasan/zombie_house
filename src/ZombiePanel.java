@@ -2,14 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class ZombiePanel extends JPanel  {
+public class ZombiePanel extends JPanel implements KeyListener{
   int pixelSize = 8;
   Level level = new Level();
+  GameControl gameController = new GameControl();
   //paints buffered image of map and characters on top
   int speed = 17;
   Timer timer = new Timer(speed, new ActionListener()
@@ -24,6 +27,44 @@ public class ZombiePanel extends JPanel  {
   public ZombiePanel()
   {
     timer.start();
+    addKeyListener(this);
+
+
+  }
+
+  @Override
+  public void keyPressed(KeyEvent e)
+  {
+    if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
+    {
+      gameController.userPlayer.move("left");
+      //System.out.println("left key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
+    {
+      gameController.userPlayer.move("right");
+      //System.out.println("right key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
+    {
+      gameController.userPlayer.move("down");
+      //System.out.println("down key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
+    {
+      gameController.userPlayer.move("up");
+      //System.out.println("up key pressed");
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e) {
+
+  }
+
+  @Override
+  public void keyTyped(KeyEvent e) {
+
   }
 
   @Override
@@ -58,6 +99,9 @@ public class ZombiePanel extends JPanel  {
         }
       }
     }
+    g.setColor(Color.red);
+    //System.out.println(gameController.userPlayer.x);
+    g.fillOval(gameController.userPlayer.getX(), gameController.userPlayer.getY(), 5, 5);
   }
 
 }
