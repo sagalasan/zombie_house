@@ -11,7 +11,8 @@ public abstract class Entity
   private int x,y;
   private int width;
   private String type;
-
+  //speed is in tiles per second
+  private double speed;
   public Entity(String type, int x, int y)
   {
     this.type = type;
@@ -26,23 +27,36 @@ public abstract class Entity
   {
     return y;
   }
+  public void setX(int x)
+  {
+    this.x = x;
+  }
+  public void setY(int y)
+  {
+    this.y = y;
+  }
+  public void setSpeed(double speed)
+  {
+    this.speed = speed;
+  }
+
   public void move(String direction)
   {
     if (direction.toLowerCase() == "left")
     {
-      x -= 1;
+      x -= speed;
     }
     else if (direction.toLowerCase() == "right")
     {
-      x+= 1;
+      x+= speed;
     }
     else if (direction.toLowerCase() == "down")
     {
-      y+=1;
+      y+=speed;
     }
     else if (direction.toLowerCase() == "up")
     {
-      y-=1;
+      y-=speed;
     }
 
     //moves east, north, south, west depending on string.

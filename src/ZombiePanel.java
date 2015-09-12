@@ -10,26 +10,16 @@ import java.awt.image.BufferedImage;
  * Created by Jalen on 9/9/2015.
  */
 public class ZombiePanel extends JPanel implements KeyListener{
-  int pixelSize = 8;
+  int pixelSize = 40;
   Level level = new Level();
-  GameControl gameController = new GameControl();
+  GameControl gameController = new GameControl(this);
   //paints buffered image of map and characters on top
-  int speed = 17;
-  Timer timer = new Timer(speed, new ActionListener()
-  {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-      repaint();
-    }
-  });
+
+
 
   public ZombiePanel()
   {
-    timer.start();
     addKeyListener(this);
-
-
   }
 
   @Override
@@ -85,6 +75,13 @@ public class ZombiePanel extends JPanel implements KeyListener{
     wallDraw.setColor(Color.gray);
     wallDraw.fillRect(1, 1, pixelSize, pixelSize);
 
+    BufferedImage pathBlock = new BufferedImage(pixelSize-1, pixelSize-1, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D pathDraw = pathBlock.createGraphics();
+    pathDraw.setColor(Color.BLACK);
+    pathDraw.fillRect(0, 0, pixelSize-1, pixelSize-1);
+    pathDraw.setColor(Color.gray);
+    pathDraw.fillRect(1, 1, pixelSize-1, pixelSize-1);
+
     for (int i = 0; i < Level.width; i++)
     {
       for (int j = 0; j < Level.height; j++)
@@ -101,7 +98,11 @@ public class ZombiePanel extends JPanel implements KeyListener{
     }
     g.setColor(Color.red);
     //System.out.println(gameController.userPlayer.x);
-    g.fillOval(gameController.userPlayer.getX(), gameController.userPlayer.getY(), 5, 5);
+    g.fillOval(gameController.userPlayer.getX() * pixelSize, gameController.userPlayer.getY() * pixelSize, 30, 30);
+
+    g.setColor(Color.BLUE);
+    g.fillOval(gameController.zombie1.getX() * pixelSize, gameController.zombie1.getY() * pixelSize, 30, 30);
+
   }
 
 }

@@ -20,11 +20,11 @@ public class Level {
       {
         if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
         {
-          map[i][j] = new Tile(Constants.WALL);
+          map[i][j] = new Tile(Constants.WALL, i, j);
         }
         else
         {
-          map[i][j] = new Tile(Constants.FLOOR);
+          map[i][j] = new Tile(Constants.FLOOR, i, j);
         }
       }
     }
