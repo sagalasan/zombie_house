@@ -19,11 +19,26 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   GameControl gameController = new GameControl(this);
   //paints buffered image of map and characters on top
 
+  private BufferedImage[] wallImages;
 
 
   public ZombiePanel()
   {
     addKeyListener(this);
+    initializeImages();
+  }
+
+  private void initializeImages()
+  {
+    wallImages = new BufferedImage[4];
+    try
+    {
+      wallImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_0_0.png"));
+      wallImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_0_90.png"));
+      wallImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_0_180.png"));
+      wallImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_0_270.png"));
+    }
+    catch (IOException e) {}
   }
 
   @Override
