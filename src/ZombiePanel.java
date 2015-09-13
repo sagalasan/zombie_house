@@ -38,7 +38,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_0_180.png"));
       floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_0_270.png"));
     }
-    catch (IOException e) {}
+    catch (IOException e)
+    {
+      System.out.println("Image loading failed");
+    }
   }
 
   @Override
