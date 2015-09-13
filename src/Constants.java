@@ -1,7 +1,7 @@
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class Constants {
+public interface Constants {
 
   static final int FLOOR = 0;
   static final int WALL = 1;

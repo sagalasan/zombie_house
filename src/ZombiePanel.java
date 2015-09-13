@@ -13,8 +13,8 @@ import java.nio.Buffer;
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class ZombiePanel extends JPanel implements KeyListener{
-  int pixelSize = 40;
+public class ZombiePanel extends JPanel implements KeyListener, Constants{
+  //int pixelSize = 40;
   Level level = new Level();
   GameControl gameController = new GameControl(this);
   //paints buffered image of map and characters on top
@@ -109,13 +109,28 @@ public class ZombiePanel extends JPanel implements KeyListener{
       wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
     } catch (IOException e) {}
 
+    for (int i = 0; i < Level.width; i++)
+    {
+      for (int j = 0; j < Level.height; j++)
+      {
+        if (Level.map[i][j].type == Constants.FLOOR)
+        {
+          g.drawImage(floor, i * SIZE, j * SIZE, null);
+        }
+        else if (Level.map[i][j].type == Constants.WALL)
+        {
+          g.drawImage(wall, i * SIZE, j * SIZE, null);
+        }
+      }
+    }
+
 
     g.setColor(Color.red);
     //System.out.println(gameController.userPlayer.x);
-    g.fillOval(gameController.userPlayer.getX() * pixelSize, gameController.userPlayer.getY() * pixelSize, 30, 30);
+    g.fillOval(gameController.userPlayer.getX() * SIZE, gameController.userPlayer.getY() * SIZE, 30, 30);
 
     g.setColor(Color.BLUE);
-    g.fillOval(gameController.zombie1.getX() * pixelSize, gameController.zombie1.getY() * pixelSize, 30, 30);
+    g.fillOval(gameController.zombie1.getX() * SIZE, gameController.zombie1.getY() * SIZE, 30, 30);
 
   }
 
