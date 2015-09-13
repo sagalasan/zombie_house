@@ -116,12 +116,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //  }
     //}
 
+    //None of this is actually how its gonna work, this is just to test
     BufferedImage floor = null;
-    BufferedImage wall = null;
+    BufferedImage wall = wallImages[0];
     try
     {
       floor = ImageIO.read(new File("tile_images/zombie_house_tile_floor_test.png"));
-      wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
     } catch (IOException e) {}
 
     for (int i = 0; i < Level.width; i++)
