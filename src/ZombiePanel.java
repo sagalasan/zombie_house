@@ -19,7 +19,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   GameControl gameController = new GameControl(this);
   //paints buffered image of map and characters on top
 
-  private BufferedImage[] wallImages;
+  private BufferedImage[] floorImages;
 
 
   public ZombiePanel()
@@ -30,13 +30,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private void initializeImages()
   {
-    wallImages = new BufferedImage[4];
+    floorImages = new BufferedImage[4];
     try
     {
-      wallImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_0_0.png"));
-      wallImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_0_90.png"));
-      wallImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_0_180.png"));
-      wallImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_0_270.png"));
+      floorImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_0_0.png"));
+      floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_0_90.png"));
+      floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_0_180.png"));
+      floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_0_270.png"));
     }
     catch (IOException e) {}
   }
@@ -117,11 +117,11 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //}
 
     //None of this is actually how its gonna work, this is just to test
-    BufferedImage floor = null;
-    BufferedImage wall = wallImages[0];
+    BufferedImage floor = floorImages[0];
+    BufferedImage wall = null;
     try
     {
-      floor = ImageIO.read(new File("tile_images/zombie_house_tile_floor_test.png"));
+      wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
     } catch (IOException e) {}
 
     for (int i = 0; i < Level.width; i++)
