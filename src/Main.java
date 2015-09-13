@@ -9,8 +9,10 @@ public class Main {
 
   private static void createAndShowGUI()
   {
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     ZombieFrame frame = new ZombieFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(screenSize);
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
   }
   public static void main(String[] args)
