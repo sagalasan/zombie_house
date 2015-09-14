@@ -55,6 +55,8 @@ public class GameControl implements Constants
     guiTimer.start();
   }
 
+
+
   public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
   public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }
   public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
