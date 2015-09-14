@@ -49,23 +49,27 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      gameController.userPlayer.move("left");
+      //gameController.userPlayer.move("left");
       //System.out.println("left key pressed");
+      gameController.setPlayerMoveLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      gameController.userPlayer.move("right");
+      //gameController.userPlayer.move("right");
       //System.out.println("right key pressed");
+      gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      gameController.userPlayer.move("down");
+      //gameController.userPlayer.move("down");
       //System.out.println("down key pressed");
+      gameController.setPlayerMoveDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      gameController.userPlayer.move("up");
+      //gameController.userPlayer.move("up");
       //System.out.println("up key pressed");
+      gameController.setPlayerMoveUp(true);
     }
   }
 
@@ -74,23 +78,27 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      gameController.userPlayer.move("left");
+      //gameController.userPlayer.move("left");
       //System.out.println("left key pressed");
+      gameController.setPlayerMoveLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      gameController.userPlayer.move("right");
+      //gameController.userPlayer.move("right");
       //System.out.println("right key pressed");
+      gameController.setPlayerMoveRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      gameController.userPlayer.move("down");
+      //gameController.userPlayer.move("down");
       //System.out.println("down key pressed");
+      gameController.setPlayerMoveDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      gameController.userPlayer.move("up");
+      //gameController.userPlayer.move("up");
       //System.out.println("up key pressed");
+      gameController.setPlayerMoveUp(false);
     }
   }
 
