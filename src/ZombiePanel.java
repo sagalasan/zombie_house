@@ -112,42 +112,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   @Override
   public void paintComponent(Graphics g)
   {
-    //this is just copy pasted code from conways GoL
-    //BufferedImage floor = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
-    //Graphics2D floorDraw = floor.createGraphics();
-    //floorDraw.setColor(Color.BLACK);
-    //floorDraw.fillRect(0, 0, pixelSize, pixelSize);
-    //floorDraw.setColor(Color.ORANGE);
-    //floorDraw.fillRect(1, 1, pixelSize - 1, pixelSize - 1);
-//
-    //BufferedImage wallBlock = new BufferedImage(pixelSize, pixelSize, BufferedImage.TYPE_INT_ARGB);
-    //Graphics2D wallDraw = wallBlock.createGraphics();
-    //wallDraw.setColor(Color.BLACK);
-    //wallDraw.fillRect(0, 0, pixelSize, pixelSize);
-    //wallDraw.setColor(Color.gray);
-    //wallDraw.fillRect(1, 1, pixelSize, pixelSize);
-//
-    //BufferedImage pathBlock = new BufferedImage(pixelSize-1, pixelSize-1, BufferedImage.TYPE_INT_ARGB);
-    //Graphics2D pathDraw = pathBlock.createGraphics();
-    //pathDraw.setColor(Color.BLACK);
-    //pathDraw.fillRect(0, 0, pixelSize-1, pixelSize-1);
-    //pathDraw.setColor(Color.gray);
-    //pathDraw.fillRect(1, 1, pixelSize-1, pixelSize-1);
-//
-    //for (int i = 0; i < Level.width; i++)
-    //{
-    //  for (int j = 0; j < Level.height; j++)
-    //  {
-    //    if (Level.map[i][j].type == Constants.FLOOR)
-    //    {
-    //      g.drawImage(floor, i * pixelSize, j * pixelSize, null);
-    //    }
-    //    else if (Level.map[i][j].type == Constants.WALL)
-    //    {
-    //      g.drawImage(wallBlock, i * pixelSize, j * pixelSize, null);
-    //    }
-    //  }
-    //}
 
     //None of this is actually how its gonna work, this is just to test
     BufferedImage floor = floorImages[0];
@@ -163,15 +127,15 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       for (int j = 0; j < Level.height; j++)
       {
-        if (Level.map[i][j].type == Constants.FLOOR)
+        if (Level.map[i][j].type == FLOOR)
         {
           g.drawImage(floor, i * SIZE, j * SIZE, null);
         }
-        else if (Level.map[i][j].type == Constants.WALL)
+        else if (Level.map[i][j].type == WALL)
         {
           g.drawImage(wall, i * SIZE, j * SIZE, null);
         }
-        else if (Level.map[i][j].type == Constants.SCORCHED_FLOOR)
+        else if (Level.map[i][j].type == SCORCHED_FLOOR)
         {
           g.drawImage(scorchedFloor, i * SIZE, j * SIZE, null);
         }
@@ -181,7 +145,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     g.setColor(Color.red);
     //System.out.println(gameController.userPlayer.x);
-    g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getyPixel(), 30, 30);
+    g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
 
     g.setColor(Color.BLUE);
     g.fillOval(gameController.zombie1.getX() * SIZE, gameController.zombie1.getY() * SIZE, 30, 30);

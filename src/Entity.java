@@ -32,8 +32,14 @@ public abstract class Entity implements Constants
     previousTime = System.currentTimeMillis();
   }
 
-  public int getXPixel() { return (int) xPixel; }
-  public int getyPixel() { return (int) yPixel; }
+  public int getXPixel()
+  {
+    return (int) xPixel;
+  }
+  public int getYPixel()
+  {
+    return (int) yPixel;
+  }
   public int getX()
   {
     return x;
