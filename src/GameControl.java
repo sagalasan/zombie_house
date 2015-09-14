@@ -17,6 +17,11 @@ public class GameControl {
   //adjust this to repaint faster
   int speed = 1000;
 
+  private boolean movePlayerUp = false;
+  private boolean movePlayerDown = false;
+  private boolean movePlayerRight = false;
+  private boolean movePlayerLeft = false;
+
   Timer timer = new Timer(speed, new ActionListener()
   {
     @Override
@@ -37,6 +42,11 @@ public class GameControl {
     zombie1.chasePlayer();
     timer.start();
   }
+
+  public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
+  public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }
+  public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
+  public void setPlayerMoveLeft(boolean b) { movePlayerLeft = b; }
 
   public Player getUserPlayer()
   {
