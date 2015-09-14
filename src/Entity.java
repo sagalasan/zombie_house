@@ -45,21 +45,21 @@ public abstract class Entity
     this.speed = speed;
   }
 
-  public void move(String direction)
+  public void move(int direction)
   {
-    if (direction.toLowerCase() == "left")
+    if (direction == Entity.LEFT)
     {
       x -= speed;
     }
-    else if (direction.toLowerCase() == "right")
+    else if (direction == Entity.RIGHT)
     {
       x+= speed;
     }
-    else if (direction.toLowerCase() == "down")
+    else if (direction == Entity.DOWN)
     {
       y+=speed;
     }
-    else if (direction.toLowerCase() == "up")
+    else if (direction == Entity.UP)
     {
       y-=speed;
     }

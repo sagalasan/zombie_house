@@ -40,7 +40,10 @@ public class GameControl {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      
+      if(movePlayerUp) userPlayer.move(Entity.UP);
+      if(movePlayerDown) userPlayer.move(Entity.DOWN);
+      if(movePlayerLeft) userPlayer.move(Entity.LEFT);
+      if(movePlayerRight) userPlayer.move(Entity.RIGHT);
       reference.repaint();
     }
   });
