@@ -18,4 +18,7 @@ public interface Constants {
   //                 DIRECTIONS   = {    0,     1,    2,    3,         4,         5,         6,         7};
   static final int[] X_DIRECTIONS = {    0,     0,   -1,    1,        -1,         1,        -1,         1};
   static final int[] Y_DIRECTIONS = {   -1,     1,    0,    0,        -1,        -1,         1,         1};
+
+  static final double SIN_OF_PI_4 = 0.70710678118;
+  static final int GUI_TIMER_SPEED = 16;
 }

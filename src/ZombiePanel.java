@@ -173,7 +173,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     g.setColor(Color.red);
     //System.out.println(gameController.userPlayer.x);
-    g.fillOval(gameController.userPlayer.getX() * SIZE, gameController.userPlayer.getY() * SIZE, 30, 30);
+    g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getyPixel(), 30, 30);
 
     g.setColor(Color.BLUE);
     g.fillOval(gameController.zombie1.getX() * SIZE, gameController.zombie1.getY() * SIZE, 30, 30);

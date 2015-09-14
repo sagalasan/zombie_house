@@ -9,14 +9,14 @@ import java.util.PriorityQueue;
  * Created by Jalen on 9/10/2015.
  * will hold the player/zombie objects/arrays, etc
  */
-public class GameControl {
+public class GameControl implements Constants
+{
 
   static Player userPlayer;
   static Zombie zombie1;
   ZombiePanel reference;
   //adjust this to repaint faster
   int speed = 1000;
-  int guiSpeed = 16;
 
   private boolean movePlayerUp = false;
   private boolean movePlayerDown = false;
@@ -35,15 +35,12 @@ public class GameControl {
     }
   });
 
-  Timer guiTimer = new Timer(guiSpeed, new ActionListener()
+  Timer guiTimer = new Timer(GUI_TIMER_SPEED, new ActionListener()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      if(movePlayerUp) userPlayer.move(Entity.UP);
-      if(movePlayerDown) userPlayer.move(Entity.DOWN);
-      if(movePlayerLeft) userPlayer.move(Entity.LEFT);
-      if(movePlayerRight) userPlayer.move(Entity.RIGHT);
+      userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
       reference.repaint();
     }
   });
