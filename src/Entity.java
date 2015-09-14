@@ -84,8 +84,6 @@ public abstract class Entity implements Constants
     x = (int) xPixel / SIZE;
     y = (int) yPixel / SIZE;
 
-    if()
-
     System.out.println(type + ": " + "(" + xMove + ", " + yMove + ")");
     //moves east, north, south, west depending on string.
   }
