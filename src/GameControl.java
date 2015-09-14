@@ -55,6 +55,7 @@ public class GameControl {
     zombie1 = new Zombie(15,10);
     zombie1.chasePlayer();
     timer.start();
+    guiTimer.start();
   }
 
   public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
