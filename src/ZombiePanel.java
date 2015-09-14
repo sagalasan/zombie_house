@@ -70,8 +70,28 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {
-
+  public void keyReleased(KeyEvent e)
+  {
+    if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
+    {
+      gameController.userPlayer.move("left");
+      //System.out.println("left key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
+    {
+      gameController.userPlayer.move("right");
+      //System.out.println("right key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
+    {
+      gameController.userPlayer.move("down");
+      //System.out.println("down key pressed");
+    }
+    if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
+    {
+      gameController.userPlayer.move("up");
+      //System.out.println("up key pressed");
+    }
   }
 
   @Override
