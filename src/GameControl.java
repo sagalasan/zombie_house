@@ -16,6 +16,7 @@ public class GameControl {
   ZombiePanel reference;
   //adjust this to repaint faster
   int speed = 1000;
+  int guiSpeed = 16;
 
   private boolean movePlayerUp = false;
   private boolean movePlayerDown = false;
@@ -27,10 +28,20 @@ public class GameControl {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      reference.repaint();
+      //reference.repaint();
       //while player is nearby
       zombie1.getNextCoordsToFollowPlayer();
 
+    }
+  });
+
+  Timer guiTimer = new Timer(guiSpeed, new ActionListener()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      
+      reference.repaint();
     }
   });
 
