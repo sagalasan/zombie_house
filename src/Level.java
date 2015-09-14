@@ -12,17 +12,12 @@ import java.util.Random;
 
 public class Level {
 
-  final int HEIGHT = 40;
-  final int WIDTH = 35;
-
   static Tile[][] map;
-  static int height = 30, width = 40;
+  static int height = 40, width = 40;
 
   Rectangle rt;
 
   private Random rnd = new Random();
-
-  int[][] mapRooms;
 
   ArrayList<Rectangle> rectangles = new ArrayList<Rectangle>();
 
@@ -33,6 +28,7 @@ public class Level {
 
     //creates map, use helper methods later
     map = new Tile[width][height];
+
     for (int i = 0; i < width; i++)
     {
       for (int j = 0; j < height; j++)
@@ -48,18 +44,27 @@ public class Level {
       }
     }
 
+    mapGen();
 
   }
 
 
 
-
+/**
+ * @params rt - rectangle object that creates rooms and stores rectangle x position
+ *         y position, width and height
+ * This method splits the area into smaller areas. Areas will be rooms * 2 and will
+ * then be merged into a single random room size > 6.
+ *
+ * */
   public void mapGen()
   {
-    rt = new Rectangle( 0, 0, HEIGHT, WIDTH); //
+    rt = new Rectangle( 0, 0, height, width);
+    int totalRooms = 10;
     rectangles.add(rt); //populate rectangle store with root area
-    //number of leaves to create
-    while( rectangles.size() < rnd.nextInt(18)+14)
+
+    //we will make a minimum of 6 and a max of 10, it will be random
+    while(rectangles.size() < rnd.nextInt(((totalRooms*2-1)-12))+12)
     {
       int splitIdx = rnd.nextInt( rectangles.size() ); // choose a random element
       Rectangle toSplit = rectangles.get(splitIdx);
@@ -77,42 +82,53 @@ public class Level {
 
   }
 
+  /**
+  * @params r - takes a rectangle ArrayList and sets the grid into tile array
+  * @params rooms - counts the number of rooms, may not be needed
+  * */
   public void setGrid(ArrayList<Rectangle> r) {
-    mapRooms = new int[HEIGHT][WIDTH];
-    int rooms = 2;
-
-    for (int i = 0; i < WIDTH; i++) {
-      for (int j = 0; j < HEIGHT; j++) {
-        mapRooms[j][i] = 0;
-      }
-    }
+    //rooms counts the nuber of rooms
+    int rooms = 1;
 
     for (Rectangle rec : r)
     {
       if (rec.room != null)
       {
-        for (int i = 0; i < rec.room.width; i++)
+
+        for (int i = 0; i < rec.room.height; i++)
         {
-          for (int j = 0; j < rec.room.height; j++)
+          for (int j = 0; j < rec.room.width; j++)
           {
-            mapRooms[rec.room.x + j][rec.room.y + i] = rooms;
+              map[rec.room.x + i][rec.room.y + j] = new Tile(Constants.SCORCHED_FLOOR, rec.room.x + i, rec.room.x + j);
           }
         }
-
         rooms++;
       }
+
+
     }
 
-    //overload the panel with the rectangles
+
+
+
+    //send the rectangle array to the panel
+    //this may not be necessary depending on if we use
+    //the objects or just an int array or tile array
     //mp.setRectangle(r);
 
+
+/*
+    //this loop created the halls and is not working correctly, currently is
+    //allows the hall to be created out of bounds and sometimes does not complete the room
     for (Rectangle rec : r)
     {
       if (rec.room != null)
       {
         Rectangle c = findClosest(rec.room);
-        //System.out.println("closest = " + rec.room.x +" " + rec.room.y + " " + rec.room.height + "x" + rec.room.width);
-        //System.out.println("closest = " + c.room.x +" " + c.room.y + " " + c.room.height + "x" + c.room.width);
+        //System.out.println("closest = " + rec.room.x +" " + rec.room.y
+                        //+ " " + rec.room.height + "x" + rec.room.width);
+        //System.out.println("closest = " + c.room.x +" " + c.room.y
+                            //+ " " + c.room.height + "x" + c.room.width);
 
         int firstX = rnd.nextInt((rec.room.width+rec.room.x) - rec.room.x)+rec.room.x;
         int firstY = rnd.nextInt((rec.room.height+rec.room.y) - rec.room.y)+rec.room.y;
@@ -120,11 +136,10 @@ public class Level {
         int secondX = rnd.nextInt((c.room.width+c.room.x) - c.room.x)+c.room.x;
         int secondY = rnd.nextInt((c.room.height+c.room.y) - c.room.y)+c.room.y;
 
+        //walk to the nearest x then to the nearest y
+        //this method needs to be fixed to work better
         while(secondX != firstX || secondY != firstY)
         {
-          System.out.println("firstX Y" + firstX + "," + firstY);
-          System.out.println("secondX Y" + secondX + "," + secondY);
-
           if(secondX != firstX)
           {
             if(secondX > firstX)
@@ -142,26 +157,24 @@ public class Level {
             else
               secondY++;
           }
-          mapRooms[secondX][secondY] = 1;
+            map[secondX][secondY] = new Tile(Constants.FLOOR, secondX, secondY);
+
         }
       }
-
     }
-
-    for (int i = 0; i < WIDTH; i++)
-    {
-      for (int j = 0; j < HEIGHT; j++)
-      {
-        System.out.print(map[j][i]);
-      }
-      System.out.println();
-    }
-
-    //overload the panel with the 2d array
-    //mp.setMap(map);
+*/
 
   }
 
+  /**
+   * @aramss currentMidX (Y) - current rectangles mid point
+   * @params midX (Y) - mid point of rectangle list being parsed and checked
+   * @params closest - finds closest rectangle object
+   * @return closest - returns the closest rectangle
+   * This class takes a rectangle argument and parses against
+   * the other rectangles to find the closest neighbor
+   * */
+  //this method needs to be corrected a bit as well
   public Rectangle findClosest(Rectangle r)
   {
     int currentMidX = (r.width/2)+r.x;
@@ -177,8 +190,8 @@ public class Level {
         {
           int midX = (rec.room.width/2)+rec.room.x;
           int midY = (rec.room.height/2)+rec.room.y;
-          //int distance = Math.abs(currentMidX - midX) + Math.abs(currentMidY - midY);
-          double distance = Math.sqrt(Math.pow((currentMidX - midX),2) + Math.pow((currentMidY - midY),2));
+          int distance = Math.abs(currentMidX - midX) + Math.abs(currentMidY - midY);
+          //double distance = Math.sqrt(Math.pow((currentMidX - midX),2) + Math.pow((currentMidY - midY),2));
           if(distance < closestDistance)
           {
             closestDistance = (int)distance;
