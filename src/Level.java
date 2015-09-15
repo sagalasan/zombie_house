@@ -108,16 +108,12 @@ public class Level {
 
     }
 
-
-
-
     //send the rectangle array to the panel
     //this may not be necessary depending on if we use
     //the objects or just an int array or tile array
     //mp.setRectangle(r);
 
 
-/*
     //this loop created the halls and is not working correctly, currently is
     //allows the hall to be created out of bounds and sometimes does not complete the room
     for (Rectangle rec : r)
@@ -125,10 +121,6 @@ public class Level {
       if (rec.room != null)
       {
         Rectangle c = findClosest(rec.room);
-        //System.out.println("closest = " + rec.room.x +" " + rec.room.y
-                        //+ " " + rec.room.height + "x" + rec.room.width);
-        //System.out.println("closest = " + c.room.x +" " + c.room.y
-                            //+ " " + c.room.height + "x" + c.room.width);
 
         int firstX = rnd.nextInt((rec.room.width+rec.room.x) - rec.room.x)+rec.room.x;
         int firstY = rnd.nextInt((rec.room.height+rec.room.y) - rec.room.y)+rec.room.y;
@@ -157,12 +149,12 @@ public class Level {
             else
               secondY++;
           }
-            map[secondX][secondY] = new Tile(Constants.FLOOR, secondX, secondY);
+            map[secondX][secondY] = new Tile(Constants.SCORCHED_FLOOR, secondX, secondY);
 
         }
       }
     }
-*/
+
 
   }
 
@@ -177,8 +169,8 @@ public class Level {
   //this method needs to be corrected a bit as well
   public Rectangle findClosest(Rectangle r)
   {
-    int currentMidX = (r.width/2)+r.x;
-    int currentMidY = (r.height/2)+r.y;
+    int midX = (r.width/2)+r.x;
+    int midY = (r.height/2)+r.y;
     int closestDistance = 100;
     Rectangle closest = null;
 
@@ -188,10 +180,10 @@ public class Level {
       {
         if(r != rec.room)
         {
-          int midX = (rec.room.width/2)+rec.room.x;
-          int midY = (rec.room.height/2)+rec.room.y;
-          int distance = Math.abs(currentMidX - midX) + Math.abs(currentMidY - midY);
-          //double distance = Math.sqrt(Math.pow((currentMidX - midX),2) + Math.pow((currentMidY - midY),2));
+          int currentMidX = (rec.room.width/2)+rec.room.x;
+          int currentMidY = (rec.room.height/2)+rec.room.y;
+          int distance = Math.min(Math.abs(currentMidX-midX) - (r.width/2) - (rec.room.width/2),
+                  Math.abs(currentMidY-midY) - (r.height/2) - (rec.room.height/2));
           if(distance < closestDistance)
           {
             closestDistance = (int)distance;
@@ -202,19 +194,6 @@ public class Level {
     }
     return closest;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
