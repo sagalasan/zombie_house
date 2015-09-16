@@ -20,6 +20,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   //paints buffered image of map and characters on top
 
   private BufferedImage[] floorImages;
+  private BufferedImage scorchedMask;
 
   private BufferedImage mapBufferedImage;
 
@@ -32,15 +33,25 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private void initializeImages()
   {
-    floorImages = new BufferedImage[5];
+    floorImages = new BufferedImage[12];
     try
     {
       floorImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_0.png"));
       floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_90.png"));
       floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_180.png"));
       floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_270.png"));
-      floorImages[4] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
+      floorImages[4] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_0.png"));
+      floorImages[5] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_90.png"));
+      floorImages[6] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_180.png"));
+      floorImages[7] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_270.png"));
+
+      floorImages[8] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_0.png"));
+      floorImages[9] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_90.png"));
+      floorImages[10] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_180.png"));
+      floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
+
+      scorchedMask = ImageIO.read(new File("scorched_mask.png"));
     }
     catch (IOException e)
     {
