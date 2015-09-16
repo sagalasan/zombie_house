@@ -21,6 +21,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private BufferedImage[] floorImages;
 
+  private BufferedImage mapBufferedImage;
+
 
   public ZombiePanel()
   {
@@ -133,6 +135,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     g.setColor(Color.BLUE);
     g.fillOval(gameController.zombie1.getX() * SIZE, gameController.zombie1.getY() * SIZE, 30, 30);
+
+  }
+
+  private void constructArrayImages()
+  {
+
+  }
+
+  private void constructBufferedImage()
+  {
+    mapBufferedImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
 
   }
 

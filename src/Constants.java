@@ -11,7 +11,7 @@ public interface Constants {
   static final int BLACKNESS = 6;
   static final double PLAYER_DEFAULT_SPEED = 1;
   static final double ZOMBIE_DEFAULT_SPEED = .5;
-  static final int SIZE = 80;
+  static final int SIZE = 40;
   static final int TOTAL_DIRECTIONS = 8;
   //used to find blocks around tile
   //Directions                       NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
