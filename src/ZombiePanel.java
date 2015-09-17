@@ -56,6 +56,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+      blacknessImage = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 
       scorchedMask = ImageIO.read(new File("scorched_mask.png"));
     }
