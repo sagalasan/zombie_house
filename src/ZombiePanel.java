@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.Random;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -20,9 +21,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   //paints buffered image of map and characters on top
 
   private BufferedImage[] floorImages;
+  private BufferedImage  blacknessImage;
+  private BufferedImage wallImage;
   private BufferedImage scorchedMask;
 
   private BufferedImage mapBufferedImage;
+  private BufferedImage[][] mapImages;
 
 
   public ZombiePanel()
@@ -51,12 +55,16 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[10] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_180.png"));
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
+      wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+
       scorchedMask = ImageIO.read(new File("scorched_mask.png"));
     }
     catch (IOException e)
     {
       System.out.println("Image loading failed");
     }
+
+
   }
 
   @Override
@@ -151,7 +159,28 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private void constructArrayImages()
   {
+    mapImages = new BufferedImage[Level.width][Level.height];
+    Random random = new Random();
 
+    for(int i = 0; i < Level.width; i++)
+    {
+      for(int j = 0; j < Level.height; j++)
+      {
+        if(Level.map[i][j].type == WALL)
+        {
+          mapImages[i][j] = wallImage;
+        }
+        else if(Level.map[i][j].type == FLOOR)
+        {
+          int index = random.nextInt(floorImages.length);
+          mapImages[i][j] = floorImages[index];
+        }
+        else
+        {
+
+        }
+      }
+    }
   }
 
   private void constructBufferedImage()
