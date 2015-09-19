@@ -15,6 +15,12 @@ public class Zombie extends Entity
   boolean smellPlayer = false;
   int directionDegree = rand.nextInt(8);
 
+  private boolean moveZombieUp;
+  private boolean moveZombieDown;
+  private boolean moveZombieRight;
+  private boolean moveZombieLeft;
+
+
   public Zombie(int x, int y)
   {
     super("Zombie", x, y);
@@ -49,7 +55,7 @@ public class Zombie extends Entity
     double distToPlayer = calculateEuclidDistance();
     if (distToPlayer <= ZOMBIE_SMELL)
     {
-      System.out.println("detected Player");
+      //System.out.println("detected Player");
       smellPlayer = true;
     }
     else
@@ -59,11 +65,6 @@ public class Zombie extends Entity
   }
 
 
-
-  private boolean moveZombieUp;
-  private boolean moveZombieDown;
-  private boolean moveZombieRight;
-  private boolean moveZombieLeft;
 
   private void setHeading(int directionDegree)
   {
@@ -157,6 +158,7 @@ public class Zombie extends Entity
     else if (lineZombie)
     {
       //choose random heading, move until hit wall, then recalc
+
       if (hitwall())
       {
         int newDirectionDegree = rand.nextInt(8);
@@ -164,8 +166,10 @@ public class Zombie extends Entity
         {
           newDirectionDegree = rand.nextInt(8);
         }
-        setHeading(newDirectionDegree);
+        directionDegree = newDirectionDegree;
       }
+      setHeading(directionDegree);
+
       //else
       //keep old heading
     }
@@ -294,7 +298,7 @@ public class Zombie extends Entity
       {
         break;
       }
-      System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
+      //System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
       currentNode.setFrontier(queue, end, map);
     }
     return end;
