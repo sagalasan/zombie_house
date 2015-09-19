@@ -10,6 +10,9 @@ public interface Constants {
   int SCORCHED_FLOOR = 5;
   int BLACKNESS = 6;
   double PLAYER_DEFAULT_SPEED = 1;
+  double PLAYER_RUN_SPEED = 2;
+  double PLAYER_DEFAULT_STAMINA = 5;
+  double PLAYER_REGEN_STAMINA = .2;
   double ZOMBIE_DEFAULT_SPEED = .5;
   double ZOMBIE_SMELL = 7.0;
   int SIZE = 80;

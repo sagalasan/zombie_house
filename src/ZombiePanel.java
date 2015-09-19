@@ -87,6 +87,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       gameController.setPlayerMoveUp(true);
     }
+    /**
+    if (e.getKeyCode() == KeyEvent.VK_R)
+    {
+      GameControl.userPlayer.addSpeed();
+      //GameControl.userPlayer.setSpeed(PLAYER_RUN_SPEED);
+    }
+     **/
   }
 
   @Override
@@ -108,6 +115,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       gameController.setPlayerMoveUp(false);
     }
+    /**
+    if (e.getKeyCode() == KeyEvent.VK_R)
+    {
+      GameControl.userPlayer.setSpeed(PLAYER_DEFAULT_SPEED);
+    }
+     **/
+
   }
 
   @Override
@@ -155,13 +169,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g.setColor(Color.BLUE);
     //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
 
-
+    /**
       for (Zombie zombie: gameController.zombieList)
       {
         g.fillOval(zombie.getXPixel(), zombie.getYPixel(), 30, 30);
         //g.fillOval(zombie.getX() * SIZE, zombie.getY() * SIZE, 30, 30);
       }
-
+**/
 
    // }
 
