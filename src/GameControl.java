@@ -28,12 +28,15 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
+      /**
     //  for (Zombie zombie : zombieList)
     //  {
     //    zombie.updateDirection();
      // }
      // zombie1.updateDirection();
      // System.out.println("zombie1 x and y " + zombie1.getX() + ", " + zombie1.getY());
+    **/
+     // zombie1.updateDirection();
     }
   });
 
@@ -45,11 +48,14 @@ public class GameControl implements Constants
       //System.out.println(userPlayer.getX());
       userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
       //if zombie hits player, reload map and players in same location
+     // zombie1.move();
+      /**
     //  for (Zombie zombie : zombieList)
    //   {
         //System.out.println("zombie x " + zombie.getX());
     //    zombie.move();
     //  }
+       **/
       reference.repaint();
     }
   });
@@ -57,8 +63,8 @@ public class GameControl implements Constants
   public GameControl(ZombiePanel panel)
   {
     reference = panel;
-    userPlayer = new Player(5,5);
-    //zombie1 = new Zombie(9,9);
+    userPlayer = new Player(1,1);
+    //zombie1 = new Zombie(12,12);
     zombieList = level.zombieList;
     zombieReactionTimer.start();
     guiTimer.start();

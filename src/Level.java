@@ -108,7 +108,7 @@ public class Level implements Constants {
             {
               zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
             }
-            System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
+            //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
             map[rec.room.x + i][rec.room.y + j] = new Tile(SCORCHED_FLOOR, rec.room.x + i, rec.room.y + j);
           }
         }

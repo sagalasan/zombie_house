@@ -21,12 +21,12 @@ public class Zombie extends Entity
     setSpeed(ZOMBIE_DEFAULT_SPEED);
     if (rand.nextDouble() > ZOMBIE_RANDOM_OR_LINE_RATE)
     {
-      System.out.println("this is a line zombie1");
+      //System.out.println("this is a line zombie1");
       lineZombie = true;
     }
     else
     {
-      System.out.println("this is a random zombie1");
+      //System.out.println("this is a random zombie1");
       lineZombie= false;
     }
     setHeading(directionDegree);
