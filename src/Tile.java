@@ -5,14 +5,13 @@ import java.util.PriorityQueue;
  * Created by Jalen on 9/9/2015.
  * @description - used to also help for astar algorithm
  */
-public class Tile {
+public class Tile implements Constants {
 
 
   //used for Astar
   Tile parent;
   int x, y;
-  Tile[] directions = new Tile[8];
-  boolean visited = false;
+  Tile[] directions;// = new Tile[8];
   boolean chosen = false;
   double tileTravelCost;
   double heuristicCost;
@@ -27,37 +26,39 @@ public class Tile {
     //panel will read the number and draw block
     this.x = x;
     this.y = y;
-    if (type == Constants.FLOOR)
+    if (type == FLOOR)
     {
-      this.type = Constants.FLOOR;
+      this.type = FLOOR;
     }
-    else if (type == Constants.WALL)
+    else if (type == WALL)
     {
-      this.type = Constants.WALL;
+      this.type = WALL;
     }
-    else if (type == Constants.PILLAR)
+    else if (type == PILLAR)
     {
-      this.type = Constants.PILLAR;
+      this.type = PILLAR;
     }
-    else if (type == Constants.EXIT)
+    else if (type == EXIT)
     {
-      this.type = Constants.EXIT;
+      this.type = EXIT;
     }
-    else if (type == Constants.SCORCHED_FLOOR)
+    else if (type == SCORCHED_FLOOR)
     {
-      this.type = Constants.SCORCHED_FLOOR;
+      this.type = SCORCHED_FLOOR;
     }
     else
     {
       //black space
-      this.type = Constants.BLACKNESS;
+      this.type = BLACKNESS;
     }
     setTileCost();
   }
 
   public void setTileCost()
   {
-    if (type == Constants.FLOOR || type == Constants.SCORCHED_FLOOR)
+
+
+    if (type == FLOOR || type == SCORCHED_FLOOR)
     {
       tileTravelCost = 1;
     }
@@ -66,6 +67,7 @@ public class Tile {
       //never crosses through a object or wall
       tileTravelCost = 50;
     }
+
   }
 
   public double calculateEuclidDistance(Tile start, Tile end)
@@ -77,6 +79,8 @@ public class Tile {
     return euclidDist;
   }
 
+
+
   /**
    *
    * @param frontier - the priority queue that all the nodes get added to
@@ -84,23 +88,29 @@ public class Tile {
    *            This will find the nodes around the tile this is called for
    *            Changes the parent node for if there is a better pathway
    */
-  public void setFrontier(PriorityQueue<Tile> frontier, Tile end)
+  public void setFrontier(PriorityQueue<Tile> frontier, Tile end, Tile[][] map)
   {
-
-    for (int i = 0; i< Constants.TOTAL_DIRECTIONS; i++)
+    directions = new Tile[8];
+    for (int i = 0; i< TOTAL_DIRECTIONS; i++)
     {
-      if (x+Constants.X_DIRECTIONS[i] >= 0 && x+Constants.X_DIRECTIONS[i] < Level.width
-          && y+Constants.Y_DIRECTIONS[i] >= 0 && y+Constants.Y_DIRECTIONS[i] < Level.height)
+      //if in bounds
+      if (x+X_DIRECTIONS[i] >= 0 && x+X_DIRECTIONS[i] < Level.width
+          && y+Y_DIRECTIONS[i] >= 0 && y+Y_DIRECTIONS[i] < Level.height)
       {
-        if (!Level.map[x + Constants.X_DIRECTIONS[i]][y + Constants.Y_DIRECTIONS[i]].chosen
-            && Level.map[x + Constants.X_DIRECTIONS[i]][y + Constants.Y_DIRECTIONS[i]].type != Constants.WALL)
+        //
+        if (!map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]].chosen
+            && map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]].type != WALL)
         {
-          directions[i] = Level.map[x + Constants.X_DIRECTIONS[i]][y + Constants.Y_DIRECTIONS[i]];
-          if (!directions[i].visited) {
-            visited = true;
+          //i set this to be a tile in the grid
+          directions[i] = map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]];
+          //if it hasnt been visited before
+          if (directions[i].parent == null)
+          {
+           // visited = true;
             directions[i].parent = this;
             directions[i].costSoFar = this.costSoFar + directions[i].tileTravelCost;
-          } else if (directions[i].visited)
+          }
+          else
           {
             if (costSoFar < directions[i].parent.costSoFar)
             {
@@ -112,9 +122,7 @@ public class Tile {
           directions[i].heuristicCost = calculateEuclidDistance(directions[i], end);
           directions[i].fCost = directions[i].heuristicCost + directions[i].costSoFar;
 
-          //System.out.println("adding "+directions[i].x+", "+directions[i].y);
           frontier.add(directions[i]);
-          //frontier.add(directions[i]);
 
         }
       }

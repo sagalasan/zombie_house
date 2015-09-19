@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class ZombiePanel extends JPanel implements KeyListener, Constants{
   //int pixelSize = 40;
-  Level level = new Level();
+  //Level level = new Level();
   GameControl gameController = new GameControl(this);
   //paints buffered image of map and characters on top
 
@@ -150,11 +150,20 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
 
     g.setColor(Color.red);
-    //System.out.println(gameController.userPlayer.x);
     g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
 
     g.setColor(Color.BLUE);
-    g.fillOval(gameController.zombie1.getX() * SIZE, gameController.zombie1.getY() * SIZE, 30, 30);
+    //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
+
+      for (Zombie zombie: gameController.zombieList)
+      {
+        g.fillOval(zombie.getXPixel(), zombie.getYPixel(), 30, 30);
+        //g.fillOval(zombie.getX() * SIZE, zombie.getY() * SIZE, 30, 30);
+      }
+
+
+   // }
+
 
   }
 

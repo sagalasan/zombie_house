@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 /**
  * Created by Jalen on 9/10/2015.
@@ -16,22 +14,26 @@ public class GameControl implements Constants
   static Zombie zombie1;
   ZombiePanel reference;
   //adjust this to repaint faster
-  int speed = 1000;
 
+  ArrayList<Zombie> zombieList;
   private boolean movePlayerUp = false;
   private boolean movePlayerDown = false;
   private boolean movePlayerRight = false;
   private boolean movePlayerLeft = false;
+  Level level = new Level();
 
-  Timer timer = new Timer(speed, new ActionListener()
+
+  Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      //reference.repaint();
-      //while player is nearby
-      zombie1.getNextCoordsToFollowPlayer();
-
+      for (Zombie zombie : zombieList)
+      {
+        zombie.updateDirection();
+      }
+     // zombie1.updateDirection();
+     // System.out.println("zombie1 x and y " + zombie1.getX() + ", " + zombie1.getY());
     }
   });
 
@@ -40,7 +42,14 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
+      //System.out.println(userPlayer.getX());
       userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+      //if zombie hits player, reload map and players in same location
+      for (Zombie zombie : zombieList)
+      {
+        //System.out.println("zombie x " + zombie.getX());
+        zombie.move();
+      }
       reference.repaint();
     }
   });
@@ -49,13 +58,11 @@ public class GameControl implements Constants
   {
     reference = panel;
     userPlayer = new Player(5,5);
-    zombie1 = new Zombie(15,10);
-    zombie1.chasePlayer();
-    timer.start();
+    //zombie1 = new Zombie(9,9);
+    zombieList = level.zombieList;
+    zombieReactionTimer.start();
     guiTimer.start();
   }
-
-
 
   public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
   public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }

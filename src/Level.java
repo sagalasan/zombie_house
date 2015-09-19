@@ -10,11 +10,11 @@ import java.util.Random;
  *
  */
 
-public class Level {
+public class Level implements Constants {
 
   static Tile[][] map;
   static int height = 40, width = 40;
-
+  ArrayList<Zombie> zombieList;
   Rectangle rt;
 
   private Random rnd = new Random();
@@ -35,11 +35,11 @@ public class Level {
       {
         if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
         {
-          map[i][j] = new Tile(Constants.WALL, i, j);
+          map[i][j] = new Tile(WALL, i, j);
         }
         else
         {
-          map[i][j] = new Tile(Constants.FLOOR, i, j);
+          map[i][j] = new Tile(FLOOR, i, j);
         }
       }
     }
@@ -81,7 +81,10 @@ public class Level {
     setGrid(rectangles);
 
   }
-
+  public ArrayList<Zombie> getZombieList()
+  {
+    return zombieList;
+  }
   /**
   * @params r - takes a rectangle ArrayList and sets the grid into tile array
   * @params rooms - counts the number of rooms, may not be needed
@@ -89,7 +92,7 @@ public class Level {
   public void setGrid(ArrayList<Rectangle> r) {
     //rooms counts the nuber of rooms
     int rooms = 1;
-
+    zombieList = new ArrayList<Zombie>();
     for (Rectangle rec : r)
     {
       if (rec.room != null)
@@ -99,7 +102,14 @@ public class Level {
         {
           for (int j = 0; j < rec.room.width; j++)
           {
-              map[rec.room.x + i][rec.room.y + j] = new Tile(Constants.SCORCHED_FLOOR, rec.room.x + i, rec.room.x + j);
+            //for floor tiles,
+            //if the int is in the top 1 percent, create a zombie
+            if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
+            {
+              zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
+            }
+            System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
+            map[rec.room.x + i][rec.room.y + j] = new Tile(SCORCHED_FLOOR, rec.room.x + i, rec.room.y + j);
           }
         }
         rooms++;
@@ -107,6 +117,8 @@ public class Level {
 
 
     }
+
+
 
     //send the rectangle array to the panel
     //this may not be necessary depending on if we use
@@ -149,7 +161,7 @@ public class Level {
             else
               secondY++;
           }
-            map[secondX][secondY] = new Tile(Constants.SCORCHED_FLOOR, secondX, secondY);
+//            map[secondX][secondY] = new Tile(SCORCHED_FLOOR, secondX, secondY);
 
         }
       }

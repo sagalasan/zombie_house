@@ -18,7 +18,9 @@ public abstract class Entity implements Constants
   private int x,y;
   private double xPixel, yPixel;
   private int width;
+
   private String type;
+  private boolean hitWall;
   //speed is in tiles per second
   private double speed;
 
@@ -57,9 +59,34 @@ public abstract class Entity implements Constants
     this.y = y;
   }
 
+  public boolean hitwall()
+  {
+    return hitWall;
+  }
   public void setSpeed(double speed)
   {
     this.speed = speed;
+  }
+
+  public boolean legalMove(int x, int y)
+  {
+    //System.out.println(Level.map[x][y].type);
+    //if wall, black boid, or pillar
+    if (Level.map[x][y].type == WALL || Level.map[x][y].type == BLACKNESS || Level.map[x][y].type == PILLAR )
+    {
+      return false;
+    }
+    /**
+     * this is a bounds check.  shouldnt need since there will be walls all around the level
+    if (x == 0 && x > Level.width && y == 0 && y > Level.height)
+    {
+        if (Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()] == Level.map[x][y])
+        {
+          return false;
+        }
+    }
+     **/
+    return true;
   }
 
   public void move(boolean up, boolean down, boolean right, boolean left)
@@ -85,13 +112,25 @@ public abstract class Entity implements Constants
       xMove = xVector * GUI_TIMER_SPEED / 1000 * SIZE;
       yMove = yVector * GUI_TIMER_SPEED / 1000 * SIZE;
     }
-    xPixel += xMove;
-    yPixel += yMove;
-    x = (int) xPixel / SIZE;
-    y = (int) yPixel / SIZE;
+    double possibleXPixel = xPixel + xMove;
+    double possibleYPixel = yPixel + yMove;
+    int possibleX = (int)possibleXPixel / SIZE;
+    int possibleY = (int)possibleYPixel / SIZE;
+    //added check to see if move will be legal or not.
+    //this will not allow ability to move through walls/blackvoid/pillars
+    if (legalMove(possibleX, possibleY))
+    {
+      hitWall = false;
+      x = possibleX;
+      y = possibleY;
+      xPixel = possibleXPixel;
+      yPixel = possibleYPixel;
+    }
+    else
+    {
+      hitWall = true;
+    }
 
-    System.out.println(type + ": " + "(" + xMove + ", " + yMove + ")");
-    //moves east, north, south, west depending on string.
   }
 
 
