@@ -153,12 +153,25 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       GameControl.userPlayer.regenStamina();
     }
 
-
+    if(e.getKeyCode() == KeyEvent.VK_H)
+    {
+      debugPrintLocations();
+    }
   }
 
   @Override
-  public void keyTyped(KeyEvent e) {
+  public void keyTyped(KeyEvent e)
+  {
 
+  }
+
+  private void debugPrintLocations()
+  {
+    for(Zombie zombie : gameController.zombieList)
+    {
+      System.out.println("Zombie: (" + zombie.getXPixel() + ", " + zombie.getYPixel() + ")");
+    }
+    System.out.println("Player: (" + gameController.userPlayer.getXPixel() + ", " + gameController.userPlayer.getYPixel() + ")");
   }
 
 
@@ -166,22 +179,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   @Override
   public void paintComponent(Graphics g)
   {
-
-    //None of this is actually how its gonna work, this is just to test
-    //BufferedImage floor = floorImages[0];
-    //BufferedImage scorchedFloor = floorImages[4];
-
-    //BufferedImage wall = null;
-    //try
-    //{
-      //wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
-    //} catch (IOException e) {}
-
-    for (int i = 0; i < Level.width; i++)
-    {
-      // You need to start drawing the bufferedimage into the screen if necessary
-    }
-
     Dimension d = this.getSize();
 
     int playerX = gameController.userPlayer.getXPixel();
@@ -194,6 +191,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     int drawY = 0;
     int imgWidth = mapBufferedImage.getWidth();
     int imgHeight = mapBufferedImage.getHeight();
+    int offsetX = -1 * imgOriginX;
+    int offsetY = -1 * imgOriginY;
     BufferedImage tempImg;
 
     if(imgOriginX < 0)
@@ -232,15 +231,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g.setColor(Color.BLUE);
     //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
 
-    /**
-      for (Zombie zombie: gameController.zombieList)
-      {
-        g.fillOval(zombie.getXPixel(), zombie.getYPixel(), 30, 30);
-        //g.fillOval(zombie.getX() * SIZE, zombie.getY() * SIZE, 30, 30);
-      }
-**/
 
-   // }
+
+    for (Zombie zombie: gameController.zombieList)
+    {
+      int zombieXPixel = zombie.getXPixel();
+      int zombieYPixel = zombie.getYPixel();
+      int zombieDrawX = offsetX + zombieXPixel;
+      int zombieDrawY = offsetY + zombieYPixel;
+
+      g.fillOval(zombieDrawX, zombieDrawY, 30, 30);
+    }
 
 
   }
