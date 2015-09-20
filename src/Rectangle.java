@@ -6,7 +6,7 @@ import java.util.Random;
 public class Rectangle {
     //room size is compensating for spacing. So subtract 1 from each  outer wall which will
     //become a wall tile. We will then be left with 8x8 min room size
-    private static int MIN_ROOM_SIZE = 10;
+    private static int MIN_ROOM_SIZE = 8;
     private static Random rnd = new Random();
 
     int x, y, width, height;
@@ -19,8 +19,8 @@ public class Rectangle {
     {
         this.x = x;
         this.y = y;
-        this.width = width-2;//subtract 2 to avoid collisions
-        this.height = height-2;//same
+        this.width = width-1;//subtract 1 to avoid collisions and boundary collision
+        this.height = height-1;//same
     }
 
     public boolean split()

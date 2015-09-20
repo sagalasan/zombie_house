@@ -35,11 +35,12 @@ public class Level implements Constants {
       {
         if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
         {
-          map[i][j] = new Tile(WALL, i, j);
+          map[i][j] = new Tile(SCORCHED_FLOOR, i, j);
         }
         else
         {
-          map[i][j] = new Tile(FLOOR, i, j);
+          //non visitable tiles
+          map[i][j] = new Tile(SCORCHED_FLOOR, i, j);
         }
       }
     }
@@ -110,14 +111,12 @@ public class Level implements Constants {
             {
               zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
             }
-            //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
-            map[rec.room.x + i][rec.room.y + j] = new Tile(SCORCHED_FLOOR, rec.room.x + i, rec.room.y + j);
+              //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
+              map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
           }
         }
         rooms++;
       }
-
-
     }
 
 
@@ -145,6 +144,7 @@ public class Level implements Constants {
         //this method needs to be fixed to work better
         while(secondX != firstX || secondY != firstY)
         {
+          int offsetX = 0, offsetY = 0;
           if(secondX != firstX)
           {
             if(secondX > firstX)
@@ -152,6 +152,9 @@ public class Level implements Constants {
               secondX--;
             }
             else secondX++;
+
+            offsetY = secondY + 1;
+            offsetX = secondX;
           }
           else if(secondY != firstY)
           {
@@ -161,12 +164,38 @@ public class Level implements Constants {
             }
             else
               secondY++;
-          }
-            map[secondX][secondY] = new Tile(SCORCHED_FLOOR, secondX, secondY);
 
+            offsetX = secondX + 1;
+            offsetY = secondY;
+          }
+            map[secondX][secondY] = new Tile(FLOOR, secondX, secondY);
+            map[offsetX][offsetY] = new Tile(FLOOR, offsetX, offsetY);
         }
       }
     }
+
+
+    for (int i = 0; i < width; i++)
+    {
+      for (int j = 0; j < height; j++)
+      {
+        if (map[i][j].type == FLOOR)
+        {
+          for (int ii = i - 1; ii <= i + 1; ii++)
+          {
+            for (int jj = j - 1; jj <= j + 1; jj++)
+            {
+              if (map[ii][jj].type != FLOOR)
+              {
+                map[ii][jj] = new Tile(WALL, ii,jj);
+              }
+            }
+          }
+        }
+        System.out.println();
+      }
+    }
+
 
 
   }
