@@ -94,7 +94,10 @@ public class Player extends Entity
   {
     playWalkingSound.start();
   }
-
+public void stopRunningSound()
+{
+  playRunningSound.stop();
+}
 
   public void addSpeed()
   {
