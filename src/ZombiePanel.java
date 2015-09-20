@@ -139,6 +139,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       GameControl.userPlayer.moving = false;
       GameControl.userPlayer.stopWalkingSound();
+      GameControl.userPlayer.stopRunningSound();
     }
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
