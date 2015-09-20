@@ -4,7 +4,9 @@ import java.util.Random;
  * Created by laurencemirabal on 9/14/15.
  */
 public class Rectangle {
-    private static int MIN_ROOM_SIZE = 7;
+    //room size is compensating for spacing. So subtract 1 from each  outer wall which will
+    //become a wall tile. We will then be left with 8x8 min room size
+    private static int MIN_ROOM_SIZE = 10;
     private static Random rnd = new Random();
 
     int x, y, width, height;
@@ -17,8 +19,8 @@ public class Rectangle {
     {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = width-2;//subtract 2 to avoid collisions
+        this.height = height-2;//same
     }
 
     public boolean split()

@@ -13,7 +13,7 @@ import java.util.Random;
 public class Level implements Constants {
 
   static Tile[][] map;
-  static int height = 40, width = 40;
+  static int height = 50, width = 50;
   ArrayList<Zombie> zombieList;
   Rectangle rt;
 
@@ -59,12 +59,14 @@ public class Level implements Constants {
  * */
   public void mapGen()
   {
-    rt = new Rectangle( 0, 0, height, width);
-    int totalRooms = 10;
+
+    //starting at 1,1,height-1,width-1 will give us a buffer of 1 space around
+    //the entire map, which will always be wall
+    rt = new Rectangle( 1, 1, height-1, width-1);
     rectangles.add(rt); //populate rectangle store with root area
 
     //we will make a minimum of 6 and a max of 10, it will be random
-    while(rectangles.size() < rnd.nextInt(((totalRooms*2-1)-12))+12)
+    while(rectangles.size() < 13) // for now this will give us 7 rooms, 14 total elements
     {
       int splitIdx = rnd.nextInt( rectangles.size() ); // choose a random element
       Rectangle toSplit = rectangles.get(splitIdx);
@@ -98,9 +100,9 @@ public class Level implements Constants {
       if (rec.room != null)
       {
 
-        for (int i = 0; i < rec.room.height; i++)
+        for (int i = 0; i < rec.room.width; i++)
         {
-          for (int j = 0; j < rec.room.width; j++)
+          for (int j = 0; j < rec.room.height; j++)
           {
             //for floor tiles,
             //if the int is in the top 1 percent, create a zombie
@@ -136,7 +138,6 @@ public class Level implements Constants {
 
         int firstX = rnd.nextInt((rec.room.width+rec.room.x) - rec.room.x)+rec.room.x;
         int firstY = rnd.nextInt((rec.room.height+rec.room.y) - rec.room.y)+rec.room.y;
-
         int secondX = rnd.nextInt((c.room.width+c.room.x) - c.room.x)+c.room.x;
         int secondY = rnd.nextInt((c.room.height+c.room.y) - c.room.y)+c.room.y;
 
@@ -161,7 +162,7 @@ public class Level implements Constants {
             else
               secondY++;
           }
-//            map[secondX][secondY] = new Tile(SCORCHED_FLOOR, secondX, secondY);
+            map[secondX][secondY] = new Tile(SCORCHED_FLOOR, secondX, secondY);
 
         }
       }
@@ -194,11 +195,12 @@ public class Level implements Constants {
         {
           int currentMidX = (rec.room.width/2)+rec.room.x;
           int currentMidY = (rec.room.height/2)+rec.room.y;
-          int distance = Math.min(Math.abs(currentMidX-midX) - (r.width/2) - (rec.room.width/2),
-                  Math.abs(currentMidY-midY) - (r.height/2) - (rec.room.height/2));
+          int distance = Math.min(Math.abs((currentMidX-midX) - (r.width/2) - (rec.room.width/2)),
+                  Math.abs((currentMidY-midY) - (r.height/2) - (rec.room.height/2)));
+
           if(distance < closestDistance)
           {
-            closestDistance = (int)distance;
+            closestDistance = distance;
             closest = rec;
           }
         }
