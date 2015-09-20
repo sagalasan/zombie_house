@@ -28,6 +28,7 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
+
       //used for updating zombie direction every 2 sec
     /**
       for (Zombie zombie : zombieList)
@@ -50,6 +51,7 @@ public class GameControl implements Constants
     {
       //System.out.println(userPlayer.getX());
       userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
 
@@ -81,6 +83,8 @@ public class GameControl implements Constants
 
   public boolean checkIfPlayerMoving()
   {
+    //if player is moving, play sound every sec
+    //if stopped, then stop the timer
     if (movePlayerDown || movePlayerLeft || movePlayerRight || movePlayerUp)
     {
       return true;

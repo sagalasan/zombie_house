@@ -49,6 +49,7 @@ public class Zombie extends Entity
     return euclidDist;
   }
 
+
   public void sniffForPlayer()
   {
     //need to check if player is nearby
@@ -61,6 +62,20 @@ public class Zombie extends Entity
     else
     {
       smellPlayer = false;
+    }
+
+
+  }
+  public void seeIfPlayerCanHear()
+  {
+    double distToPlayer = calculateEuclidDistance();
+    //this prob has to be seperate.  perhaps in move checker?
+    if (distToPlayer <= PLAYER_HEARING_DISTANCE)
+    {
+      //player can hear
+      //run sound method
+      //if to the right of player, play right sound
+      //if to left of player, play left sound, etc
     }
   }
 
@@ -125,7 +140,9 @@ public class Zombie extends Entity
     moveZombieRight = false;
     moveZombieLeft = false;
     //sniffs for if player is within 7 euclid distance blocks
+
     sniffForPlayer();
+
 
     if (smellPlayer)
     {

@@ -1,6 +1,10 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -10,6 +14,10 @@ public class Player extends Entity
   double stamina = PLAYER_DEFAULT_STAMINA;
   boolean running = false;
   boolean moving = false;
+  int runSoundSpeed = 400;
+  int walkSoundSpeed = 800;
+
+
   public Player(int x, int y)
   {
     super("Player", x, y);
@@ -22,11 +30,16 @@ public class Player extends Entity
       //System.out.println("stamina is "+stamina);
       if (stamina <= 0)
       {
+        playRunningSound.stop();
+        playWalkingSound.start();
         setSpeed(PLAYER_DEFAULT_SPEED);
       }
       //only subtract if moving as well
       else if (moving)
       {
+        playRunningSound.start();
+        playWalkingSound.stop();
+        //change speed of sound timer
         stamina -= .01;
       }
     }
@@ -42,6 +55,47 @@ public class Player extends Entity
       }
     }
   });
+
+
+  Timer playWalkingSound = new Timer(walkSoundSpeed, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      playSound();
+    }
+  });
+
+  Timer playRunningSound = new Timer(runSoundSpeed, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      playSound();
+    }
+  });
+
+  public void playSound()
+  {
+    try {
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sound_files/player_footsteps.wav").getAbsoluteFile());
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      clip.start();
+    } catch(Exception ex) {
+      System.out.println("Error with playing sound.");
+      ex.printStackTrace();
+    }
+  }
+
+  public void stopWalkingSound()
+  {
+    playWalkingSound.stop();
+  }
+  public void startWalkingSound()
+  {
+    playWalkingSound.start();
+  }
+
+
   public void addSpeed()
   {
 
@@ -51,7 +105,7 @@ public class Player extends Entity
     staminaRegen.stop();
     staminaRun.start();
     //System.out.println("keeps starting timer");
-    //setSpeed(PLAYER_RUN_SPEED);
+
 
   }
   public void regenStamina()

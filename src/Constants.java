@@ -13,6 +13,7 @@ public interface Constants {
   double PLAYER_RUN_SPEED = 2.0;
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;
+  double PLAYER_HEARING_DISTANCE = 10;
   double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;
   int SIZE = 80;

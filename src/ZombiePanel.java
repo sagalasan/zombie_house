@@ -1,4 +1,11 @@
+import javafx.application.Application;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -92,16 +99,14 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       gameController.setPlayerMoveUp(true);
     }
 
+    if(gameController.checkIfPlayerMoving())
+    {
+      GameControl.userPlayer.moving = true;
+      GameControl.userPlayer.startWalkingSound();
+    }
     if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.running)
     {
-      if(gameController.checkIfPlayerMoving())
-      {
-        GameControl.userPlayer.moving = true;
-      }
       GameControl.userPlayer.addSpeed();
-
-      //i need to stop the timers once they get to 0 or 5
-      //GameControl.userPlayer.setSpeed(PLAYER_RUN_SPEED);
     }
   }
 
@@ -133,11 +138,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (!gameController.checkIfPlayerMoving())
     {
       GameControl.userPlayer.moving = false;
+      GameControl.userPlayer.stopWalkingSound();
     }
-
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
-
       GameControl.userPlayer.regenStamina();
     }
 
@@ -148,6 +152,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   public void keyTyped(KeyEvent e) {
 
   }
+
+
 
   @Override
   public void paintComponent(Graphics g)
