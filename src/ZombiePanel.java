@@ -73,27 +73,36 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
+     // GameControl.userPlayer.moving = true;
       gameController.setPlayerMoveLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
+      //GameControl.userPlayer.moving = true;
       gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
+      //GameControl.userPlayer.moving = true;
       gameController.setPlayerMoveDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
+      //GameControl.userPlayer.moving = true;
       gameController.setPlayerMoveUp(true);
     }
-    /**
-    if (e.getKeyCode() == KeyEvent.VK_R)
+
+    if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.running)
     {
+      if(gameController.checkIfPlayerMoving())
+      {
+        GameControl.userPlayer.moving = true;
+      }
       GameControl.userPlayer.addSpeed();
+
+      //i need to stop the timers once they get to 0 or 5
       //GameControl.userPlayer.setSpeed(PLAYER_RUN_SPEED);
     }
-     **/
   }
 
   @Override
@@ -101,26 +110,37 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
+      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
+      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
+      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
+      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveUp(false);
     }
-    /**
+    //check all movement bools
+    //if all done set movement to false
+    if (!gameController.checkIfPlayerMoving())
+    {
+      GameControl.userPlayer.moving = false;
+    }
+
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
-      GameControl.userPlayer.setSpeed(PLAYER_DEFAULT_SPEED);
+
+      GameControl.userPlayer.regenStamina();
     }
-     **/
+
 
   }
 

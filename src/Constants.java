@@ -9,16 +9,16 @@ public interface Constants {
   int EXIT = 3;
   int SCORCHED_FLOOR = 5;
   int BLACKNESS = 6;
-  double PLAYER_DEFAULT_SPEED = 1;
-  double PLAYER_RUN_SPEED = 2;
-  double PLAYER_DEFAULT_STAMINA = 5;
-  double PLAYER_REGEN_STAMINA = .2;
-  double ZOMBIE_DEFAULT_SPEED = .5;
+  double PLAYER_DEFAULT_SPEED = 1.0;
+  double PLAYER_RUN_SPEED = 2.0;
+  double PLAYER_DEFAULT_STAMINA = 5.0;
+  double PLAYER_REGEN_STAMINA = .20;
+  double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;
   int SIZE = 80;
   int TOTAL_DIRECTIONS = 8;
   double ZOMBIE_SPAWN_RATE = .010;
-  double ZOMBIE_RANDOM_OR_LINE_RATE = .5;
+  double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
   int ZOMBIE_DECISION_RATE = 2000;
   //used to find blocks around tile
   //Directions          NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST

@@ -79,6 +79,14 @@ public class GameControl implements Constants
   public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
   public void setPlayerMoveLeft(boolean b) { movePlayerLeft = b; }
 
+  public boolean checkIfPlayerMoving()
+  {
+    if (movePlayerDown || movePlayerLeft || movePlayerRight || movePlayerUp)
+    {
+      return true;
+    }
+    return false;
+  }
   public Player getUserPlayer()
   {
     return userPlayer;
