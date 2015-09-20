@@ -33,13 +33,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage scorchedMask;
 
   private BufferedImage mapBufferedImage;
+  private BufferedImage mapScorchedMaskImage;
   private BufferedImage[][] mapImages;
+  private int[][] scorchedLocations;
 
 
   public ZombiePanel()
   {
     addKeyListener(this);
     initializeImages();
+    constructArrayImages();
+    constructBufferedImage();
   }
 
   private void initializeImages()
@@ -63,15 +67,18 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
-      blacknessImage = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
+      blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
-      scorchedMask = ImageIO.read(new File("scorched_mask.png"));
+      scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
     }
     catch (IOException e)
     {
       System.out.println("Image loading failed");
     }
 
+    Graphics2D g2d = blacknessImage.createGraphics();
+    g2d.setPaint(Color.black);
+    g2d.fillRect(0, 0, blacknessImage.getWidth(), blacknessImage.getHeight());
 
   }
 
@@ -160,37 +167,66 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
 
     //None of this is actually how its gonna work, this is just to test
-    BufferedImage floor = floorImages[0];
-    BufferedImage scorchedFloor = floorImages[4];
+    //BufferedImage floor = floorImages[0];
+    //BufferedImage scorchedFloor = floorImages[4];
 
-    BufferedImage wall = null;
-    try
-    {
-      wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
-    } catch (IOException e) {}
+    //BufferedImage wall = null;
+    //try
+    //{
+      //wall = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+    //} catch (IOException e) {}
 
     for (int i = 0; i < Level.width; i++)
     {
-      for (int j = 0; j < Level.height; j++)
-      {
-        if (Level.map[i][j].type == FLOOR)
-        {
-          g.drawImage(floor, i * SIZE, j * SIZE, null);
-        }
-        else if (Level.map[i][j].type == WALL)
-        {
-          g.drawImage(wall, i * SIZE, j * SIZE, null);
-        }
-        else if (Level.map[i][j].type == SCORCHED_FLOOR)
-        {
-          g.drawImage(scorchedFloor, i * SIZE, j * SIZE, null);
-        }
-      }
+      // You need to start drawing the bufferedimage into the screen if necessary
     }
+
+    Dimension d = this.getSize();
+
+    int playerX = gameController.userPlayer.getXPixel();
+    int playerY = gameController.userPlayer.getYPixel();
+    int imgOriginX = playerX - d.width / 2;
+    int imgOriginY = playerY - d.height / 2;
+    int subImgWidth = d.width;
+    int subImgHeight = d.height;
+    int drawX = 0;
+    int drawY = 0;
+    int imgWidth = mapBufferedImage.getWidth();
+    int imgHeight = mapBufferedImage.getHeight();
+    BufferedImage tempImg;
+
+    if(imgOriginX < 0)
+    {
+      drawX = -1 * imgOriginX;
+      imgOriginX = 0;
+    }
+    if(imgOriginY < 0)
+    {
+      drawY = -1 * imgOriginY;
+      imgOriginY = 0;
+    }
+    if(imgOriginX + d.width >= imgWidth)
+    {
+      subImgWidth = imgWidth - imgOriginX;
+    }
+    if(imgOriginY + d.height >= imgHeight)
+    {
+      subImgHeight = imgHeight - imgOriginY;
+    }
+
+    tempImg = mapBufferedImage.getSubimage(imgOriginX, imgOriginY, subImgWidth, subImgHeight);
+
+    g.drawImage(blacknessImage, 0, 0, null);
+    g.drawImage(tempImg, drawX, drawY, null);
+
+
+
 
 
     g.setColor(Color.red);
-    g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
+    //System.out.println(gameController.userPlayer.x);
+    //g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
+    g.fillOval(d.width / 2, d.height / 2, 30, 30);
 
     g.setColor(Color.BLUE);
     //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
@@ -211,6 +247,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private void constructArrayImages()
   {
     mapImages = new BufferedImage[Level.width][Level.height];
+    scorchedLocations = new int[Level.width][Level.height];
     Random random = new Random();
 
     for(int i = 0; i < Level.width; i++)
@@ -228,7 +265,15 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         }
         else
         {
-
+          mapImages[i][j] = blacknessImage;
+        }
+        if(Level.map[i][j].type == SCORCHED_FLOOR)
+        {
+          scorchedLocations[i][j] = 1;
+        }
+        else
+        {
+          scorchedLocations[i][j] = 0;
         }
       }
     }
@@ -237,7 +282,31 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private void constructBufferedImage()
   {
     mapBufferedImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
+    mapScorchedMaskImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
 
+    for(int i = 0; i < Level.width; i++)
+    {
+      for(int j = 0; j < Level.height; j++)
+      {
+        mapBufferedImage.createGraphics().drawImage(mapImages[i][j], SIZE * i, SIZE * j, null);
+        if(scorchedLocations[i][j] == 1)
+        {
+          mapBufferedImage.createGraphics().drawImage(scorchedMask, SIZE * i, SIZE * j, null);
+        }
+      }
+    }
+  }
+
+  private boolean areArrayMapEqaul()
+  {
+    for(int i = 0; i < Level.width; i++)
+    {
+      for(int j = 0; j < Level.height; j++)
+      {
+
+      }
+    }
+    return true;
   }
 
 }
