@@ -257,12 +257,16 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       g.fillOval(zombieDrawX, zombieDrawY, 30, 30);
     }
 
-
+    // Will finish this later, I need to subtract this from a black image to get the proper visibility.
+    //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
   }
 
   private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
   {
+    int drawX = img.getWidth() / 2;
+    int drawY = img.getHeight() / 2;
 
+    g.drawImage(img, x - drawX, y - drawY, null);
   }
 
   private void constructArrayImages()
