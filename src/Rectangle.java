@@ -41,7 +41,7 @@ public class Rectangle {
         {
             return false;
         }
-        int split = rnd.nextInt( max ); // generate split point
+        int split = rnd.nextInt(max); // generate split point
 
         //check that the split size can accommodate the min room size
         if(split < MIN_ROOM_SIZE)
@@ -51,14 +51,14 @@ public class Rectangle {
         //if horizontal is true then we split horizontally and make the child areas
         if(horizontal)
         {
-            leftChild = new Rectangle( x, y, split, width );
-            rightChild = new Rectangle( x+split, y, height-split, width );
+            leftChild = new Rectangle(x, y, split, width);
+            rightChild = new Rectangle(x+split, y, height-split, width);
         }
         //if horizontal is not true then we split vertically
         else
         {
-            leftChild = new Rectangle( x, y, height, split );
-            rightChild = new Rectangle( x, y+split, height, width-split );
+            leftChild = new Rectangle(x, y, height, split);
+            rightChild = new Rectangle(x, y+split, height, width-split);
         }
 
         //we split
@@ -80,14 +80,14 @@ public class Rectangle {
         {   //if height - MIN_ROOM_SIZE <= 0, we only have enough room for the min room
             //size. Otherwise we pick a number within the areas size + min room size.
             //this also determines half the height to be joined with the leaf
-            int roomTop = (height - MIN_ROOM_SIZE <= 0) ? 0 : rnd.nextInt( height - MIN_ROOM_SIZE);
+            int roomX = (height - MIN_ROOM_SIZE <= 0) ? 0 : rnd.nextInt( height - MIN_ROOM_SIZE);
             //this variable is the same as the one above but is for determining room width
-            int roomLeft =  (width - MIN_ROOM_SIZE <= 0) ? 0 : rnd.nextInt( width - MIN_ROOM_SIZE);
+            int roomY =  (width - MIN_ROOM_SIZE <= 0) ? 0 : rnd.nextInt( width - MIN_ROOM_SIZE);
             //now we set those constraints into what will become the dimensions of the room
-            int roomHeight = Math.max(rnd.nextInt( height - roomTop ), MIN_ROOM_SIZE );
-            int roomWidth = Math.max(rnd.nextInt( width - roomLeft ), MIN_ROOM_SIZE );
+            int roomHeight = Math.max(rnd.nextInt( height - roomX ), MIN_ROOM_SIZE );
+            int roomWidth = Math.max(rnd.nextInt( width - roomY ), MIN_ROOM_SIZE );
             //create the room object
-            room = new Rectangle( x + roomTop, y+roomLeft, roomHeight, roomWidth);
+            room = new Rectangle(x+roomX, y+roomY, roomHeight, roomWidth);
         }
     }
 

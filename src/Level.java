@@ -24,8 +24,6 @@ public class Level implements Constants {
 
   public Level(){
 
-
-
     //creates map, use helper methods later
     map = new Tile[width][height];
 
@@ -35,7 +33,7 @@ public class Level implements Constants {
       {
         if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
         {
-          map[i][j] = new Tile(SCORCHED_FLOOR, i, j);
+          map[i][j] = new Tile(WALL, i, j);
         }
         else
         {
@@ -63,18 +61,18 @@ public class Level implements Constants {
 
     //starting at 1,1,height-1,width-1 will give us a buffer of 1 space around
     //the entire map, which will always be wall
-    rt = new Rectangle( 1, 1, height-1, width-1);
+    rt = new Rectangle(1, 1, height-1, width-1);
     rectangles.add(rt); //populate rectangle store with root area
 
     //we will make a minimum of 6 and a max of 10, it will be random
     while(rectangles.size() < 13) // for now this will give us 7 rooms, 14 total elements
     {
-      int splitIdx = rnd.nextInt( rectangles.size() ); // choose a random element
+      int splitIdx = rnd.nextInt(rectangles.size()); // choose a random element
       Rectangle toSplit = rectangles.get(splitIdx);
-      if( toSplit.split() )
+      if(toSplit.split())
       { //attempt to split
-        rectangles.add( toSplit.leftChild );
-        rectangles.add( toSplit.rightChild );
+        rectangles.add(toSplit.leftChild);
+        rectangles.add(toSplit.rightChild);
       }
     }
 
@@ -94,28 +92,26 @@ public class Level implements Constants {
   * */
   public void setGrid(ArrayList<Rectangle> r) {
     //rooms counts the nuber of rooms
-    int rooms = 1;
     zombieList = new ArrayList<Zombie>();
     for (Rectangle rec : r)
     {
       if (rec.room != null)
       {
-
         for (int i = 0; i < rec.room.width; i++)
         {
           for (int j = 0; j < rec.room.height; j++)
           {
+              //this line must be [j][i]!!
+            map[rec.room.x + j][rec.room.y + i].type = FLOOR;//new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
             //for floor tiles,
             //if the int is in the top 1 percent, create a zombie
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
             {
               zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
             }
-              //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
-              map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
+
           }
         }
-        rooms++;
       }
     }
 
@@ -135,10 +131,10 @@ public class Level implements Constants {
       {
         Rectangle c = findClosest(rec.room);
 
-        int firstX = rnd.nextInt((rec.room.width+rec.room.x) - rec.room.x)+rec.room.x;
-        int firstY = rnd.nextInt((rec.room.height+rec.room.y) - rec.room.y)+rec.room.y;
-        int secondX = rnd.nextInt((c.room.width+c.room.x) - c.room.x)+c.room.x;
-        int secondY = rnd.nextInt((c.room.height+c.room.y) - c.room.y)+c.room.y;
+        int firstX = rnd.nextInt((rec.room.height+rec.room.x) - rec.room.x)+rec.room.x;
+        int firstY = rnd.nextInt((rec.room.width+rec.room.y) - rec.room.y)+rec.room.y;
+        int secondX = rnd.nextInt((c.room.height+c.room.x) - c.room.x)+c.room.x;
+        int secondY = rnd.nextInt((c.room.width+c.room.y) - c.room.y)+c.room.y;
 
         //walk to the nearest x then to the nearest y
         //this method needs to be fixed to work better
@@ -168,8 +164,8 @@ public class Level implements Constants {
             offsetX = secondX + 1;
             offsetY = secondY;
           }
-            map[secondX][secondY] = new Tile(FLOOR, secondX, secondY);
-            map[offsetX][offsetY] = new Tile(FLOOR, offsetX, offsetY);
+            map[secondX][secondY].type = FLOOR;//new Tile(FLOOR, secondX, secondY);
+            map[offsetX][offsetY].type = FLOOR;//new Tile(FLOOR, offsetX, offsetY);
         }
       }
     }
