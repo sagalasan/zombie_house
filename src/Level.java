@@ -14,6 +14,7 @@ public class Level implements Constants {
 
   static Tile[][] map;
   static int height = 50, width = 50;
+  int startX = 1, startY = 1;
   ArrayList<Zombie> zombieList;
   Rectangle rt;
 
@@ -94,6 +95,7 @@ public class Level implements Constants {
   public void setGrid(ArrayList<Rectangle> r) {
     //rooms counts the nuber of rooms
     zombieList = new ArrayList<Zombie>();
+    int rooms = 0;
     for (Rectangle rec : r)
     {
       if (rec.room != null)
@@ -102,8 +104,6 @@ public class Level implements Constants {
         {
           for (int j = 0; j < rec.room.height; j++)
           {
-              //this line must be [j][i]!!
-            map[rec.room.x + j][rec.room.y + i].type = FLOOR;//new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
             //for floor tiles,
             //if the int is in the top 1 percent, create a zombie
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
@@ -111,9 +111,16 @@ public class Level implements Constants {
               zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
             }
 
+            //this line must be [j][i] or the map wont work!!
+            map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + j, rec.room.y + i);
 
-              //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
-            map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
+            if(rooms == 0)
+            {
+              setStartX(startX = rec.room.x + j);
+              setStartY(startY = rec.room.y + i);
+            }
+
+            rooms++;
           }
         }
       }
@@ -181,9 +188,9 @@ public class Level implements Constants {
       {
         if (map[i][j].type == FLOOR)
         {
-          for (int ii = i - 1; ii <= i + 1; ii++)
+          for (int ii = i-1; ii <= i+1; ii++)
           {
-            for (int jj = j - 1; jj <= j + 1; jj++)
+            for (int jj = j-1; jj <= j+1; jj++)
             {
               if (map[ii][jj].type != FLOOR)
               {
@@ -192,13 +199,33 @@ public class Level implements Constants {
             }
           }
         }
-        System.out.println();
       }
     }
 
 
 
   }
+
+  public void setStartX(int x)
+  {
+    startX = x;
+  }
+  public void setStartY(int y)
+  {
+    startY = y;
+  }
+
+
+  public int getStartRoomX()
+  {
+    return startX;
+  }
+
+  public int getStartRoomY()
+  {
+    return startY;
+  }
+
 
   /**
    * @aramss currentMidX (Y) - current rectangles mid point

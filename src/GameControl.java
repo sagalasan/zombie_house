@@ -74,11 +74,15 @@ public class GameControl implements Constants
   {
     reference = panel;
     Random rand = new Random();
-    userPlayer = new Player(1,1);
+    userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //zombie1 = new Zombie(9,9);
     zombieList = level.zombieList;
     zombieReactionTimer.start();
     guiTimer.start();
+
+
+
+
   }
 
   public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
