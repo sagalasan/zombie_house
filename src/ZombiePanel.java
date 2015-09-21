@@ -38,6 +38,11 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage[][] mapImages;
   private int[][] scorchedLocations;
 
+  private RadialGradientPaint playerGradient;
+  private Color colorBlackOpaque;
+  private Color colorBlackTransparent;
+  private int playerSight;
+
 
   public ZombiePanel()
   {
@@ -45,6 +50,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     initializeImages();
     constructArrayImages();
     constructBufferedImage();
+
+    colorBlackOpaque = new Color(0, 0, 0, 255);
+    colorBlackTransparent = new Color(0, 0, 0, 0);
   }
 
   private void initializeImages()
@@ -258,7 +266,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
 
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
-    //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
+    drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
   }
 
   private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)

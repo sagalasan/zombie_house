@@ -29,4 +29,6 @@ public interface Constants {
 
   double SIN_OF_PI_4 = 0.70710678118;
   int GUI_TIMER_SPEED = 16;
+
+  int PLAYER_SIGHT = 4;
 }
