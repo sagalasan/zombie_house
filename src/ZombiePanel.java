@@ -260,6 +260,11 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   }
 
+  private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
+  {
+
+  }
+
   private void constructArrayImages()
   {
     mapImages = new BufferedImage[Level.width][Level.height];
