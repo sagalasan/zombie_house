@@ -128,6 +128,7 @@ public abstract class Entity implements Constants
     }
     else
     {
+     // System.out.println("hitwall is true");
       hitWall = true;
     }
 

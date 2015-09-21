@@ -150,6 +150,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
+      if (GameControl.userPlayer.moving)
+      {
+        GameControl.userPlayer.startWalkingSound();
+      }
       GameControl.userPlayer.regenStamina();
     }
 
@@ -230,6 +234,14 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     g.setColor(Color.BLUE);
     //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
+
+
+     /** for (Zombie zombie: gameController.zombieList)
+      {
+        g.fillOval(zombie.getXPixel(), zombie.getYPixel(), 30, 30);
+        //g.fillOval(zombie.getX() * SIZE, zombie.getY() * SIZE, 30, 30);
+      }
+      **/
 
 
 

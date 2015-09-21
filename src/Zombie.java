@@ -1,7 +1,13 @@
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Random;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.*;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -20,6 +26,27 @@ public class Zombie extends Entity
   private boolean moveZombieRight;
   private boolean moveZombieLeft;
 
+  String zombieStepsFileName = "sound_files/player_footsteps.wav";
+  //todo set zombie footsteps sound to someother file
+  //todo have zombies move in 360 degrees
+  //String
+  Timer zombieWalkSound = new Timer(1000, new ActionListener()
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      double multiplier =1;
+      if (getX() < GameControl.userPlayer.getX())
+      {
+        multiplier = -1;
+      }
+      double euclid = calculateEuclidDistance();
+      double panValue = 1.0/euclid * multiplier;
+      double gainValue = 5.0 * euclid;
+      playSound(zombieStepsFileName, panValue, (float)gainValue);
+    }
+
+  });
 
   public Zombie(int x, int y)
   {
@@ -27,12 +54,12 @@ public class Zombie extends Entity
     setSpeed(ZOMBIE_DEFAULT_SPEED);
     if (rand.nextDouble() > ZOMBIE_RANDOM_OR_LINE_RATE)
     {
-      //System.out.println("this is a line zombie1");
+      System.out.println("this is a line zombie1");
       lineZombie = true;
     }
     else
     {
-      //System.out.println("this is a random zombie1");
+      System.out.println("this is a random zombie1");
       lineZombie= false;
     }
     setHeading(directionDegree);
@@ -42,12 +69,33 @@ public class Zombie extends Entity
 
   public double calculateEuclidDistance()
   {
-    double euclidDist = 0;
+    double euclidDist;
     double xDifference = Math.abs(GameControl.userPlayer.getX() - getX());
     double yDifference = Math.abs(GameControl.userPlayer.getY() - getY());
     euclidDist = Math.sqrt(xDifference*xDifference + yDifference*yDifference);
     return euclidDist;
   }
+
+  public void playSound(String fileName, double panValue, float gainValue)
+  {
+    try {
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
+      panControl.setValue((float) panValue);
+      FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+      gainControl.setValue(-1*gainValue);
+
+      System.out.println("gainvalue "+gainValue);
+      clip.start();
+    } catch(Exception ex) {
+      System.out.println("Error with playing sound.");
+      ex.printStackTrace();
+    }
+  }
+
+
 
 
   public void sniffForPlayer()
@@ -72,10 +120,13 @@ public class Zombie extends Entity
     //this prob has to be seperate.  perhaps in move checker?
     if (distToPlayer <= PLAYER_HEARING_DISTANCE)
     {
-      //player can hear
-      //run sound method
-      //if to the right of player, play right sound
-      //if to left of player, play left sound, etc
+      //System.out.println("player can hear me");
+      // todo need to combine each zombies footsteps
+      zombieWalkSound.start();
+    }
+    else
+    {
+      zombieWalkSound.stop();
     }
   }
 

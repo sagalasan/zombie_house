@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Jalen on 9/10/2015.
@@ -30,17 +31,17 @@ public class GameControl implements Constants
     {
 
       //used for updating zombie direction every 2 sec
-    /**
+
       for (Zombie zombie : zombieList)
       {
         zombie.updateDirection();
+
       }
 
-    **/
-     // zombie1.updateDirection();
-     // System.out.println("zombie1 x and y " + zombie1.getX() + ", " + zombie1.getY());
+
 
       //zombie1.updateDirection();
+     // System.out.println("zombie1 x and y " + zombie1.getX() + ", " + zombie1.getY());
     }
   });
 
@@ -51,16 +52,19 @@ public class GameControl implements Constants
     {
       //System.out.println(userPlayer.getX());
       userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
-
+      //System.out.println("player coords ("+userPlayer.getX()+", "+userPlayer.getY()+")");
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
 
-    /**  for (Zombie zombie : zombieList)
+      for (Zombie zombie : zombieList)
       {
         //System.out.println("zombie x " + zombie.getX());
+
         zombie.move();
+        zombie.seeIfPlayerCanHear();
       }
-     **/
+
+
 
       reference.repaint();
     }
@@ -69,8 +73,9 @@ public class GameControl implements Constants
   public GameControl(ZombiePanel panel)
   {
     reference = panel;
+    Random rand = new Random();
     userPlayer = new Player(1,1);
-    //zombie1 = new Zombie(12,12);
+    //zombie1 = new Zombie(9,9);
     zombieList = level.zombieList;
     zombieReactionTimer.start();
     guiTimer.start();

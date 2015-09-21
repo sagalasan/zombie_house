@@ -21,6 +21,7 @@ public class Level implements Constants {
 
   ArrayList<Rectangle> rectangles = new ArrayList<Rectangle>();
 
+  ArrayList<Tile> possiblePlayerTiles = new ArrayList<>();
 
   public Level(){
 
@@ -110,6 +111,9 @@ public class Level implements Constants {
               zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
             }
 
+
+              //System.out.println("room coords at "+(rec.room.x + i) +", "+(rec.room.y + j));
+            map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + i, rec.room.y + j);
           }
         }
       }

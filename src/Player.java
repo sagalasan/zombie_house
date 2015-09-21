@@ -1,6 +1,7 @@
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ public class Player extends Entity
   boolean moving = false;
   int runSoundSpeed = 400;
   int walkSoundSpeed = 800;
-
+  String playerFootstepsFileName = "sound_files/player_footsteps.wav";
 
   public Player(int x, int y)
   {
@@ -61,7 +62,7 @@ public class Player extends Entity
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      playSound();
+      playSound(playerFootstepsFileName);
     }
   });
 
@@ -69,14 +70,14 @@ public class Player extends Entity
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      playSound();
+      playSound(playerFootstepsFileName);
     }
   });
 
-  public void playSound()
+  public void playSound(String fileName)
   {
     try {
-      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sound_files/player_footsteps.wav").getAbsoluteFile());
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
       clip.start();
