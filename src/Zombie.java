@@ -28,7 +28,6 @@ public class Zombie extends Entity
 
   String zombieStepsFileName = "sound_files/player_footsteps.wav";
   //todo set zombie footsteps sound to someother file
-  //todo have zombies move in 360 degrees
   //String
   Timer zombieWalkSound = new Timer(1000, new ActionListener()
   {
