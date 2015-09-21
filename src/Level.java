@@ -108,7 +108,7 @@ public class Level implements Constants {
             //if the int is in the top 1 percent, create a zombie
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
             {
-              zombieList.add(new Zombie(rec.room.x + i, rec.room.y + j));
+              zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
             }
 
             //this line must be [j][i] or the map wont work!!

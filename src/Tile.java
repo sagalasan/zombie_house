@@ -65,7 +65,7 @@ public class Tile implements Constants {
     else
     {
       //never crosses through a object or wall
-      tileTravelCost = 50;
+      tileTravelCost = 500;
     }
 
   }
