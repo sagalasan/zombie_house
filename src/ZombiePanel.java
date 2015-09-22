@@ -44,7 +44,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private Color colorBlackPartial;
   private Color colorBlackTransparent;
   private int playerSight;
-  private float[] fractions = {0.0f, 0.5f, 1.0f};
+  private float[] fractions = {0.0f, 0.7f, 1.0f};
 
 
   public ZombiePanel()
@@ -56,7 +56,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     playerSight = PLAYER_SIGHT * SIZE;
     colorBlackOpaque = new Color(0, 0, 0, 255);
-    colorBlackPartial = new Color(0, 0, 0, 100);
+    colorBlackPartial = new Color(0, 0, 0, 220);
     colorBlackTransparent = new Color(0, 0, 0, 0);
     Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
