@@ -160,6 +160,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
+      GameControl.userPlayer.stopRunningSound();
       if (GameControl.userPlayer.moving)
       {
         GameControl.userPlayer.startWalkingSound();
@@ -184,8 +185,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     for(Zombie zombie : gameController.zombieList)
     {
       System.out.println("Zombie: (" + zombie.getXPixel() + ", " + zombie.getYPixel() + ")");
+      System.out.println("Zombie x, y: (" + zombie.getX() + ", " + zombie.getY() + ")");
     }
     System.out.println("Player: (" + gameController.userPlayer.getXPixel() + ", " + gameController.userPlayer.getYPixel() + ")");
+    System.out.println("Player: x, y(" + gameController.userPlayer.getX() + ", " + gameController.userPlayer.getY() + ")");
   }
 
 

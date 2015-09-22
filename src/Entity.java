@@ -130,6 +130,10 @@ public abstract class Entity implements Constants
     {
      // System.out.println("hitwall is true");
       hitWall = true;
+      //if map[x][possibleY] == wall
+      //if possible y > y hit south
+      //else hit north
+      //
     }
 
   }

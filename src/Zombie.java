@@ -26,25 +26,40 @@ public class Zombie extends Entity
   private boolean moveZombieRight;
   private boolean moveZombieLeft;
 
-  String zombieStepsFileName = "sound_files/player_footsteps.wav";
+  private boolean lastMoveLeft = false;
+  private boolean lastMoveRight = false;
+  private boolean lastMoveDown = false;
+  private boolean lastMoveUp = false;
+
+  private boolean initialCheckFinished = false;
+  String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
+  String zombieWallBump= "sound_files/wall_hit_zombie.wav";
   //todo set zombie footsteps sound to someother file
   //String
+  //for the sound, may have to start the timer in the gamecontrol
+  //that Way I could calculate each pan/gain value and add it
   Timer zombieWalkSound = new Timer(1000, new ActionListener()
   {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      double multiplier =1;
+      double multiplier = 1;
       if (getX() < GameControl.userPlayer.getX())
       {
         multiplier = -1;
       }
       double euclid = calculateEuclidDistance();
-      double panValue = 1.0/euclid * multiplier;
-      double gainValue = 5.0 * euclid;
-      playSound(zombieStepsFileName, panValue, (float)gainValue);
+      double panValue = 1.0 / euclid * multiplier;
+      double gainValue = 4.0 * euclid;
+      if (hitwall())
+      {
+        playSound(zombieWallBump, panValue, 12f);
+      }
+      else
+      {
+        playSound(zombieStepsFileName, panValue, (float) gainValue);
+      }
     }
-
   });
 
   public Zombie(int x, int y)
@@ -53,12 +68,12 @@ public class Zombie extends Entity
     setSpeed(ZOMBIE_DEFAULT_SPEED);
     if (rand.nextDouble() > ZOMBIE_RANDOM_OR_LINE_RATE)
     {
-      System.out.println("this is a line zombie1");
+     // System.out.println("this is a line zombie1");
       lineZombie = true;
     }
     else
     {
-      System.out.println("this is a random zombie1");
+     // System.out.println("this is a random zombie1");
       lineZombie= false;
     }
     setHeading(directionDegree);
@@ -84,9 +99,9 @@ public class Zombie extends Entity
       FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
       panControl.setValue((float) panValue);
       FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-      gainControl.setValue(-1*gainValue);
+      gainControl.setValue(-1 * gainValue);
 
-      System.out.println("gainvalue "+gainValue);
+      //System.out.println("gainvalue "+gainValue);
       clip.start();
     } catch(Exception ex) {
       System.out.println("Error with playing sound.");
@@ -194,28 +209,45 @@ public class Zombie extends Entity
     sniffForPlayer();
 
 
-    if (smellPlayer)
-    {
-      chasePlayer();
-      if (!movementQueue.isEmpty())
+    if (smellPlayer) {
+     /** if (!initialCheckFinished)
       {
-        if (getX() > movementQueue.getLast().x)
-        {
+        initialCheckFinished = true;
+        chasePlayer();
+      }
+      else if (hitwall())
+      {
+        //check if
+        //just try and follow the next coords
+      }
+      else {
+
+        chasePlayer();
+      }
+      **/
+    chasePlayer();
+
+      //if hitwall move to the next tile up in the movementqueue
+      if (!movementQueue.isEmpty()) {
+        System.out.println("looking for next coords using "+movementQueue.getLast().x+", "+movementQueue.getLast().y);
+
+        if (getX() > movementQueue.getLast().x) {
           //System.out.println("zombie left");
+          lastMoveLeft = true;
           moveZombieLeft = true;
         }
-        if (getX() < movementQueue.getLast().x)
-        {
+        if (getX() < movementQueue.getLast().x) {
+          lastMoveRight = true;
           //System.out.println("zombie right");
           moveZombieRight = true;
         }
-        if (getY() < movementQueue.getLast().y)
-        {
+        if (getY() < movementQueue.getLast().y) {
+          lastMoveDown = true;
           //System.out.println("zombie down");
           moveZombieDown = true;
         }
-        if (getY() > movementQueue.getLast().y)
-        {
+        if (getY() > movementQueue.getLast().y) {
+          lastMoveUp = true;
           //System.out.println("zombie up");
           moveZombieUp = true;
         }
@@ -365,7 +397,7 @@ public class Zombie extends Entity
       {
         break;
       }
-      //System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
+      System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
       currentNode.setFrontier(queue, end, map);
     }
     return end;
