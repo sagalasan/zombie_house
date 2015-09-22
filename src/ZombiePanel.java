@@ -341,12 +341,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     mapBufferedImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
     mapScorchedMaskImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
 
-    for(int i = 0; i < Level.width; i++)
+    for (int i = 0; i < Level.width; i++)
     {
-      for(int j = 0; j < Level.height; j++)
+      for (int j = 0; j < Level.height; j++)
       {
         mapBufferedImage.createGraphics().drawImage(mapImages[i][j], SIZE * i, SIZE * j, null);
-        if(scorchedLocations[i][j] == 1)
+        if (scorchedLocations[i][j] == 1)
         {
           mapBufferedImage.createGraphics().drawImage(scorchedMask, SIZE * i, SIZE * j, null);
         }
