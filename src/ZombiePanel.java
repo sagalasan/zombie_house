@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,8 +41,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private RadialGradientPaint playerGradient;
   private Color colorBlackOpaque;
+  private Color colorBlackPartial;
   private Color colorBlackTransparent;
   private int playerSight;
+  private float[] fractions = {0.0f, 0.5f, 1.0f};
 
 
   public ZombiePanel()
@@ -51,8 +54,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     constructArrayImages();
     constructBufferedImage();
 
+    playerSight = PLAYER_SIGHT * SIZE;
     colorBlackOpaque = new Color(0, 0, 0, 255);
+    colorBlackPartial = new Color(0, 0, 0, 100);
     colorBlackTransparent = new Color(0, 0, 0, 0);
+    Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
+
+    playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
   }
 
   private void initializeImages()
@@ -196,6 +204,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   @Override
   public void paintComponent(Graphics g)
   {
+    Graphics2D g2d = (Graphics2D) g;
     Dimension d = this.getSize();
 
     int playerX = gameController.userPlayer.getXPixel();
@@ -269,7 +278,19 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
 
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
-    drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
+    //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
+    g2d.setPaint(playerGradient);
+    //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);
+    g2d.fillRect(0, 0, getWidth(), getHeight());
+
+    //Point2D center = new Point2D.Float(d.width / 2, d.height / 2);
+    //float radius = 150;
+    //float[] dist = {0.0f, 0.2f, 1.0f};
+    //Color[] colors = {Color.RED, Color.WHITE, Color.BLUE};
+    //RadialGradientPaint p =
+    //        new RadialGradientPaint(center, radius, dist, colors);
+    //g2d.setPaint(p);
+    //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
   }
 
   private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
