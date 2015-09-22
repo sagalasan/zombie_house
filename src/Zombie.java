@@ -32,6 +32,8 @@ public class Zombie extends Entity
   private boolean lastMoveUp = false;
 
   private boolean initialCheckFinished = false;
+
+
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
   String zombieWallBump= "sound_files/wall_hit_zombie.wav";
   //todo set zombie footsteps sound to someother file
@@ -100,7 +102,6 @@ public class Zombie extends Entity
       panControl.setValue((float) panValue);
       FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
       gainControl.setValue(-1 * gainValue);
-
       //System.out.println("gainvalue "+gainValue);
       clip.start();
     } catch(Exception ex) {
@@ -140,6 +141,7 @@ public class Zombie extends Entity
     }
     else
     {
+
       zombieWalkSound.stop();
     }
   }
@@ -229,7 +231,7 @@ public class Zombie extends Entity
 
       //if hitwall move to the next tile up in the movementqueue
       if (!movementQueue.isEmpty()) {
-        System.out.println("looking for next coords using "+movementQueue.getLast().x+", "+movementQueue.getLast().y);
+        //System.out.println("looking for next coords using "+movementQueue.getLast().x+", "+movementQueue.getLast().y);
 
         if (getX() > movementQueue.getLast().x) {
           //System.out.println("zombie left");
@@ -397,7 +399,7 @@ public class Zombie extends Entity
       {
         break;
       }
-      System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
+      //System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
       currentNode.setFrontier(queue, end, map);
     }
     return end;

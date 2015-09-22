@@ -17,9 +17,9 @@ public class Tile implements Constants {
   double heuristicCost;
   double fCost;
   double costSoFar;
-
-
+  boolean combusting = false;
   int type;
+
   public Tile(int type, int x, int y){
     //could change this to for loop,
     //whatever is more readable
@@ -46,19 +46,21 @@ public class Tile implements Constants {
     {
       this.type = SCORCHED_FLOOR;
     }
-    else
+    else if (type == BLACKNESS)
     {
       //black space
       this.type = BLACKNESS;
+    }
+    else if (type == FIRETRAP)
+    {
+      this.type = FIRETRAP;
     }
     setTileCost();
   }
 
   public void setTileCost()
   {
-
-
-    if (type == FLOOR || type == SCORCHED_FLOOR)
+    if (type == FLOOR || type == SCORCHED_FLOOR || type == FIRETRAP)
     {
       tileTravelCost = 1;
     }
@@ -67,15 +69,34 @@ public class Tile implements Constants {
       //never crosses through a object or wall
       tileTravelCost = 500;
     }
-
   }
 
+  public void explode()
+  {
+    type = FLOOR;
+    for (int i = -1; i < 2; i++)
+    {
+      for (int j = -1; j < 2; j++)
+      {
+        if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
+        {
+          //check for if the type is a wall or object as well
+          Level.map[x+i][y+j].type = SCORCHED_FLOOR;
+          Level.map[x + i][y + j].combusting = true;
+
+          //wait 5 seconds and then set back to false
+          //probably done in the fire animation loop
+        }
+      }
+    }
+    //combusts tile and eight blocks around it
+
+  }
   public double calculateEuclidDistance(Tile start, Tile end)
   {
-    double euclidDist = 0;
     double xDifference = Math.abs(start.x - end.x);
     double yDifference = Math.abs(start.y - end.y);
-    euclidDist = Math.sqrt(xDifference*xDifference + yDifference*yDifference);
+    double euclidDist = Math.sqrt(xDifference*xDifference + yDifference*yDifference);
     return euclidDist;
   }
 

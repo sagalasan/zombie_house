@@ -29,19 +29,14 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
-
       //used for updating zombie direction every 2 sec
-
       for (Zombie zombie : zombieList)
       {
-        zombie.updateDirection();
-
+        if (zombie.isAlive())
+        {
+          zombie.updateDirection();
+        }
       }
-
-
-
-      //zombie1.updateDirection();
-     // System.out.println("zombie1 x and y " + zombie1.getX() + ", " + zombie1.getY());
     }
   });
 
@@ -50,22 +45,35 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      //System.out.println(userPlayer.getX());
       userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
-      //System.out.println("player coords ("+userPlayer.getX()+", "+userPlayer.getY()+")");
+      if (userPlayer.running && Level.map[userPlayer.getX()][userPlayer.getY()].type==FIRETRAP)
+      {
+        Level.map[userPlayer.getX()][userPlayer.getY()].explode();
+      }
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
 
       for (Zombie zombie : zombieList)
       {
-        //System.out.println("zombie x " + zombie.getX());
+        if (zombie.isAlive())
+        {
+          zombie.move();
+          zombie.seeIfPlayerCanHear();
+          Tile zombieLocation = Level.map[zombie.getX()][zombie.getY()];
+          if (zombieLocation.type == FIRETRAP)
+          {
+            zombieLocation.explode();
 
-        zombie.move();
-        zombie.seeIfPlayerCanHear();
+          }
+          //this has to be last so removing zombie is seemless?
+          if (zombieLocation.combusting)
+          {
+            //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
+            zombie.setAlive(false);
+            zombie.zombieWalkSound.stop();
+          }
+        }
       }
-
-
-
       reference.repaint();
     }
   });
@@ -73,9 +81,9 @@ public class GameControl implements Constants
   public GameControl(ZombiePanel panel)
   {
     reference = panel;
-    Random rand = new Random();
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //zombie1 = new Zombie(9,9);
+    //could possibly clone zombielist so level will always have the original info for reloading
     zombieList = level.zombieList;
     zombieReactionTimer.start();
     guiTimer.start();

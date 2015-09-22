@@ -40,6 +40,7 @@ public class Level implements Constants {
         else
         {
           //non visitable tiles
+          //todo, does this need to be changed to BLACKNESS?
           map[i][j] = new Tile(SCORCHED_FLOOR, i, j);
         }
       }
@@ -104,15 +105,21 @@ public class Level implements Constants {
         {
           for (int j = 0; j < rec.room.height; j++)
           {
+            map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + j, rec.room.y + i);
             //for floor tiles,
             //if the int is in the top 1 percent, create a zombie
+
+            if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
+            {
+              System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
+              map[rec.room.x + j][rec.room.y + i].type = FIRETRAP;
+            }
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
             {
               zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
             }
 
             //this line must be [j][i] or the map wont work!!
-            map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + j, rec.room.y + i);
 
             if(rooms == 0)
             {
@@ -175,8 +182,21 @@ public class Level implements Constants {
             offsetX = secondX + 1;
             offsetY = secondY;
           }
-            map[secondX][secondY].type = FLOOR;//new Tile(FLOOR, secondX, secondY);
-            map[offsetX][offsetY].type = FLOOR;//new Tile(FLOOR, offsetX, offsetY);
+          map[secondX][secondY].type = FLOOR;//new Tile(FLOOR, secondX, secondY);
+          map[offsetX][offsetY].type = FLOOR;//new Tile(FLOOR, offsetX, offsetY);
+          if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
+          {
+              //choose random tile of these
+            //spawns firetrap
+            if (rnd.nextDouble()<.5)
+            {
+              map[secondX][secondY].type = FIRETRAP;
+            }
+            else
+            {
+              map[offsetX][offsetY].type = FIRETRAP;
+            }
+          }
         }
       }
     }
@@ -186,15 +206,24 @@ public class Level implements Constants {
     {
       for (int j = 0; j < height; j++)
       {
-        if (map[i][j].type == FLOOR)
+        if (map[i][j].type == FLOOR || map[i][j].type == FIRETRAP)
         {
           for (int ii = i-1; ii <= i+1; ii++)
           {
             for (int jj = j-1; jj <= j+1; jj++)
             {
-              if (map[ii][jj].type != FLOOR)
+              if (map[ii][jj].type != FLOOR)//|| map[ii][jj].type != FIRETRAP)
               {
-                map[ii][jj] = new Tile(WALL, ii,jj);
+                if (map[ii][jj].type == FIRETRAP)
+                {
+                  //some reason firetraps are turned into walls
+                  //skip it becoming a wall if firetrap
+                }
+                else
+                {
+                  map[ii][jj] = new Tile(WALL, ii,jj);
+                }
+
               }
             }
           }

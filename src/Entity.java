@@ -19,6 +19,8 @@ public abstract class Entity implements Constants
   private double xPixel, yPixel;
   private int width;
 
+  private boolean isAlive = true;
+
   private String type;
   private boolean hitWall;
   //speed is in tiles per second
@@ -59,6 +61,16 @@ public abstract class Entity implements Constants
     this.y = y;
   }
 
+  public void setAlive(boolean aliveStatus)
+  {
+    isAlive = aliveStatus;
+
+  }
+
+  public boolean isAlive()
+  {
+    return isAlive;
+  }
   public boolean hitwall()
   {
     return hitWall;

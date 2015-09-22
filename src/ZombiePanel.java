@@ -31,6 +31,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage[] floorImages;
   private BufferedImage  blacknessImage;
   private BufferedImage wallImage;
+  private BufferedImage firetrapImage;
   private BufferedImage scorchedMask;
   private BufferedImage playerVisibleMask;
 
@@ -84,6 +85,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+      firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
@@ -192,8 +194,11 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     for(Zombie zombie : gameController.zombieList)
     {
-      System.out.println("Zombie: (" + zombie.getXPixel() + ", " + zombie.getYPixel() + ")");
-      System.out.println("Zombie x, y: (" + zombie.getX() + ", " + zombie.getY() + ")");
+      if (zombie.isAlive())
+      {
+        System.out.println("Zombie: (" + zombie.getXPixel() + ", " + zombie.getYPixel() + ")");
+        System.out.println("Zombie x, y: (" + zombie.getX() + ", " + zombie.getY() + ")");
+      }
     }
     System.out.println("Player: (" + gameController.userPlayer.getXPixel() + ", " + gameController.userPlayer.getYPixel() + ")");
     System.out.println("Player: x, y(" + gameController.userPlayer.getX() + ", " + gameController.userPlayer.getY() + ")");
@@ -269,12 +274,15 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     for (Zombie zombie: gameController.zombieList)
     {
-      int zombieXPixel = zombie.getXPixel();
-      int zombieYPixel = zombie.getYPixel();
-      int zombieDrawX = offsetX + zombieXPixel;
-      int zombieDrawY = offsetY + zombieYPixel;
+      if (zombie.isAlive())
+      {
+        int zombieXPixel = zombie.getXPixel();
+        int zombieYPixel = zombie.getYPixel();
+        int zombieDrawX = offsetX + zombieXPixel;
+        int zombieDrawY = offsetY + zombieYPixel;
 
-      g.fillOval(zombieDrawX, zombieDrawY, 30, 30);
+        g.fillOval(zombieDrawX, zombieDrawY, 30, 30);
+      }
     }
 
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
@@ -319,6 +327,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         {
           int index = random.nextInt(floorImages.length);
           mapImages[i][j] = floorImages[index];
+        }
+        else if (Level.map[i][j].type == FIRETRAP)
+        {
+          mapImages[i][j] = firetrapImage;
         }
         else
         {

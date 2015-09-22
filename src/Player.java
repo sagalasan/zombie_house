@@ -38,6 +38,10 @@ public class Player extends Entity
       //only subtract if moving as well
       else if (moving)
       {
+        //player is running,
+        //check if its on top of a firetrap.  if so explode
+        //possible large use of processing power
+
         playRunningSound.start();
         playWalkingSound.stop();
         //change speed of sound timer
