@@ -45,10 +45,15 @@ public class GameControl implements Constants
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+      if (userPlayer.canMove())
+      {
+        userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+      }
+
       if (userPlayer.running && Level.map[userPlayer.getX()][userPlayer.getY()].type==FIRETRAP)
       {
         Level.map[userPlayer.getX()][userPlayer.getY()].explode();
+        userPlayer.setAlive(false);
       }
       //if zombie hits player, reload map and players in same location
       //zombie1.move();

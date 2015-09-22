@@ -15,9 +15,11 @@ public class Player extends Entity
   double stamina = PLAYER_DEFAULT_STAMINA;
   boolean running = false;
   boolean moving = false;
+  private boolean canMove = true;
   int runSoundSpeed = 400;
   int walkSoundSpeed = 800;
   String playerFootstepsFileName = "sound_files/player_footsteps.wav";
+  int fireTrapInventory = 0;
 
   public Player(int x, int y)
   {
@@ -78,6 +80,14 @@ public class Player extends Entity
     }
   });
 
+  public boolean canMove()
+  {
+    return canMove;
+  }
+  public void setCanMove(boolean b)
+  {
+    canMove = b;
+  }
   public void playSound(String fileName)
   {
     try {
@@ -99,11 +109,27 @@ public class Player extends Entity
   {
     playWalkingSound.start();
   }
-public void stopRunningSound()
+  public void stopRunningSound()
 {
   playRunningSound.stop();
 }
 
+  public boolean hasFiretraps()
+  {
+    if (fireTrapInventory > 0)
+    {
+      return true;
+    }
+    return false;
+  }
+  public void takeFiretrap()
+  {
+    fireTrapInventory += 1;
+  }
+  public void useFiretrap()
+  {
+    fireTrapInventory -= 1;
+  }
   public void addSpeed()
   {
 

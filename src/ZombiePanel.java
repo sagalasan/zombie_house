@@ -101,6 +101,26 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g2d.fillRect(0, 0, blacknessImage.getWidth(), blacknessImage.getHeight());
 
   }
+  int fiveSeconds = 5000;
+  Timer pickUpFiretrap = new Timer(fiveSeconds, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      GameControl.userPlayer.takeFiretrap();
+      Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()].type = FLOOR;
+      GameControl.userPlayer.setCanMove(true);
+    }
+  });
+
+  Timer setFiretrap = new Timer(fiveSeconds, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      GameControl.userPlayer.useFiretrap();
+      Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()].type = FIRETRAP;
+      GameControl.userPlayer.setCanMove(true);
+    }
+  });
 
   @Override
   public void keyPressed(KeyEvent e)
@@ -126,14 +146,41 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       gameController.setPlayerMoveUp(true);
     }
 
-    if(gameController.checkIfPlayerMoving())
+    if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
     {
       GameControl.userPlayer.moving = true;
       GameControl.userPlayer.startWalkingSound();
     }
-    if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.running)
+    if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.running && GameControl.userPlayer.canMove())
     {
       GameControl.userPlayer.addSpeed();
+    }
+    if (e.getKeyCode() == KeyEvent.VK_P && !GameControl.userPlayer.running)
+    {
+      Tile playerTile = Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()];
+      if (playerTile.type == FIRETRAP)
+      {
+        //disable moving
+        GameControl.userPlayer.setCanMove(false);
+        pickUpFiretrap.setRepeats(false);
+        pickUpFiretrap.start();
+        //start waiting timer,
+      }
+      else if (GameControl.userPlayer.hasFiretraps()&& playerTile.type == FLOOR)
+      {
+        GameControl.userPlayer.setCanMove(false);
+        setFiretrap.setRepeats(false);
+        setFiretrap.start();
+
+      }
+      //if on firetrap tile
+      //cant move,
+      //wait 5 seconds
+      //at the end of 5 seconds, add firetrap to inventory and tile is no longer firetrap
+
+      //else if on reg tile and firetrap inventory is not 0
+      //cant move, wait 5 sec
+      //at the end add firetrap to tile;
     }
   }
 
