@@ -366,4 +366,14 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     return true;
   }
 
+  private class RayTracingThread implements Runnable
+  {
+
+    @Override
+    public void run()
+    {
+
+    }
+  }
+
 }
