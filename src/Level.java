@@ -41,9 +41,7 @@ public class Level implements Constants {
         }
         else
         {
-          //non visitable tiles
-          //todo, does this need to be changed to BLACKNESS?
-          map[i][j] = new Tile(SCORCHED_FLOOR, i, j);
+          map[i][j] = new Tile(BLACKNESS, i, j);
         }
       }
     }
@@ -229,7 +227,10 @@ public class Level implements Constants {
       }
     }
 
-
+    //we have to set the exit tiles only after the walls have been made
+    //otherwise they need to be created somewhere else
+    map[getExitRoomX()][getStartExitY()-1].type = EXIT;
+    map[getExitRoomX()+1][getStartExitY()-1].type = EXIT;
 
   }
 
@@ -320,13 +321,12 @@ public class Level implements Constants {
         }
       }
     }
-    if(currentRec == 0)
-    {
+    if (currentRec == 0) {
       System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
       setExitX(farthest.room.x);
       setExitY(farthest.room.y);
      // map[farthest.room.x][farthest.room.y].type = EXIT;
-      map[farthest.room.x][farthest.room.y] = new Tile(EXIT, farthest.room.x,farthest.room.y);
+      //map[farthest.room.x][farthest.room.y] = new Tile(EXIT, farthest.room.x,farthest.room.y);
     }
 
     return closest;

@@ -84,10 +84,14 @@ public abstract class Entity implements Constants
   {
     //System.out.println(Level.map[x][y].type);
     //if wall, black boid, or pillar
-    if (Level.map[x][y].type == WALL || Level.map[x][y].type == BLACKNESS || Level.map[x][y].type == PILLAR )
+    if (Level.map[x][y].type == WALL || Level.map[x][y].type == BLACKNESS
+            || Level.map[x][y].type == PILLAR || Level.map[x][y].type == EXIT)
     {
       return false;
     }
+
+    //TODO add constraints for making contact with the exit
+
     /**
      * this is a bounds check.  shouldnt need since there will be walls all around the level
     if (x == 0 && x > Level.width && y == 0 && y > Level.height)
