@@ -90,6 +90,7 @@ public class Player extends Entity
   }
   public void playSound(String fileName)
   {
+    //todo have gain level change according to whether or not player is running
     try {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
       Clip clip = AudioSystem.getClip();

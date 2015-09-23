@@ -36,7 +36,6 @@ public class Zombie extends Entity
 
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
   String zombieWallBump= "sound_files/wall_hit_zombie.wav";
-  //todo set zombie footsteps sound to someother file
   //String
   //for the sound, may have to start the timer in the gamecontrol
   //that Way I could calculate each pan/gain value and add it

@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -71,6 +74,21 @@ public class Tile implements Constants {
     }
   }
 
+  private void combust()
+  {
+    //runs for 15 seconds
+    Timer CombustTimer = new Timer(15000, new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        combusting = false;
+        System.out.println("finsihed combusting");
+      }
+    });
+    CombustTimer.setRepeats(false);
+    CombustTimer.start();
+  }
   public void explode()
   {
     type = FLOOR;
@@ -83,6 +101,8 @@ public class Tile implements Constants {
           //check for if the type is a wall or object as well
           Level.map[x+i][y+j].type = SCORCHED_FLOOR;
           Level.map[x + i][y + j].combusting = true;
+          Level.map[x + i][y + j].combust();
+          System.out.println("started combusting");
 
           //wait 5 seconds and then set back to false
           //probably done in the fire animation loop
