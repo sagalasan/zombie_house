@@ -14,14 +14,14 @@ public class Tile implements Constants {
   //used for Astar
   Tile parent;
   int x, y;
-  Tile[] directions;// = new Tile[8];
-  boolean chosen = false;
-  double tileTravelCost;
-  double heuristicCost;
-  double fCost;
-  double costSoFar;
-  boolean combusting = false;
-  int type;
+  private Tile[] directions;// = new Tile[8];
+  private boolean chosen = false;
+  private double tileTravelCost;
+  private double heuristicCost;
+  private double fCost;
+  private double costSoFar;
+  private boolean combusting = false;
+  private int type;
 
   public Tile(int type, int x, int y){
     //could change this to for loop,
@@ -60,7 +60,39 @@ public class Tile implements Constants {
     }
     setTileCost();
   }
+  public void setChosen(boolean b)
+  {
+    chosen = b;
+  }
+  public double getHeuristicCost()
+  {
+    return heuristicCost;
+  }
+  public double getfCost()
+  {
+    return fCost;
+  }
+  public void setCostSoFar(double newValue)
+  {
+    costSoFar = newValue;
+  }
+  public boolean isCombusting()
+  {
+    return combusting;
+  }
+  public double getTileTravelCost()
+  {
+    return tileTravelCost;
+  }
 
+  public void setType(int newType)
+  {
+    type = newType;
+  }
+  public int getType()
+  {
+    return type;
+  }
   public void setTileCost()
   {
     if (type == FLOOR || type == SCORCHED_FLOOR || type == FIRETRAP)

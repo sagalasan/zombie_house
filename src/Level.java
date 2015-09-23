@@ -112,7 +112,7 @@ public class Level implements Constants {
             if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
             {
               System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
-              map[rec.room.x + j][rec.room.y + i].type = FIRETRAP;
+              map[rec.room.x + j][rec.room.y + i].setType(FIRETRAP);
             }
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
             {
@@ -177,19 +177,19 @@ public class Level implements Constants {
             offsetX = secondX + 1;
             offsetY = secondY;
           }
-          map[secondX][secondY].type = FLOOR;//new Tile(FLOOR, secondX, secondY);
-          map[offsetX][offsetY].type = FLOOR;//new Tile(FLOOR, offsetX, offsetY);
+          map[secondX][secondY].setType(FLOOR);//new Tile(FLOOR, secondX, secondY);
+          map[offsetX][offsetY].setType(FLOOR);//new Tile(FLOOR, offsetX, offsetY);
           if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
           {
             //choose random tile of these
             //spawns firetrap
             if (rnd.nextDouble()<.5)
             {
-              map[secondX][secondY].type = FIRETRAP;
+              map[secondX][secondY].setType(FIRETRAP);
             }
             else
             {
-              map[offsetX][offsetY].type = FIRETRAP;
+              map[offsetX][offsetY].setType(FIRETRAP);
             }
           }
         }
@@ -202,15 +202,15 @@ public class Level implements Constants {
     {
       for (int j = 0; j < height; j++)
       {
-        if (map[i][j].type == FLOOR || map[i][j].type == FIRETRAP)
+        if (map[i][j].getType() == FLOOR || map[i][j].getType() == FIRETRAP)
         {
           for (int ii = i-1; ii <= i+1; ii++)
           {
             for (int jj = j-1; jj <= j+1; jj++)
             {
-              if (map[ii][jj].type != FLOOR)//|| map[ii][jj].type != FIRETRAP)
+              if (map[ii][jj].getType() != FLOOR)//|| map[ii][jj].type != FIRETRAP)
               {
-                if (map[ii][jj].type == FIRETRAP)
+                if (map[ii][jj].getType() == FIRETRAP)
                 {
                   //some reason firetraps are turned into walls
                   //skip it becoming a wall if firetrap
@@ -229,8 +229,8 @@ public class Level implements Constants {
 
     //we have to set the exit tiles only after the walls have been made
     //otherwise they need to be created somewhere else
-    map[getExitRoomX()][getStartExitY()-1].type = EXIT;
-    map[getExitRoomX()+1][getStartExitY()-1].type = EXIT;
+    map[getExitRoomX()][getStartExitY()-1].setType(EXIT);
+    map[getExitRoomX()+1][getStartExitY()-1].setType(EXIT);
 
   }
 

@@ -12,14 +12,14 @@ import java.io.File;
  */
 public class Player extends Entity
 {
-  double stamina = PLAYER_DEFAULT_STAMINA;
-  boolean running = false;
-  boolean moving = false;
+  private double stamina = PLAYER_DEFAULT_STAMINA;
+  private boolean running = false;
+  private boolean moving = false;
   private boolean canMove = true;
-  int runSoundSpeed = 400;
-  int walkSoundSpeed = 800;
-  String playerFootstepsFileName = "sound_files/player_footsteps.wav";
-  int fireTrapInventory = 0;
+  private int runSoundSpeed = 400;
+  private int walkSoundSpeed = 800;
+  private String playerFootstepsFileName = "sound_files/player_footsteps.wav";
+  private int fireTrapInventory = 0;
 
   public Player(int x, int y)
   {
@@ -84,10 +84,24 @@ public class Player extends Entity
   {
     return canMove;
   }
+
   public void setCanMove(boolean b)
   {
     canMove = b;
   }
+  public boolean isRunning()
+  {
+    return running;
+  }
+  public void setMoving(boolean b)
+  {
+    moving = b;
+  }
+  public boolean isMoving()
+  {
+    return moving;
+  }
+
   public void playSound(String fileName)
   {
     //todo have gain level change according to whether or not player is running
@@ -115,6 +129,7 @@ public class Player extends Entity
   playRunningSound.stop();
 }
 
+
   public boolean hasFiretraps()
   {
     if (fireTrapInventory > 0)
@@ -133,15 +148,12 @@ public class Player extends Entity
   }
   public void addSpeed()
   {
-
     running = true;
     setSpeed(PLAYER_RUN_SPEED);
     //if im running, begin regen?
     staminaRegen.stop();
     staminaRun.start();
     //System.out.println("keeps starting timer");
-
-
   }
   public void regenStamina()
   {

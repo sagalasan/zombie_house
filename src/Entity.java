@@ -84,8 +84,8 @@ public abstract class Entity implements Constants
   {
     //System.out.println(Level.map[x][y].type);
     //if wall, black boid, or pillar
-    if (Level.map[x][y].type == WALL || Level.map[x][y].type == BLACKNESS
-            || Level.map[x][y].type == PILLAR || Level.map[x][y].type == EXIT)
+    if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
+            || Level.map[x][y].getType() == PILLAR || Level.map[x][y].getType() == EXIT)
     {
       return false;
     }

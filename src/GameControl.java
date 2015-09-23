@@ -50,7 +50,7 @@ public class GameControl implements Constants
         userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
       }
 
-      if (userPlayer.running && Level.map[userPlayer.getX()][userPlayer.getY()].type==FIRETRAP)
+      if (userPlayer.isRunning() && Level.map[userPlayer.getX()][userPlayer.getY()].getType() == FIRETRAP)
       {
         Level.map[userPlayer.getX()][userPlayer.getY()].explode();
         userPlayer.setAlive(false);
@@ -65,13 +65,13 @@ public class GameControl implements Constants
           zombie.move();
           zombie.seeIfPlayerCanHear();
           Tile zombieLocation = Level.map[zombie.getX()][zombie.getY()];
-          if (zombieLocation.type == FIRETRAP)
+          if (zombieLocation.getType() == FIRETRAP)
           {
             zombieLocation.explode();
 
           }
           //this has to be last so removing zombie is seemless?
-          if (zombieLocation.combusting)
+          if (zombieLocation.isCombusting())
           {
             //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
             zombie.setAlive(false);

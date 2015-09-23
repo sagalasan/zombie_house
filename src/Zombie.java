@@ -15,11 +15,11 @@ import java.util.*;
 public class Zombie extends Entity
 {
   //used for the movements that need to be painted for zombie
-  LinkedList<Tile> movementQueue;
-  Random rand = new Random();
-  boolean lineZombie;
-  boolean smellPlayer = false;
-  int directionDegree = rand.nextInt(8);
+  private LinkedList<Tile> movementQueue;
+  private Random rand = new Random();
+  private boolean lineZombie;
+  private boolean smellPlayer = false;
+  private int directionDegree = rand.nextInt(8);
 
   private boolean moveZombieUp;
   private boolean moveZombieDown;
@@ -307,7 +307,7 @@ public class Zombie extends Entity
       {
         //reset board here
         //I wanted to do it on only the affected nodes but cant seem to get it
-        map[i][j].chosen = false;
+        map[i][j].setChosen(false);
         map[i][j].parent = null;
       }
     }
@@ -334,14 +334,14 @@ public class Zombie extends Entity
   {
     @Override
     public int compare(Tile one, Tile two) {
-      if (one.fCost == two.fCost)
+      if (one.getfCost() == two.getfCost())
       {
         //this could be screwy since it involves casting double values to int
-        if (one.heuristicCost < two.heuristicCost)
+        if (one.getHeuristicCost() < two.getHeuristicCost())
         {
           return -1;
         }
-        else if (one.heuristicCost > two.heuristicCost)
+        else if (one.getHeuristicCost() > two.getHeuristicCost())
         {
           return 1;
         }
@@ -351,11 +351,11 @@ public class Zombie extends Entity
         }
 
       }
-      else if (one.fCost < two.fCost)
+      else if (one.getfCost() < two.getfCost())
       {
         return -1;
       }
-      else if (one.fCost > two.fCost)
+      else if (one.getfCost() > two.getfCost())
       {
         return 1;
       }
@@ -382,10 +382,10 @@ public class Zombie extends Entity
       return end;
     }
 
-    start.chosen = true;
+    start.setChosen(true);
     Tile currentNode;
     PQsort sorter = new PQsort();
-    start.costSoFar = start.tileTravelCost;
+    start.setCostSoFar(start.getTileTravelCost());
     PriorityQueue<Tile> queue = new PriorityQueue<>(1, sorter);
     queue.clear();
     queue.add(start);
@@ -393,7 +393,7 @@ public class Zombie extends Entity
     while (!queue.isEmpty())
     {
       currentNode = queue.remove();
-      currentNode.chosen = true;
+      currentNode.setChosen(true);
       if (currentNode.x == end.x && currentNode.y == end.y)
       {
         break;
