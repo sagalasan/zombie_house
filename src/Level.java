@@ -15,6 +15,8 @@ public class Level implements Constants {
   static Tile[][] map;
   static int height = 50, width = 50;
   int startX = 1, startY = 1;
+  int exitX = 1, exitY = 1;
+
   ArrayList<Zombie> zombieList;
   Rectangle rt;
 
@@ -125,6 +127,8 @@ public class Level implements Constants {
             {
               setStartX(startX = rec.room.x + j);
               setStartY(startY = rec.room.y + i);
+              System.out.println("Starting room" + startX + "x" + startY);
+
             }
 
             rooms++;
@@ -135,27 +139,21 @@ public class Level implements Constants {
 
 
 
-    //send the rectangle array to the panel
-    //this may not be necessary depending on if we use
-    //the objects or just an int array or tile array
-    //mp.setRectangle(r);
-
-
     //this loop created the halls and is not working correctly, currently is
     //allows the hall to be created out of bounds and sometimes does not complete the room
+    int currentRoom = 0;
     for (Rectangle rec : r)
     {
       if (rec.room != null)
       {
-        Rectangle c = findClosest(rec.room);
-
+        Rectangle c = findClosest(rec.room, currentRoom);
+        System.out.println(currentRoom);
         int firstX = rnd.nextInt((rec.room.height+rec.room.x) - rec.room.x)+rec.room.x;
         int firstY = rnd.nextInt((rec.room.width+rec.room.y) - rec.room.y)+rec.room.y;
         int secondX = rnd.nextInt((c.room.height+c.room.x) - c.room.x)+c.room.x;
         int secondY = rnd.nextInt((c.room.width+c.room.y) - c.room.y)+c.room.y;
 
         //walk to the nearest x then to the nearest y
-        //this method needs to be fixed to work better
         while(secondX != firstX || secondY != firstY)
         {
           int offsetX = 0, offsetY = 0;
@@ -186,7 +184,7 @@ public class Level implements Constants {
           map[offsetX][offsetY].type = FLOOR;//new Tile(FLOOR, offsetX, offsetY);
           if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
           {
-              //choose random tile of these
+            //choose random tile of these
             //spawns firetrap
             if (rnd.nextDouble()<.5)
             {
@@ -198,10 +196,11 @@ public class Level implements Constants {
             }
           }
         }
+        currentRoom++;
       }
     }
 
-
+    //set the outside tiles to walls and inside to floor or firetraps
     for (int i = 0; i < width; i++)
     {
       for (int j = 0; j < height; j++)
@@ -249,15 +248,36 @@ public class Level implements Constants {
   {
     return startX;
   }
-
   public int getStartRoomY()
   {
     return startY;
   }
 
+  public void setExitX(int x)
+  {
+    exitX = x;
+  }
+  public void setExitY(int y)
+  {
+    exitY = y;
+  }
+
+
+  public int getExitRoomX()
+  {
+    return exitX;
+  }
+  public int getStartExitY()
+  {
+    return exitY;
+  }
+
+
+
 
   /**
-   * @aramss currentMidX (Y) - current rectangles mid point
+   * @params currentRec is the selected rectangle to check
+   * @paramss currentMidX (Y) - current rectangles mid point
    * @params midX (Y) - mid point of rectangle list being parsed and checked
    * @params closest - finds closest rectangle object
    * @return closest - returns the closest rectangle
@@ -265,12 +285,15 @@ public class Level implements Constants {
    * the other rectangles to find the closest neighbor
    * */
   //this method needs to be corrected a bit as well
-  public Rectangle findClosest(Rectangle r)
+  public Rectangle findClosest(Rectangle r, int currentRec)
   {
     int midX = (r.width/2)+r.x;
     int midY = (r.height/2)+r.y;
     int closestDistance = 100;
+    int farthestDistance = 0;
+
     Rectangle closest = null;
+    Rectangle farthest = null;
 
     for (Rectangle rec : rectangles)
     {
@@ -288,9 +311,24 @@ public class Level implements Constants {
             closestDistance = distance;
             closest = rec;
           }
+          //this is only for the first room where we spawn
+          if(distance > farthestDistance && currentRec == 0)
+          {
+            farthestDistance = distance;
+            farthest = rec;
+          }
+
         }
       }
     }
+    if(currentRec == 0)
+    {
+      System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
+      setExitX(farthest.room.x);
+      setExitY(farthest.room.y);
+      map[farthest.room.x][farthest.room.y].type = EXIT;
+    }
+
     return closest;
   }
 

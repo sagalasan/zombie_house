@@ -32,6 +32,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage  blacknessImage;
   private BufferedImage wallImage;
   private BufferedImage firetrapImage;
+  private BufferedImage exitImage;
   private BufferedImage scorchedMask;
   private BufferedImage playerVisibleMask;
 
@@ -86,6 +87,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
       firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
+      exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
@@ -378,6 +380,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         else if (Level.map[i][j].type == FIRETRAP)
         {
           mapImages[i][j] = firetrapImage;
+        }
+        else if (Level.map[i][j].type == EXIT)
+        {
+          mapImages[i][j] = exitImage;
         }
         else
         {
