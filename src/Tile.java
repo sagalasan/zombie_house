@@ -99,9 +99,20 @@ public class Tile implements Constants {
         if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
         {
           //check for if the type is a wall or object as well
-          Level.map[x+i][y+j].type = SCORCHED_FLOOR;
-          Level.map[x + i][y + j].combusting = true;
-          Level.map[x + i][y + j].combust();
+          Tile checkingTile = Level.map[x+i][y+j];
+          if (checkingTile.type == FLOOR)
+          {
+            checkingTile.type = SCORCHED_FLOOR;
+          }
+          if (checkingTile.type == WALL || checkingTile.type == PILLAR)
+          {
+            if (checkingTile.checkIfInsideTile())
+            {
+              checkingTile.type = SCORCHED_WALL;
+            }
+          }
+          checkingTile.combusting = true;
+          checkingTile.combust();
           System.out.println("started combusting");
 
           //wait 5 seconds and then set back to false
@@ -112,6 +123,44 @@ public class Tile implements Constants {
     //combusts tile and eight blocks around it
 
   }
+
+  /**
+   *
+   * @return returns true if valid inside tile to be scorched!
+   * else false, it is out of bounds, or has blackness around it
+   */
+  private boolean checkIfInsideTile()
+  {
+    int checkXLeft = x - 1;
+    int checkXRight = x + 1;
+    int checkYUp = y - 1;
+    int checkYDown = y + 1;
+    if (checkXLeft < 0 || checkXRight > Level.width)
+    {
+      return false;
+    }
+    if (checkYDown > Level.height || checkYUp < 0)
+    {
+      return false;
+    }
+    if (Level.map[x-1][y].type == BLACKNESS)
+    {
+      return false;
+    }
+    if (Level.map[x+1][y].type == BLACKNESS){
+      return false;
+    }
+    if (Level.map[x][y-1].type == BLACKNESS){
+      return false;
+    }
+    if (Level.map[x][y+1].type == BLACKNESS)
+    {
+      return false;
+    }
+    return true;
+  }
+
+
   public double calculateEuclidDistance(Tile start, Tile end)
   {
     double xDifference = Math.abs(start.x - end.x);

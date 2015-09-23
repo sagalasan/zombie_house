@@ -5,6 +5,8 @@ public interface Constants {
 
   int FLOOR = 0;
   int WALL = 1;
+  //NOTICE THIS IS 1 FOR NOW SO MAP LOADING DOESNT GET MESSED UP  WILL NEED TO HAVE MASK APPLIED LATER
+  int SCORCHED_WALL = 1;
   int PILLAR = 2;
   int EXIT = 3;
   int SCORCHED_FLOOR = 5;
