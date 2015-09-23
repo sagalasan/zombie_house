@@ -147,7 +147,6 @@ public class Level implements Constants {
       if (rec.room != null)
       {
         Rectangle c = findClosest(rec.room, currentRoom);
-        System.out.println(currentRoom);
         int firstX = rnd.nextInt((rec.room.height+rec.room.x) - rec.room.x)+rec.room.x;
         int firstY = rnd.nextInt((rec.room.width+rec.room.y) - rec.room.y)+rec.room.y;
         int secondX = rnd.nextInt((c.room.height+c.room.x) - c.room.x)+c.room.x;
@@ -326,7 +325,8 @@ public class Level implements Constants {
       System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
       setExitX(farthest.room.x);
       setExitY(farthest.room.y);
-      map[farthest.room.x][farthest.room.y].type = EXIT;
+     // map[farthest.room.x][farthest.room.y].type = EXIT;
+      map[farthest.room.x][farthest.room.y] = new Tile(EXIT, farthest.room.x,farthest.room.y);
     }
 
     return closest;
