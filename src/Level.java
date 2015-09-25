@@ -130,7 +130,7 @@ public class Level implements Constants {
 
             if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
             {
-              System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
+              //System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
               map[rec.room.x + j][rec.room.y + i].setType(FIRETRAP);
             }
             if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)

@@ -1,3 +1,13 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * Created by Jalen on 9/9/2015.
  * @Entity
@@ -17,14 +27,18 @@ public abstract class Entity implements Constants
   //posibly make these double?
   private int x,y;
   private double xPixel, yPixel;
-  private int width;
+
 
   private boolean isAlive = true;
-
   private String type;
   private boolean hitWall;
   //speed is in tiles per second
   private double speed;
+
+  private int animationDirection = ANIMATION_DOWN_WALKING;
+  private BufferedImage currentFrame;
+  private BufferedImage spriteSheet;
+  private int indexForImage = 0;
 
   public Entity(String type, int x, int y)
   {
@@ -36,6 +50,64 @@ public abstract class Entity implements Constants
     previousTime = System.currentTimeMillis();
 
     speed = 0;
+  }
+
+  Timer animationStart = new Timer(200, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      indexForImage+=1;
+      int totalImages = 9;
+      setPlayerFrame(indexForImage % totalImages);
+    }
+  });
+  public void startAnimation()
+  {
+
+    animationStart.start();
+  }
+  public void stopAnimation()
+  {
+    animationStart.stop();
+  }
+
+  public void setSpriteSheet(String spriteSheet)
+  {
+    try
+    {
+      this.spriteSheet = ImageIO.read(new File(spriteSheet));
+    }
+    catch (IOException e)
+    {
+      System.out.println("Player Image did not load");
+    }
+  }
+
+  private void setPlayerFrame(int indexForPicture)
+  {
+    currentFrame = spriteSheet.getSubimage(15+(indexForPicture*SPRITE_SPREAD_DISTANCE),
+        animationDirection, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+  }
+
+  public void setAnimationDirection(int direction)
+  {
+    animationDirection = direction;
+  }
+
+  public void resetCurrentFrame()
+  {
+    indexForImage = 0;
+    animationDirection = ANIMATION_DOWN_WALKING;
+    currentFrame = getPlayerSprite().getSubimage(15+(0*SPRITE_SPREAD_DISTANCE), animationDirection, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+  }
+  public Image getCurrentFrame()
+  {
+    return currentFrame.getScaledInstance(PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT, Image.SCALE_DEFAULT);
+  }
+
+  public BufferedImage getPlayerSprite()
+  {
+    return spriteSheet;
   }
 
   public int getXPixel()
@@ -84,15 +156,20 @@ public abstract class Entity implements Constants
     this.speed = speed;
   }
 
-  public boolean legalMove(int x, int y)
-  {
+  public boolean legalMove(int x, int y) {
     //System.out.println(Level.map[x][y].type);
     //if wall, black boid, or pillar
     //TODO zombies also cant be in the same space as one another
     if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
             || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
+    //if wall, black, or pillar
+    if (x >= 0 && x < Level.width && y >= 0 && y < Level.height)
     {
-      return false;
+      if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
+          || Level.map[x][y].getType() == PILLAR || Level.map[x][y].getType() == EXIT)
+      {
+        return false;
+      }
     }
     if(Level.map[x][y].getType() == EXIT)
     {
@@ -100,19 +177,36 @@ public abstract class Entity implements Constants
       System.out.println("Player has found the exit!");
       //load the second level and clear the playerStatus
     }
-
-
-    /**
-     * this is a bounds check.  shouldnt need since there will be walls all around the level
-    if (x == 0 && x > Level.width && y == 0 && y > Level.height)
-    {
-        if (Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()] == Level.map[x][y])
-        {
-          return false;
-        }
-    }
-     **/
+      //TODO add constraints for making contact with the exit
     return true;
+  }
+
+  //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
+  //false if does not intersect with wall
+  private boolean intersectsWithWall(double possibleXPixel, double possibleYPixel)
+  {
+    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+
+    ArrayList<Tile> surroundingWalls = new ArrayList<>();
+    //check in 9 directions if legalrect intersects with a wall.
+    for (int i = -1; i < 2;i++)
+    {
+      for (int j = -1; j < 2; j++)
+      {
+        if (Level.map[i+x][j+y].getType() == WALL || Level.map[i+x][j+y].getType() == PILLAR )
+        {
+          surroundingWalls.add(Level.map[i+x][j+y]);
+        }
+      }
+    }
+    for (Tile wall : surroundingWalls)
+    {
+      if (legalRectangle.intersects(wall.getBoundingRectangle()))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void move(boolean up, boolean down, boolean right, boolean left)
@@ -146,15 +240,27 @@ public abstract class Entity implements Constants
     //this will not allow ability to move through walls/blackvoid/pillars
     if (legalMove(possibleX, possibleY))
     {
+      //could try testing to see if the pixels are valid instead
       hitWall = false;
       x = possibleX;
       y = possibleY;
-      xPixel = possibleXPixel;
-      yPixel = possibleYPixel;
+      /**
+      if (legalPixelMove(possibleXPixel, possibleYPixel)
+      {
+        xPixel = possibleXPixel;
+        yPixel = possibleYPixel;
+      }
+       **/
+      if (!intersectsWithWall(possibleXPixel, possibleYPixel))
+      {
+        xPixel = possibleXPixel;
+        yPixel = possibleYPixel;
+      }
     }
     else
     {
-     // System.out.println("hitwall is true");
+
+      //if hit right wall or bottom wall, subtract
       hitWall = true;
       //if map[x][possibleY] == wall
       //if possible y > y hit south
@@ -163,6 +269,7 @@ public abstract class Entity implements Constants
     }
 
   }
+
 
 
 

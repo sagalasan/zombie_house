@@ -12,9 +12,8 @@ public class GameControl implements Constants
 {
 
   static Player userPlayer;
-  static Zombie zombie1;
+ //static Zombie zombie1;
   ZombiePanel reference;
-  //adjust this to repaint faster
 
   ArrayList<Zombie> zombieList;
   private boolean movePlayerUp = false;
@@ -29,9 +28,12 @@ public class GameControl implements Constants
 
   Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener()
   {
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
+
+
       //used for updating zombie direction every 2 sec
       for (Zombie zombie : zombieList)
       {
@@ -40,6 +42,8 @@ public class GameControl implements Constants
           zombie.updateDirection();
         }
       }
+      //System.out.println("test counter "+testCount);
+      //zombie1.updateDirection();
     }
   });
 
@@ -90,6 +94,8 @@ public class GameControl implements Constants
           }
         }
       }
+
+
       reference.repaint();
     }
   });

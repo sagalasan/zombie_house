@@ -1,11 +1,15 @@
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -18,23 +22,33 @@ public class Player extends Entity
   private boolean canMove = true;
   private int runSoundSpeed = 400;
   private int walkSoundSpeed = 800;
+
   private String playerFootstepsFileName = "sound_files/player_footsteps.wav";
   private int fireTrapInventory = 0;
 
+
+  private String playerSpriteSheet = "character_images/player_sprite_sheet.png";
+  //private int animationWidth = ANIMATION_FORWARD_WIDTH;
+  //private int animationHeight = ANIMATION_FORWARD_HEIGHT;
   public Player(int x, int y)
   {
     super("Player", x, y);
     setSpeed(Constants.PLAYER_DEFAULT_SPEED);
+    setSpriteSheet(playerSpriteSheet);
+    resetCurrentFrame();
   }
 
   Timer staminaRun = new Timer(10, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
       //System.out.println("stamina is "+stamina);
+
       if (stamina <= 0)
       {
+
         playRunningSound.stop();
         playWalkingSound.start();
+        //loop through images
         setSpeed(PLAYER_DEFAULT_SPEED);
       }
       //only subtract if moving as well
@@ -43,7 +57,7 @@ public class Player extends Entity
         //player is running,
         //check if its on top of a firetrap.  if so explode
         //possible large use of processing power
-
+        //loop through images faster
         playRunningSound.start();
         playWalkingSound.stop();
         //change speed of sound timer

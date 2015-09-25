@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class Tile implements Constants {
   private double costSoFar;
   private boolean combusting = false;
   private int type;
+
+
 
   public Tile(int type, int x, int y){
     //could change this to for loop,
@@ -93,6 +97,24 @@ public class Tile implements Constants {
   {
     return type;
   }
+  public double getXPixel()
+  {
+    //System.out.println("xpixel for wall block at " + x + ", " + y+" is "+ (x*SIZE)+", "+y*SIZE);
+   // System.out.println("userPlayers x y is" + GameControl.userPlayer.getX()+", " + GameControl.userPlayer.getY()+" xpixel is "+ GameControl.userPlayer.getXPixel());
+    return (double)(x * SIZE);
+  }
+  public double getYPixel()
+  {
+    return (double)(y * SIZE);
+  }
+
+  public java.awt.Rectangle getBoundingRectangle()
+  {
+
+
+    return new Rectangle((int)getXPixel(), (int)getYPixel(), SIZE, SIZE);
+  }
+
   public void setTileCost()
   {
     if (type == FLOOR || type == SCORCHED_FLOOR || type == FIRETRAP)
@@ -202,7 +224,10 @@ public class Tile implements Constants {
   }
 
 
-
+  public boolean isChosen()
+  {
+    return chosen;
+  }
   /**
    *
    * @param frontier - the priority queue that all the nodes get added to
@@ -210,10 +235,11 @@ public class Tile implements Constants {
    *            This will find the nodes around the tile this is called for
    *            Changes the parent node for if there is a better pathway
    */
-  public void setFrontier(PriorityQueue<Tile> frontier, Tile end, Tile[][] map)
+  public void setFrontier(PriorityQueue<Tile> frontier, Tile end, Tile[][] map,int numberOfFrontierDirections)
   {
-    directions = new Tile[8];
-    for (int i = 0; i< TOTAL_DIRECTIONS; i++)
+    //change directions to 4 if reg astar stuff
+    directions = new Tile[numberOfFrontierDirections];
+    for (int i = 0; i< numberOfFrontierDirections; i++)
     {
       //if in bounds
       if (x+X_DIRECTIONS[i] >= 0 && x+X_DIRECTIONS[i] < Level.width
@@ -225,6 +251,7 @@ public class Tile implements Constants {
         {
           //i set this to be a tile in the grid
           directions[i] = map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]];
+          //todo fix bug, sometimes gives array out of bounds for above line
           //if it hasnt been visited before
           if (directions[i].parent == null)
           {

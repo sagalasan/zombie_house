@@ -26,7 +26,6 @@ import java.util.Random;
  * Created by Jalen on 9/9/2015.
  */
 public class ZombiePanel extends JPanel implements KeyListener, Constants{
-  //int pixelSize = 40;
   //Level level = new Level();
 
   //paints buffered image of map and characters on top
@@ -67,8 +66,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     initializeImages();
     constructArrayImages();
     constructBufferedImage();
-
-   // PlayerMovement.start();
 
     playerSight = PLAYER_SIGHT * SIZE;
     colorBlackOpaque = new Color(0, 0, 0, 255);
@@ -113,7 +110,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
-      //playerSprite = ImageIO.read(new File("character_images/player_sprite.png"));
+      playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
       playerVisibleMask = ImageIO.read(new File("opacity_masks/zombie_house_player_mask.png"));
@@ -128,17 +125,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g2d.fillRect(0, 0, blacknessImage.getWidth(), blacknessImage.getHeight());
 
   }
-/**
-  Timer PlayerMovement = new Timer(500, new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-      //currentPlayerImage = GameControl.userPlayer.getCurrentDrawSprite();
-
-      //g.drawImage(currentPlayerImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT),d.width / 2, d.height / 2, null));
-    }
-  });
-**/
+  public BufferedImage getPlayerImage()
+  {
+    return playerSprite;
+  }
   private int fiveSeconds = 5000;
   private Timer pickUpFiretrap = new Timer(fiveSeconds, new ActionListener() {
     @Override
@@ -161,34 +151,37 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
   });
 
+  //todo fix player walking so it looks more natural
   @Override
   public void keyPressed(KeyEvent e)
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-     // GameControl.userPlayer.moving = true;
+      GameControl.userPlayer.setAnimationDirection(ANIMATION_LEFT_WALKING);
       gameController.setPlayerMoveLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      //GameControl.userPlayer.moving = true;
+      GameControl.userPlayer.setAnimationDirection(ANIMATION_RIGHT_WALKING);
       gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      //GameControl.userPlayer.moving = true;
+      GameControl.userPlayer.setAnimationDirection(ANIMATION_DOWN_WALKING);
       gameController.setPlayerMoveDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      //GameControl.userPlayer.moving = true;
+      GameControl.userPlayer.setAnimationDirection(ANIMATION_TOP_WALKING);
       gameController.setPlayerMoveUp(true);
     }
-
     if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
     {
+      GameControl.userPlayer.startAnimation();
       GameControl.userPlayer.setMoving(true);
       GameControl.userPlayer.startWalkingSound();
+      //start animation timer that loops through images
+      //animation
     }
     if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.isRunning() && GameControl.userPlayer.canMove())
     {
@@ -212,14 +205,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         setFiretrap.start();
 
       }
-      //if on firetrap tile
-      //cant move,
-      //wait 5 seconds
-      //at the end of 5 seconds, add firetrap to inventory and tile is no longer firetrap
-
-      //else if on reg tile and firetrap inventory is not 0
-      //cant move, wait 5 sec
-      //at the end add firetrap to tile;
     }
   }
 
@@ -228,28 +213,26 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      //GameControl.userPlayer.moving = false;
       gameController.setPlayerMoveUp(false);
     }
     //check all movement bools
     //if all done set movement to false
     if (!gameController.checkIfPlayerMoving())
     {
+      GameControl.userPlayer.stopAnimation();
+      //GameControl.userPlayer.resetPlayerFrame();
       GameControl.userPlayer.setMoving(false);
       GameControl.userPlayer.stopWalkingSound();
       GameControl.userPlayer.stopRunningSound();
@@ -263,7 +246,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       }
       GameControl.userPlayer.regenStamina();
     }
-
     if(e.getKeyCode() == KeyEvent.VK_H)
     {
       debugPrintLocations();
@@ -343,19 +325,19 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g.setColor(Color.red);
     //System.out.println(gameController.userPlayer.x);
     //g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
-    g.fillOval(d.width / 2, d.height / 2, 30, 30);
 
-    //timer can be done in the move timers.  the panel could just get the image that player is currently set to
-    //and can just draw that.  load images first, then player adjusts its picture
-    //BufferedImage currentPlayerFrame = playerSprite.getSubimage(0, 20, 40, 50);
-    //Image scaledImage = currentPlayerFrame.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+    /**
+     * if player bounding rectangle does not intersect with a wall pixel,
+     * then draw player
+     */
+    //g.fillRect(d.width / 2, d.height / 2, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+    //
+
+    g.drawImage(GameControl.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
 
 
 
 
-
-    //g.drawImage(currentPlayerImage, d.width / 2, d.height / 2, null);
-    //g.drawImage(scaledImage, d.width / 2, d.height / 2, null);
 
 
 
@@ -379,11 +361,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         int zombieYPixel = zombie.getYPixel();
         int zombieDrawX = offsetX + zombieXPixel;
         int zombieDrawY = offsetY + zombieYPixel;
-
-        g.fillOval(zombieDrawX, zombieDrawY, 30, 30);
+        g.drawImage(zombie.getCurrentFrame() ,zombieDrawX, zombieDrawY ,null );
       }
     }
+    /**
+    int zombieXPixel = GameControl.zombie1.getXPixel();
+    int zombieYPixel = GameControl.zombie1.getYPixel();
+    int zombieDrawX = offsetX + zombieXPixel;
+    int zombieDrawY = offsetY + zombieYPixel;
+    g.drawImage(GameControl.zombie1.getCurrentFrame() ,zombieDrawX, zombieDrawY ,null );
 
+     **/
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
     //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
     //g2d.setPaint(playerGradient);

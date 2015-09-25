@@ -34,7 +34,7 @@ public class Zombie extends Entity
   private int startX, startY;
 
   private boolean initialCheckFinished = false;
-
+  private String zombieSpriteSheet = "character_images/zombie_sprite_sheet.png";
 
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
   String zombieWallBump= "sound_files/wall_hit_zombie.wav";
@@ -80,6 +80,9 @@ public class Zombie extends Entity
       lineZombie= false;
     }
     setHeading(directionDegree);
+    setSpriteSheet(zombieSpriteSheet);
+    resetCurrentFrame();
+    startAnimation();
     //set zombie intial direction
 
     setStartX(x);
@@ -88,6 +91,10 @@ public class Zombie extends Entity
 
   }
 
+  public void setZombieSmell(boolean b)
+  {
+    smellPlayer = b;
+  }
   public double calculateEuclidDistance()
   {
     double euclidDist;
@@ -130,8 +137,6 @@ public class Zombie extends Entity
     {
       smellPlayer = false;
     }
-
-
   }
   public void seeIfPlayerCanHear()
   {
@@ -159,44 +164,52 @@ public class Zombie extends Entity
     if (directionDegree == 0)
     {
       //east
+      setAnimationDirection(ANIMATION_RIGHT_WALKING);
       moveZombieRight = true;
     }
     else if (directionDegree == 1)
     {
       //north east
+      setAnimationDirection(ANIMATION_RIGHT_WALKING);
       moveZombieRight = true;
       moveZombieUp = true;
     }
     else if (directionDegree == 2)
     {
       //north
+      setAnimationDirection(ANIMATION_TOP_WALKING);
       moveZombieUp = true;
     }
     else if (directionDegree == 3)
     {
       //north west
+      setAnimationDirection(ANIMATION_LEFT_WALKING);
       moveZombieUp = true;
       moveZombieLeft = true;
     }
     else if (directionDegree == 4)
     {
       //west
+      setAnimationDirection(ANIMATION_LEFT_WALKING);
       moveZombieLeft = true;
     }
     else if (directionDegree == 5)
     {
       //southwest
+      setAnimationDirection(ANIMATION_LEFT_WALKING);
       moveZombieLeft = true;
       moveZombieDown = true;
     }
     else if (directionDegree == 6)
     {
       //south
+      setAnimationDirection(ANIMATION_DOWN_WALKING);
       moveZombieDown = true;
     }
     else if (directionDegree == 7)
     {
       //south east
+      setAnimationDirection(ANIMATION_RIGHT_WALKING);
       moveZombieRight = true;
       moveZombieDown = true;
     }
@@ -231,30 +244,39 @@ public class Zombie extends Entity
         chasePlayer();
       }
       **/
-    chasePlayer();
+      if (hitwall())
+      {
+        System.out.println("chasing cause hit wall");
+        chasePlayer(4);
+      }
+      else
+      {
+        chasePlayer(TOTAL_DIRECTIONS);
+      }
+
 
       //if hitwall move to the next tile up in the movementqueue
       if (!movementQueue.isEmpty()) {
         //System.out.println("looking for next coords using "+movementQueue.getLast().x+", "+movementQueue.getLast().y);
-
+        //if hitwall, find way to avoid wall
         if (getX() > movementQueue.getLast().x) {
           //System.out.println("zombie left");
-          lastMoveLeft = true;
+          setAnimationDirection(ANIMATION_LEFT_WALKING);
           moveZombieLeft = true;
         }
         if (getX() < movementQueue.getLast().x) {
-          lastMoveRight = true;
           //System.out.println("zombie right");
+          setAnimationDirection(ANIMATION_RIGHT_WALKING);
           moveZombieRight = true;
         }
         if (getY() < movementQueue.getLast().y) {
-          lastMoveDown = true;
           //System.out.println("zombie down");
+          setAnimationDirection(ANIMATION_DOWN_WALKING);
           moveZombieDown = true;
         }
         if (getY() > movementQueue.getLast().y) {
-          lastMoveUp = true;
           //System.out.println("zombie up");
+          setAnimationDirection(ANIMATION_TOP_WALKING);
           moveZombieUp = true;
         }
         movementQueue.removeLast();
@@ -274,7 +296,6 @@ public class Zombie extends Entity
         directionDegree = newDirectionDegree;
       }
       setHeading(directionDegree);
-
       //else
       //keep old heading
     }
@@ -284,6 +305,8 @@ public class Zombie extends Entity
       int newDirectionDegree = rand.nextInt(8);
       if (hitwall())
       {
+        stopAnimation();
+        //stopanimationtimer
         while(newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
@@ -297,11 +320,13 @@ public class Zombie extends Entity
   {
     super.move(moveZombieUp, moveZombieDown, moveZombieRight, moveZombieLeft);
   }
+
+
   /**
    * finds the be astar path to player
    * puts results in a queue that is called later to draw movements of zombie
    */
-  private void chasePlayer()
+  private void chasePlayer(int numberOfFrontierDirections)
   {
     Tile[][] map = Level.map.clone();
     Tile start = map[getX()][getY()];
@@ -314,12 +339,13 @@ public class Zombie extends Entity
         //I wanted to do it on only the affected nodes but cant seem to get it
         map[i][j].setChosen(false);
         map[i][j].parent = null;
+        //System.out.println("coords for map x, y " + map[i][j].x +", "+map[i][j].y);
       }
     }
 
     movementQueue = new LinkedList<>();
-    Tile next = findBestPath(start, end, map);
-    System.out.println(next.x+", "+ next.y);
+    Tile next = findBestPath(start, end, map, numberOfFrontierDirections);
+    //System.out.println(next.x+", "+ next.y);
 
     while (next != null )
     {
@@ -364,6 +390,8 @@ public class Zombie extends Entity
       {
         return 1;
       }
+//      GameControl.testCount +=1;
+      System.out.println("returned 0");
       return 0;
     }
 
@@ -377,8 +405,11 @@ public class Zombie extends Entity
    * @throws IndexOutOfBoundsException
    * Finds the shortest path between a zombie and player
    */
-  private Tile findBestPath(Tile start, Tile end, Tile[][] map) {
+  //todo, fix never ending loop to search for tile
+  //try making master zombie and getting that working first
+  private Tile findBestPath(Tile start, Tile end, Tile[][] map, int numberOfFrontierDirections) {
     //if distance is only one tile away, just skip the whole pathfinding algo.
+
     int xDiff = Math.abs(start.x - end.x);
     int yDiff = Math.abs(start.y - end.y);
     if ((xDiff == 1 || xDiff == 0 )&& (yDiff == 1 || yDiff == 0))
@@ -395,16 +426,16 @@ public class Zombie extends Entity
     queue.clear();
     queue.add(start);
     //System.out.println("start (" + start.x + ", " + start.y + "), end (" + end.x +", "+end.y+")");
-    while (!queue.isEmpty())
-    {
+    while (!queue.isEmpty()) {
       currentNode = queue.remove();
       currentNode.setChosen(true);
-      if (currentNode.x == end.x && currentNode.y == end.y)
-      {
+      if (currentNode.x == end.x && currentNode.y == end.y) {
         break;
       }
-      //System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
-      currentNode.setFrontier(queue, end, map);
+  //    System.out.println(queue.size());
+//      System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
+      //System.out.println(GameControl.testCount);
+      currentNode.setFrontier(queue, end, map, numberOfFrontierDirections);
     }
     return end;
   }
