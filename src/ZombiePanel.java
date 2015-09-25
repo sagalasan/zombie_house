@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.effect.Light;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -51,6 +53,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private int playerSight;
   private float[] fractions = {0.0f, 0.7f, 1.0f};
 
+  private BufferedImage lightingMask;
+
 
   public ZombiePanel()
   {
@@ -69,6 +73,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
     playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
+
   }
 
   private void initializeImages()
@@ -370,9 +375,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
     //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
-    g2d.setPaint(playerGradient);
+    //g2d.setPaint(playerGradient);
     //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);
-    g2d.fillRect(0, 0, getWidth(), getHeight());
+    //g2d.fillRect(0, 0, getWidth(), getHeight());
 
     //Point2D center = new Point2D.Float(d.width / 2, d.height / 2);
     //float radius = 150;
@@ -382,6 +387,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //        new RadialGradientPaint(center, radius, dist, colors);
     //g2d.setPaint(p);
     //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
+    //createRayTracingPolygons();
+    //g2d.drawImage(lightingMask, 0, 0, null);
   }
 
   private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
@@ -465,14 +472,95 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     return true;
   }
 
-  private class RayTracingThread implements Runnable
+  private void createRayTracingPolygons()
   {
+    lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+    ArrayList<Polygon> lightPolygons = new ArrayList<Polygon>();
+    ArrayList<Integer> xVertices = new ArrayList<Integer>();
+    ArrayList<Integer> yVertices = new ArrayList<Integer>();
+    int x = gameController.getUserPlayer().getX();
+    int y = gameController.getUserPlayer().getY();
+    int xp = gameController.getUserPlayer().getXPixel();
+    int yp = gameController.getUserPlayer().getYPixel();
 
-    @Override
-    public void run()
+    int xStart = x - 6;
+    int xEnd = x + 6;
+    int yStart = y - 6;
+    int yEnd = y + 6;
+    if(xStart < 0) xStart = 0;
+    if(xEnd >= Level.width) xEnd = Level.width;
+    if(yStart < 0) yStart = 0;
+    if(yEnd >= Level.height) yEnd = Level.height;
+
+    for(int i = xStart; i < xEnd; i++)
     {
+      for(int j = yStart; j < yEnd; j++)
+      {
+        Tile tile = Level.map[i][j];
+        int nPoints = 4;
+        int[] xCoord = new int[nPoints];
+        int[] yCoord = new int[nPoints];
+        if(tile.getType() == WALL)
+        {
+          int xTilePixel = i * SIZE;
+          int yTilePixel = j * SIZE;
+          int xTilePixelOne = xTilePixel + SIZE;
+          int yTilePixelOne = yTilePixel + SIZE;
 
+          xVertices.add(xTilePixel);
+          yVertices.add(yTilePixel);
+          xCoord[0] = xTilePixel;
+          yCoord[0] = yTilePixel;
+
+          xVertices.add(xTilePixelOne);
+          yVertices.add(yTilePixel);
+          xCoord[1] = xTilePixelOne;
+          yCoord[1] = yTilePixel;
+
+          xVertices.add(xTilePixelOne);
+          yVertices.add(yTilePixelOne);
+          xCoord[2] = xTilePixelOne;
+          yCoord[2] = yTilePixelOne;
+
+          xVertices.add(xTilePixel);
+          yVertices.add(yTilePixelOne);
+          xCoord[3] = xTilePixel;
+          yCoord[3] = yTilePixelOne;
+
+          lightPolygons.add(new Polygon(xCoord, yCoord, nPoints));
+        }
+      }
+    }
+    Graphics2D g2 = lightingMask.createGraphics();
+    g2.setPaint(Color.black);
+    g2.fillRect(0, 0, lightingMask.getWidth(), lightingMask.getHeight());
+    g2.dispose();
+
+    Graphics2D g2d = (Graphics2D) lightingMask.getGraphics();
+    g2d.drawImage(lightingMask, 0, 0, null);
+
+    int type = AlphaComposite.DST_OUT;
+    AlphaComposite alphaComposite = AlphaComposite.getInstance(type, 1f);
+    g2d.setComposite(alphaComposite);
+
+    for(int i = 0; i < lightPolygons.size(); i++)
+    {
+      g2d.fillPolygon(lightPolygons.get(i));
     }
   }
 
+  private class RayTracingRunnable implements Runnable
+  {
+    ArrayList<Point2D> vertices;
+    @Override
+    public void run()
+    {
+      int x = gameController.getUserPlayer().getX();
+      int y = gameController.getUserPlayer().getY();
+      int xp = gameController.getUserPlayer().getXPixel();
+      int yp = gameController.getUserPlayer().getYPixel();
+
+
+    }
+  }
 }
