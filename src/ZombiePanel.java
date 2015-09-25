@@ -559,7 +559,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       int xp = gameController.getUserPlayer().getXPixel();
       int yp = gameController.getUserPlayer().getYPixel();
 
-
     }
   }
 
@@ -568,7 +567,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   public void setMapCopy(Tile[][] mc)
   {
     mapCopy = new Tile[50][50];
-    mapCopy = mc;
+
+    for (int i = 0; i < 50; i++)
+    {
+      for (int j = 0; j < 50; j++)
+      {
+        mapCopy[j][i] = new Tile(mc[j][i].getType(), mc[j][i].x, mc[j][i].y);
+      }
+    }
+    //TODO if the game ends reset the firetraps to stop combusting
+
+
   }
 
   public Tile[][] getMapCopy()
@@ -579,6 +588,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   public void setZombieListCopy(ArrayList<Zombie> zl)
   {
     zombieListCopy = (ArrayList<Zombie>)zl.clone();
+    //copy each zombie to a new zombie list for use later on
+    //and remove the clone method and also the clear() method.
+
+
   }
 
   public ArrayList<Zombie> getZombieListCopy()
@@ -625,9 +638,5 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     return exitY;
   }
-
-
-
-
 
 }
