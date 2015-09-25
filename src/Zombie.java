@@ -31,6 +31,8 @@ public class Zombie extends Entity
   private boolean lastMoveDown = false;
   private boolean lastMoveUp = false;
 
+  private int startX, startY;
+
   private boolean initialCheckFinished = false;
 
 
@@ -80,6 +82,10 @@ public class Zombie extends Entity
     setHeading(directionDegree);
     //set zombie intial direction
 
+    setStartX(x);
+    setStartY(y);
+
+
   }
 
   public double calculateEuclidDistance()
@@ -108,7 +114,6 @@ public class Zombie extends Entity
       ex.printStackTrace();
     }
   }
-
 
 
 
@@ -403,5 +408,27 @@ public class Zombie extends Entity
     }
     return end;
   }
+
+
+
+
+  public void setStartX(int x)
+  {
+    startX = x;
+  }
+  public int getStartX()
+  {
+    return startX;
+  }
+
+  public void setStartY(int y)
+  {
+    startY = y;
+  }
+  public int getStartY()
+  {
+    return startY;
+  }
+
 
 }

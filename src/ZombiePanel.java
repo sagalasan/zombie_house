@@ -54,8 +54,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private float[] fractions = {0.0f, 0.7f, 1.0f};
 
   private BufferedImage lightingMask;
-
-
+  public boolean gameState = false;
+  
+  private int startX, startY, exitX, exitY;
+  private Tile[][] mapCopy;
+  ArrayList<Zombie> zombieListCopy;
+  
   public ZombiePanel()
   {
     gameController = new GameControl(this);
@@ -73,8 +77,16 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
     playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
-
   }
+
+  public void resetGame()
+  {
+    gameState = true;
+    gameController.zombieList.clear();
+    gameController = new GameControl(this);
+  }
+
+
 
   private void initializeImages()
   {
@@ -359,7 +371,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       **/
 
 
-
     for (Zombie zombie: gameController.zombieList)
     {
       if (zombie.isAlive())
@@ -563,4 +574,72 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     }
   }
+
+
+
+  public void setMapCopy(Tile[][] mc)
+  {
+    mapCopy = new Tile[50][50];
+    mapCopy = mc;
+  }
+
+  public Tile[][] getMapCopy()
+  {
+    return mapCopy;
+  }
+
+  public void setZombieListCopy(ArrayList<Zombie> zl)
+  {
+    zombieListCopy = (ArrayList<Zombie>)zl.clone();
+  }
+
+  public ArrayList<Zombie> getZombieListCopy()
+  {
+    return zombieListCopy;
+  }
+
+  public void setStartX(int x)
+  {
+    startX = x;
+  }
+
+  public int getStartX()
+  {
+    return startX;
+  }
+
+  public void setStartY(int y)
+  {
+    startY = y;
+  }
+
+  public int getStartY()
+  {
+    return startY;
+  }
+
+  public void setExitX(int x)
+  {
+    exitX = x;
+  }
+
+  public int getExitX()
+  {
+    return exitX;
+  }
+
+  public void setExitY(int y)
+  {
+    exitY = y;
+  }
+
+  public int getExitY()
+  {
+    return exitY;
+  }
+
+
+
+
+
 }

@@ -10,14 +10,17 @@ import java.util.Random;
  *
  */
 
+
+//gaurav.munjal.us/universal-LPC-Spritesheet-Character-Generator/#
 public class Level implements Constants {
 
   static Tile[][] map;
-  static int height = 50, width = 50;
+  static int height = 50, width = 50; //may change these with the level progression
   int startX = 1, startY = 1;
   int exitX = 1, exitY = 1;
 
   ArrayList<Zombie> zombieList;
+
   Rectangle rt;
 
   private Random rnd = new Random();
@@ -26,8 +29,8 @@ public class Level implements Constants {
 
   ArrayList<Tile> possiblePlayerTiles = new ArrayList<>();
 
-  public Level(){
 
+  public Level(){
     //creates map, use helper methods later
     map = new Tile[width][height];
 
@@ -46,10 +49,29 @@ public class Level implements Constants {
       }
     }
 
+    //TODO if level is complete reset this, maybe.
     mapGen();
 
   }
 
+  //this constructor is used if the player dies
+  public Level(Tile[][] t)
+  {
+    map = t;
+
+   /* for (int i = 0; i < width; i++)
+    {
+      for (int j = 0; j < height; j++)
+      {
+        if(map[j][i].getType() == FIRETRAP)
+        {
+          System.out.println("firetrap at [" + j + "," + i + "]");
+          map[j][i].setType(FIRETRAP);
+        }
+      }
+    }*/
+
+  }
 
 
 /**
@@ -67,7 +89,6 @@ public class Level implements Constants {
     rt = new Rectangle(1, 1, height-1, width-1);
     rectangles.add(rt); //populate rectangle store with root area
 
-    //we will make a minimum of 6 and a max of 10, it will be random
     while(rectangles.size() < 13) // for now this will give us 7 rooms, 14 total elements
     {
       int splitIdx = rnd.nextInt(rectangles.size()); // choose a random element
@@ -85,10 +106,8 @@ public class Level implements Constants {
     setGrid(rectangles);
 
   }
-  public ArrayList<Zombie> getZombieList()
-  {
-    return zombieList;
-  }
+
+
   /**
   * @params r - takes a rectangle ArrayList and sets the grid into tile array
   * @params rooms - counts the number of rooms, may not be needed
@@ -126,7 +145,6 @@ public class Level implements Constants {
               setStartX(startX = rec.room.x + j);
               setStartY(startY = rec.room.y + i);
               System.out.println("Starting room" + startX + "x" + startY);
-
             }
 
             rooms++;
@@ -230,48 +248,12 @@ public class Level implements Constants {
     //we have to set the exit tiles only after the walls have been made
     //otherwise they need to be created somewhere else
     map[getExitRoomX()][getStartExitY()-1].setType(EXIT);
-    map[getExitRoomX()+1][getStartExitY()-1].setType(EXIT);
-
-  }
-
-  public void setStartX(int x)
-  {
-    startX = x;
-  }
-  public void setStartY(int y)
-  {
-    startY = y;
-  }
+    //map[getExitRoomX()+1][getStartExitY()-1].setType(EXIT);
+    setGameCopy(map);
+    setZombieList(zombieList);
 
 
-  public int getStartRoomX()
-  {
-    return startX;
   }
-  public int getStartRoomY()
-  {
-    return startY;
-  }
-
-  public void setExitX(int x)
-  {
-    exitX = x;
-  }
-  public void setExitY(int y)
-  {
-    exitY = y;
-  }
-
-
-  public int getExitRoomX()
-  {
-    return exitX;
-  }
-  public int getStartExitY()
-  {
-    return exitY;
-  }
-
 
 
 
@@ -321,18 +303,73 @@ public class Level implements Constants {
         }
       }
     }
-    if (currentRec == 0) {
+    if (currentRec == 0)
+    {
       System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
       setExitX(farthest.room.x);
       setExitY(farthest.room.y);
-     // map[farthest.room.x][farthest.room.y].type = EXIT;
-      //map[farthest.room.x][farthest.room.y] = new Tile(EXIT, farthest.room.x,farthest.room.y);
     }
 
     return closest;
   }
 
 
+  public void setGameCopy(Tile[][] cm)
+  {
+    map = cm;
+  }
+
+  public Tile[][] getMapCopy()
+  {
+    return map;
+  }
+
+  public void setZombieList(ArrayList<Zombie> zl)
+  {
+    zombieList = zl;
+  }
+
+  public ArrayList<Zombie> getZombieList()
+  {
+    return zombieList;
+  }
+
+
+  public void setStartX(int x)
+  {
+    startX = x;
+  }
+  public void setStartY(int y)
+  {
+    startY = y;
+  }
+
+  public int getStartRoomX()
+  {
+    return startX;
+  }
+  public int getStartRoomY()
+  {
+    return startY;
+  }
+
+  public void setExitX(int x)
+  {
+    exitX = x;
+  }
+  public void setExitY(int y)
+  {
+    exitY = y;
+  }
+
+  public int getExitRoomX()
+  {
+    return exitX;
+  }
+  public int getStartExitY()
+  {
+    return exitY;
+  }
 
 
 }

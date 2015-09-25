@@ -21,7 +21,10 @@ public class GameControl implements Constants
   private boolean movePlayerDown = false;
   private boolean movePlayerRight = false;
   private boolean movePlayerLeft = false;
-  Level level = new Level();
+
+  private Tile[][] mapCopy; //this will be used if the player dies to preserve the map
+
+  Level level;
 
 
   Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener()
@@ -58,9 +61,10 @@ public class GameControl implements Constants
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
 
-      for (Zombie zombie : zombieList)
+      for(Zombie zombie : zombieList)
       {
-        if (zombie.isAlive())
+
+        if (zombie.isAlive() && zombie != null)
         {
           zombie.move();
           zombie.seeIfPlayerCanHear();
@@ -68,14 +72,21 @@ public class GameControl implements Constants
           if (zombieLocation.getType() == FIRETRAP)
           {
             zombieLocation.explode();
-
           }
+
           //this has to be last so removing zombie is seemless?
           if (zombieLocation.isCombusting())
           {
             //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
             zombie.setAlive(false);
             zombie.zombieWalkSound.stop();
+          }
+
+          if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
+          {
+            System.out.println("Player just died. Should be reloading");
+            //set player death to true so we can reload the map
+            reference.resetGame();
           }
         }
       }
@@ -86,15 +97,44 @@ public class GameControl implements Constants
   public GameControl(ZombiePanel panel)
   {
     reference = panel;
+
+    if(reference.gameState)
+    {
+      level = new Level(reference.getMapCopy());
+      zombieList = reference.getZombieListCopy();
+
+      level.setZombieList(zombieList);
+      level.setStartX(reference.getStartX());
+      level.setStartY(reference.getStartY());
+      level.setExitX(reference.getExitX());
+      level.setExitY(reference.getExitY());
+      for(Zombie z: reference.getZombieListCopy())
+      {
+        z.setAlive(true);//make them visible on the map again
+        z.setXPixel(z.getStartX()*SIZE);
+        z.setYPixel(z.getStartY()*SIZE);
+      }
+      //TODO make sure the traps come back!
+    }
+    else
+    {
+      level = new Level();
+    }
+
+    mapCopy = level.getMapCopy();
+    zombieList = level.getZombieList();
+    reference.setMapCopy(level.getMapCopy());
+    reference.setZombieListCopy(level.getZombieList());
+    reference.setStartX(level.getStartRoomX());
+    reference.setStartY(level.getStartRoomY());
+    reference.setExitX(level.getExitRoomX());
+    reference.setExitY(level.getStartExitY());
+
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //zombie1 = new Zombie(9,9);
     //could possibly clone zombielist so level will always have the original info for reloading
-    zombieList = level.zombieList;
     zombieReactionTimer.start();
     guiTimer.start();
-
-
-
 
   }
 

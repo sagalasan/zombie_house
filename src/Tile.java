@@ -231,6 +231,8 @@ public class Tile implements Constants {
            // visited = true;
             directions[i].parent = this;
             directions[i].costSoFar = this.costSoFar + directions[i].tileTravelCost;
+            frontier.add(directions[i]);
+
           }
           else
           {
@@ -244,7 +246,6 @@ public class Tile implements Constants {
           directions[i].heuristicCost = calculateEuclidDistance(directions[i], end);
           directions[i].fCost = directions[i].heuristicCost + directions[i].costSoFar;
 
-          frontier.add(directions[i]);
 
         }
       }

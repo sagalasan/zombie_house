@@ -34,6 +34,8 @@ public abstract class Entity implements Constants
     this.xPixel = this.x * SIZE;
     this.yPixel = this.y * SIZE;
     previousTime = System.currentTimeMillis();
+
+    speed = 0;
   }
 
   public int getXPixel()
@@ -44,6 +46,8 @@ public abstract class Entity implements Constants
   {
     return (int) yPixel;
   }
+  public void setXPixel(int x){ xPixel = x;}
+  public void setYPixel(int y){ yPixel = y;}
   public int getX()
   {
     return x;
@@ -84,13 +88,19 @@ public abstract class Entity implements Constants
   {
     //System.out.println(Level.map[x][y].type);
     //if wall, black boid, or pillar
+    //TODO zombies also cant be in the same space as one another
     if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
-            || Level.map[x][y].getType() == PILLAR || Level.map[x][y].getType() == EXIT)
+            || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
     {
       return false;
     }
+    if(Level.map[x][y].getType() == EXIT)
+    {
+      //TODO add constraints for making contact with the exit
+      System.out.println("Player has found the exit!");
+      //load the second level and clear the playerStatus
+    }
 
-    //TODO add constraints for making contact with the exit
 
     /**
      * this is a bounds check.  shouldnt need since there will be walls all around the level
