@@ -38,14 +38,7 @@ public class Level implements Constants {
     {
       for (int j = 0; j < height; j++)
       {
-        if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
-        {
-          map[i][j] = new Tile(BLACKNESS, i, j);
-        }
-        else
-        {
-          map[i][j] = new Tile(BLACKNESS, i, j);
-        }
+        map[i][j] = new Tile(BLACKNESS, i, j);
       }
     }
 

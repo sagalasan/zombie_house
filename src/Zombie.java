@@ -244,8 +244,10 @@ public class Zombie extends Entity
         chasePlayer();
       }
       **/
+    //System.out.println("smells player");
       if (hitwall())
       {
+        setHitWall(false);
         System.out.println("chasing cause hit wall");
         chasePlayer(4);
       }
@@ -288,6 +290,7 @@ public class Zombie extends Entity
 
       if (hitwall())
       {
+        //setHitWall(false);
         int newDirectionDegree = rand.nextInt(8);
         while(newDirectionDegree == directionDegree)
         {
@@ -305,6 +308,7 @@ public class Zombie extends Entity
       int newDirectionDegree = rand.nextInt(8);
       if (hitwall())
       {
+        //setHitWall(false);
         stopAnimation();
         //stopanimationtimer
         while(newDirectionDegree == directionDegree)
@@ -357,7 +361,6 @@ public class Zombie extends Entity
       }
     }
   }
-
   /**
    * used for sorting the priority queue
    */
@@ -380,7 +383,6 @@ public class Zombie extends Entity
         {
           return 0;
         }
-
       }
       else if (one.getfCost() < two.getfCost())
       {
@@ -432,9 +434,6 @@ public class Zombie extends Entity
       if (currentNode.x == end.x && currentNode.y == end.y) {
         break;
       }
-  //    System.out.println(queue.size());
-//      System.out.println("looking for coords x y "+end.x+", "+end.y+"...currentnodecoords "+currentNode.x +", "+ currentNode.y);
-      //System.out.println(GameControl.testCount);
       currentNode.setFrontier(queue, end, map, numberOfFrontierDirections);
     }
     return end;

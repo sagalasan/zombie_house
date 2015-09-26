@@ -16,10 +16,10 @@ public class GameControl implements Constants
   ZombiePanel reference;
 
   ArrayList<Zombie> zombieList;
-  private boolean movePlayerUp = false;
-  private boolean movePlayerDown = false;
-  private boolean movePlayerRight = false;
-  private boolean movePlayerLeft = false;
+  //private boolean movePlayerUp = false;
+  //private boolean movePlayerDown = false;
+  //private boolean movePlayerRight = false;
+  //private boolean movePlayerLeft = false;
 
   private Tile[][] mapCopy; //this will be used if the player dies to preserve the map
 
@@ -42,7 +42,6 @@ public class GameControl implements Constants
           zombie.updateDirection();
         }
       }
-      //System.out.println("test counter "+testCount);
       //zombie1.updateDirection();
     }
   });
@@ -54,7 +53,7 @@ public class GameControl implements Constants
     {
       if (userPlayer.canMove())
       {
-        userPlayer.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+        userPlayer.move();
       }
 
       if (userPlayer.isRunning() && Level.map[userPlayer.getX()][userPlayer.getY()].getType() == FIRETRAP)
@@ -67,7 +66,6 @@ public class GameControl implements Constants
 
       for(Zombie zombie : zombieList)
       {
-
         if (zombie.isAlive() && zombie != null)
         {
           zombie.move();
@@ -77,7 +75,6 @@ public class GameControl implements Constants
           {
             zombieLocation.explode();
           }
-
           //this has to be last so removing zombie is seemless?
           if (zombieLocation.isCombusting())
           {
@@ -85,7 +82,6 @@ public class GameControl implements Constants
             zombie.setAlive(false);
             zombie.zombieWalkSound.stop();
           }
-
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
             System.out.println("Player just died. Should be reloading");
@@ -94,8 +90,6 @@ public class GameControl implements Constants
           }
         }
       }
-
-
       reference.repaint();
     }
   });
@@ -144,16 +138,16 @@ public class GameControl implements Constants
 
   }
 
-  public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
-  public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }
-  public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
-  public void setPlayerMoveLeft(boolean b) { movePlayerLeft = b; }
+  //public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
+  //public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }
+  //public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
+  //public void setPlayerMoveLeft(boolean b) { movePlayerLeft = b; }
 
   public boolean checkIfPlayerMoving()
   {
     //if player is moving, play sound every sec
     //if stopped, then stop the timer
-    if (movePlayerDown || movePlayerLeft || movePlayerRight || movePlayerUp)
+    if (userPlayer.getMovePlayerDown() || userPlayer.getMovePlayerLeft() || userPlayer.getMovePlayerRight() || userPlayer.getMovePlayerUp())
     {
       return true;
     }

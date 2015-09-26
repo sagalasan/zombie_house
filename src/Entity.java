@@ -186,7 +186,6 @@ public abstract class Entity implements Constants
   private boolean intersectsWithWall(double possibleXPixel, double possibleYPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-
     ArrayList<Tile> surroundingWalls = new ArrayList<>();
     //check in 9 directions if legalrect intersects with a wall.
     for (int i = -1; i < 2;i++)
@@ -207,6 +206,10 @@ public abstract class Entity implements Constants
       }
     }
     return false;
+  }
+  public void setHitWall(boolean b)
+  {
+    hitWall = b;
   }
 
   public void move(boolean up, boolean down, boolean right, boolean left)
@@ -241,16 +244,9 @@ public abstract class Entity implements Constants
     if (legalMove(possibleX, possibleY))
     {
       //could try testing to see if the pixels are valid instead
-      hitWall = false;
+      //hitWall = false;
       x = possibleX;
       y = possibleY;
-      /**
-      if (legalPixelMove(possibleXPixel, possibleYPixel)
-      {
-        xPixel = possibleXPixel;
-        yPixel = possibleYPixel;
-      }
-       **/
       if (!intersectsWithWall(possibleXPixel, possibleYPixel))
       {
         xPixel = possibleXPixel;
@@ -259,8 +255,8 @@ public abstract class Entity implements Constants
     }
     else
     {
-
       //if hit right wall or bottom wall, subtract
+      System.out.println("hitwall zombies at " + getX()+", "+getY());
       hitWall = true;
       //if map[x][possibleY] == wall
       //if possible y > y hit south
@@ -269,8 +265,4 @@ public abstract class Entity implements Constants
     }
 
   }
-
-
-
-
 }

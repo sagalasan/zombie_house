@@ -158,30 +158,31 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
       GameControl.userPlayer.setAnimationDirection(ANIMATION_LEFT_WALKING);
-      gameController.setPlayerMoveLeft(true);
+      GameControl.userPlayer.setMovePlayerLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
       GameControl.userPlayer.setAnimationDirection(ANIMATION_RIGHT_WALKING);
-      gameController.setPlayerMoveRight(true);
+      GameControl.userPlayer.setMovePlayerRight(true);
+     // gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
       GameControl.userPlayer.setAnimationDirection(ANIMATION_DOWN_WALKING);
-      gameController.setPlayerMoveDown(true);
+      GameControl.userPlayer.setMovePlayerDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
       GameControl.userPlayer.setAnimationDirection(ANIMATION_TOP_WALKING);
-      gameController.setPlayerMoveUp(true);
+      GameControl.userPlayer.setMovePlayerUp(true);
+      //gameController.setPlayerMoveUp(true);
     }
     if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
     {
+
       GameControl.userPlayer.startAnimation();
       GameControl.userPlayer.setMoving(true);
       GameControl.userPlayer.startWalkingSound();
-      //start animation timer that loops through images
-      //animation
     }
     if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.isRunning() && GameControl.userPlayer.canMove())
     {
@@ -213,19 +214,23 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      gameController.setPlayerMoveLeft(false);
+      GameControl.userPlayer.setMovePlayerLeft(false);
+      //gameController.setPlayerMoveLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      gameController.setPlayerMoveRight(false);
+      GameControl.userPlayer.setMovePlayerRight(false);
+      //gameController.setPlayerMoveRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      gameController.setPlayerMoveDown(false);
+      GameControl.userPlayer.setMovePlayerDown(false);
+      //gameController.setPlayerMoveDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      gameController.setPlayerMoveUp(false);
+      GameControl.userPlayer.setMovePlayerUp(false);
+      //gameController.setPlayerMoveUp(false);
     }
     //check all movement bools
     //if all done set movement to false
@@ -318,14 +323,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     g.drawImage(blacknessImage, 0, 0, null);
     g.drawImage(tempImg, drawX, drawY, null);
 
-
-
-
-
-    g.setColor(Color.red);
-    //System.out.println(gameController.userPlayer.x);
-    //g.fillOval(gameController.userPlayer.getXPixel(), gameController.userPlayer.getYPixel(), 30, 30);
-
     /**
      * if player bounding rectangle does not intersect with a wall pixel,
      * then draw player
@@ -334,11 +331,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //
 
     g.drawImage(GameControl.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
-
-
-
-
-
 
 
     g.setColor(Color.BLUE);

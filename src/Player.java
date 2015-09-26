@@ -23,6 +23,11 @@ public class Player extends Entity
   private int runSoundSpeed = 400;
   private int walkSoundSpeed = 800;
 
+  private boolean movePlayerUp = false;
+  private boolean movePlayerDown = false;
+  private boolean movePlayerRight = false;
+  private boolean movePlayerLeft = false;
+
   private String playerFootstepsFileName = "sound_files/player_footsteps.wav";
   private int fireTrapInventory = 0;
 
@@ -54,10 +59,6 @@ public class Player extends Entity
       //only subtract if moving as well
       else if (moving)
       {
-        //player is running,
-        //check if its on top of a firetrap.  if so explode
-        //possible large use of processing power
-        //loop through images faster
         playRunningSound.start();
         playWalkingSound.stop();
         //change speed of sound timer
@@ -93,6 +94,45 @@ public class Player extends Entity
       playSound(playerFootstepsFileName);
     }
   });
+
+  public void move()
+  {
+    super.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);
+  }
+
+  public void setMovePlayerUp(boolean b)
+  {
+    movePlayerUp = b;
+  }
+  public void setMovePlayerDown(boolean b)
+  {
+    movePlayerDown = b;
+  }
+  public void setMovePlayerRight(boolean b)
+  {
+    movePlayerRight = b;
+  }
+  public void setMovePlayerLeft(boolean b)
+  {
+    movePlayerLeft = b;
+  }
+
+  public boolean getMovePlayerUp()
+  {
+    return movePlayerUp;
+  }
+  public boolean getMovePlayerDown()
+  {
+    return movePlayerDown;
+  }
+  public boolean getMovePlayerRight()
+  {
+    return movePlayerRight;
+  }
+  public boolean getMovePlayerLeft()
+  {
+    return movePlayerLeft;
+  }
 
   public boolean canMove()
   {

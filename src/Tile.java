@@ -245,7 +245,6 @@ public class Tile implements Constants {
       if (x+X_DIRECTIONS[i] >= 0 && x+X_DIRECTIONS[i] < Level.width
           && y+Y_DIRECTIONS[i] >= 0 && y+Y_DIRECTIONS[i] < Level.height)
       {
-        //
         if (!map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]].chosen
             && map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]].type != WALL)
         {
@@ -259,7 +258,6 @@ public class Tile implements Constants {
             directions[i].parent = this;
             directions[i].costSoFar = this.costSoFar + directions[i].tileTravelCost;
             frontier.add(directions[i]);
-
           }
           else
           {
@@ -268,12 +266,9 @@ public class Tile implements Constants {
               directions[i].parent = this;
               directions[i].costSoFar = this.costSoFar + directions[i].tileTravelCost;
             }
-
           }
           directions[i].heuristicCost = calculateEuclidDistance(directions[i], end);
           directions[i].fCost = directions[i].heuristicCost + directions[i].costSoFar;
-
-
         }
       }
     }
