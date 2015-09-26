@@ -58,6 +58,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private int startX, startY, exitX, exitY;
   private Tile[][] mapCopy;
   ArrayList<Zombie> zombieListCopy;
+  Zombie masterZombieCopy;
   
   public ZombiePanel()
   {
@@ -84,6 +85,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     GameControl.userPlayer.stopWalkingSound();
     GameControl.userPlayer.stopRunningSound();
     gameController.zombieList.clear();
+    gameController.masterZombie = null;
     gameController = new GameControl(this);
   }
 
@@ -570,12 +572,19 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
 
   }
+  public void setMasterZombieCopy(Zombie masterZombie)
+  {
+    masterZombieCopy = masterZombie;
+  }
 
   public ArrayList<Zombie> getZombieListCopy()
   {
     return zombieListCopy;
   }
-
+  public Zombie getMasterZombieCopy()
+  {
+    return masterZombieCopy;
+  }
   public void setStartX(int x)
   {
     startX = x;

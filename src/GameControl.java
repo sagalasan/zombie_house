@@ -13,6 +13,9 @@ import java.util.Random;
  * Created by Jalen on 9/10/2015.
  * will hold the player/zombie objects/arrays, etc
  */
+//todo make sound sound better
+  //todo zombie death animation on death
+  //todo make masterZombie
 public class GameControl implements Constants
 {
 
@@ -21,7 +24,7 @@ public class GameControl implements Constants
   ZombiePanel reference;
 
   ArrayList<Zombie> zombieList;
-
+  Zombie masterZombie;
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
   String zombieWallBump= "sound_files/wall_hit_zombie.wav";
   double walkTotalPanValue;
@@ -49,15 +52,28 @@ public class GameControl implements Constants
   Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener() {
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-
+    public void actionPerformed(ActionEvent e)
+    {
+      masterZombie.setSmellPlayer(false);
       //used for updating zombie direction every 2 sec
-      for (Zombie zombie : zombieList) {
-        if (zombie.isAlive()) {
+      for (Zombie zombie : zombieList)
+      {
+        if (zombie.isAlive())
+        {
+          //if (a zombie can smell the player)
+
+          //set masterzombie to able to smell player
+
           zombie.updateDirection();
+          if (zombie.getSmellPlayer())
+          {
+            System.out.println("masterZombie can smell your stench");
+            System.out.println("coords are "+masterZombie.getX()+", "+masterZombie.getY());
+            masterZombie.setSmellPlayer(true);
+          }
         }
       }
+      masterZombie.updateDirection();
       //zombie1.updateDirection();
     }
   });
@@ -87,6 +103,7 @@ public class GameControl implements Constants
       walkTotalPanValue = 0;
       for(Zombie zombie : zombieList)
       {
+
         if (zombie.isAlive())// && zombie != null)
         {
           zombie.move();
@@ -113,7 +130,6 @@ public class GameControl implements Constants
           {
             //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
             zombie.setAlive(false);
-            //zombie.zombieWalkSound.stop();
           }
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
@@ -155,13 +171,22 @@ public class GameControl implements Constants
 
   public GameControl(ZombiePanel panel)
   {
+    zombieReactionTimer.stop();
+    guiTimer.stop();
     reference = panel;
 
     if(reference.gameState)
     {
       level = new Level(reference.getMapCopy());
       zombieList = reference.getZombieListCopy();
+      //masterZombie = reference.getMasterZombieCopy();
 
+      masterZombie = zombieList.get(zombieList.size()-1);
+      //if (masterZombie.isMasterZombie())
+      //{
+     ///   System.out.println("masterzombie seems to be set correctly");
+    //  }
+      level.setMasterZombie(masterZombie);
       level.setZombieList(zombieList);
       level.setStartX(reference.getStartX());
       level.setStartY(reference.getStartY());
@@ -173,6 +198,9 @@ public class GameControl implements Constants
         z.setXPixel(z.getStartX()*SIZE);
         z.setYPixel(z.getStartY()*SIZE);
       }
+   //   masterZombie.setAlive(true);
+    //  masterZombie.setXPixel((masterZombie.getStartX()*SIZE));
+    //  masterZombie.setYPixel((masterZombie.getStartY()*SIZE));
       //TODO make sure the traps come back!
     }
     else
@@ -182,13 +210,23 @@ public class GameControl implements Constants
 
     mapCopy = level.getMapCopy();
     zombieList = level.getZombieList();
+    //masterZombie = level.getMasterZombie();
+    masterZombie = zombieList.get(zombieList.size()-1);
     reference.setMapCopy(level.getMapCopy());
     reference.setZombieListCopy(level.getZombieList());
+
+    reference.setMasterZombieCopy(masterZombie);
+
     reference.setStartX(level.getStartRoomX());
     reference.setStartY(level.getStartRoomY());
     reference.setExitX(level.getExitRoomX());
     reference.setExitY(level.getStartExitY());
 
+
+   // if (masterZombie.isMasterZombie())
+   // {
+   //   System.out.println("masterzombie seems to be set correctly");
+   // }
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //zombie1 = new Zombie(9,9);
     //could possibly clone zombielist so level will always have the original info for reloading

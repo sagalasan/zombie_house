@@ -20,9 +20,9 @@ public class Level implements Constants {
   int exitX = 1, exitY = 1;
 
   ArrayList<Zombie> zombieList;
-
+  Zombie masterZombie;
   Rectangle rt;
-
+  private boolean masterZombieCreated = false;
   private Random rnd = new Random();
 
   ArrayList<Rectangle> rectangles = new ArrayList<Rectangle>();
@@ -109,6 +109,7 @@ public class Level implements Constants {
     //rooms counts the nuber of rooms
     zombieList = new ArrayList<Zombie>();
     int rooms = 0;
+    double masterZombieSpawnRate = 0;
     for (Rectangle rec : r)
     {
       if (rec.room != null)
@@ -130,6 +131,22 @@ public class Level implements Constants {
             {
               zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
             }
+            if (!masterZombieCreated)
+            {
+              if (rnd.nextDouble() < masterZombieSpawnRate)// ||
+                  //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
+              {
+                masterZombieCreated = true;
+                System.out.println("masterZombie spawnned at " +rec.room.x + j + ", " + rec.room.y + i);
+                masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
+                masterZombie.setMaster(true);
+              }
+              else
+              {
+                masterZombieSpawnRate += .02;
+              }
+            }
+
 
             //this line must be [j][i] or the map wont work!!
 
@@ -145,6 +162,7 @@ public class Level implements Constants {
         }
       }
     }
+    zombieList.add(masterZombie);
 
 
 
@@ -240,7 +258,7 @@ public class Level implements Constants {
 
     //we have to set the exit tiles only after the walls have been made
     //otherwise they need to be created somewhere else
-    map[getExitRoomX()][getStartExitY()-1].setType(EXIT);
+    map[getExitRoomX()][getStartExitY() - 1].setType(EXIT);
     //map[getExitRoomX()+1][getStartExitY()-1].setType(EXIT);
     setGameCopy(map);
     setZombieList(zombieList);
@@ -327,6 +345,14 @@ public class Level implements Constants {
     return zombieList;
   }
 
+  public void setMasterZombie(Zombie masterZombie)
+  {
+    this.masterZombie = masterZombie;
+  }
+  public Zombie getMasterZombie()
+  {
+    return masterZombie;
+  }
 
   public void setStartX(int x)
   {

@@ -21,6 +21,7 @@ public class Zombie extends Entity
   private boolean smellPlayer = false;
   private int directionDegree = rand.nextInt(8);
 
+  private boolean isMasterZombie = false;
   private boolean moveZombieUp;
   private boolean moveZombieDown;
   private boolean moveZombieRight;
@@ -70,6 +71,22 @@ public class Zombie extends Entity
     return euclidDist;
   }
 
+  public void setMaster(boolean b)
+  {
+    isMasterZombie = true;
+  }
+  public boolean isMasterZombie()
+  {
+    return isMasterZombie;
+  }
+  public boolean getSmellPlayer()
+  {
+    return smellPlayer;
+  }
+  public void setSmellPlayer(boolean b)
+  {
+    smellPlayer = b;
+  }
   public void sniffForPlayer()
   {
     //need to check if player is nearby
@@ -180,7 +197,14 @@ public class Zombie extends Entity
     moveZombieRight = false;
     moveZombieLeft = false;
     //sniffs for if player is within 7 euclid distance blocks
-    sniffForPlayer();
+
+    if (!isMasterZombie)
+    {
+      sniffForPlayer();
+    }
+
+
+
 
 
     if (smellPlayer) {
