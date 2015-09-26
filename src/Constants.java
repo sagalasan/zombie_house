@@ -37,6 +37,7 @@ public interface Constants {
   double ZOMBIE_SMELL = 7.0;
   int SIZE = 80;
   int TOTAL_DIRECTIONS = 8;
+  int FOUR_CARDINAL_DIRECTIONS = 4;
   double ZOMBIE_SPAWN_RATE = .010;
   double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
   int ZOMBIE_DECISION_RATE = 2000;

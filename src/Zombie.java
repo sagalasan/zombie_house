@@ -150,11 +150,14 @@ public class Zombie extends Entity
     }
     else
     {
-
       zombieWalkSound.stop();
     }
   }
 
+  public void stopZombieWalkSound()
+  {
+    zombieWalkSound.stop();
+  }
 
 
   private void setHeading(int directionDegree)
@@ -232,8 +235,7 @@ public class Zombie extends Entity
       if (hitwall())
       {
         setHitWall(false);
-        System.out.println("chasing cause hit wall");
-        chasePlayer(4);
+        chasePlayer(FOUR_CARDINAL_DIRECTIONS);
       }
       else
       {
@@ -241,27 +243,25 @@ public class Zombie extends Entity
       }
 
 
-      //if hitwall move to the next tile up in the movementqueue
-      if (!movementQueue.isEmpty()) {
-        //System.out.println("looking for next coords using "+movementQueue.getLast().x+", "+movementQueue.getLast().y);
-        //if hitwall, find way to avoid wall
-        if (getX() > movementQueue.getLast().x) {
-          //System.out.println("zombie left");
+      if (!movementQueue.isEmpty())
+      {
+        if (getX() > movementQueue.getLast().x)
+        {
           setAnimationDirection(ANIMATION_LEFT_WALKING);
           moveZombieLeft = true;
         }
-        if (getX() < movementQueue.getLast().x) {
-          //System.out.println("zombie right");
+        if (getX() < movementQueue.getLast().x)
+        {
           setAnimationDirection(ANIMATION_RIGHT_WALKING);
           moveZombieRight = true;
         }
-        if (getY() < movementQueue.getLast().y) {
-          //System.out.println("zombie down");
+        if (getY() < movementQueue.getLast().y)
+        {
           setAnimationDirection(ANIMATION_DOWN_WALKING);
           moveZombieDown = true;
         }
-        if (getY() > movementQueue.getLast().y) {
-          //System.out.println("zombie up");
+        if (getY() > movementQueue.getLast().y)
+        {
           setAnimationDirection(ANIMATION_TOP_WALKING);
           moveZombieUp = true;
         }
@@ -271,7 +271,6 @@ public class Zombie extends Entity
     else if (lineZombie)
     {
       //choose random heading, move until hit wall, then recalc
-
       if (hitwall())
       {
         setHitWall(false);
@@ -283,8 +282,6 @@ public class Zombie extends Entity
         directionDegree = newDirectionDegree;
       }
       setHeading(directionDegree);
-      //else
-      //keep old heading
     }
     else
     {
@@ -294,7 +291,7 @@ public class Zombie extends Entity
       {
         setHitWall(false);
         stopAnimation();
-        //stopanimationtimer
+
         while(newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
