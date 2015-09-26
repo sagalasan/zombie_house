@@ -161,45 +161,36 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      //GameControl.userPlayer.setAnimationDirection(ANIMATION_LEFT_WALKING);
       GameControl.userPlayer.setMovePlayerLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-     // GameControl.userPlayer.setAnimationDirection(ANIMATION_RIGHT_WALKING);
       GameControl.userPlayer.setMovePlayerRight(true);
-     // gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      //GameControl.userPlayer.setAnimationDirection(ANIMATION_DOWN_WALKING);
       GameControl.userPlayer.setMovePlayerDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-     // GameControl.userPlayer.setAnimationDirection(ANIMATION_TOP_WALKING);
       GameControl.userPlayer.setMovePlayerUp(true);
-      //gameController.setPlayerMoveUp(true);
     }
     if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
     {
       GameControl.userPlayer.startAnimation();
       GameControl.userPlayer.setMoving(true);
-      if (GameControl.userPlayer.isRunning())
+      GameControl.userPlayer.startWalkingSound();
+
+      if (GameControl.userPlayer.isRunning() && GameControl.userPlayer.getStamina() > 0)
       {
         GameControl.userPlayer.stopWalkingSound();
       }
-      else
-      {
-        GameControl.userPlayer.startWalkingSound();
-      }
-
     }
-    if (e.getKeyCode() == KeyEvent.VK_R && !GameControl.userPlayer.isRunning() && GameControl.userPlayer.canMove())
+    if (e.getKeyCode() == KeyEvent.VK_R && GameControl.userPlayer.canMove()
+        && !GameControl.userPlayer.isRunning() && GameControl.userPlayer.getStamina() > 0)
     {
-      GameControl.userPlayer.stopWalkingSound();
-      GameControl.userPlayer.playRunningSound.start();
       GameControl.userPlayer.addSpeed();
+
     }
     if (e.getKeyCode() == KeyEvent.VK_P && !GameControl.userPlayer.isRunning())
     {
@@ -228,29 +219,24 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
       GameControl.userPlayer.setMovePlayerLeft(false);
-      //gameController.setPlayerMoveLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
       GameControl.userPlayer.setMovePlayerRight(false);
-      //gameController.setPlayerMoveRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
       GameControl.userPlayer.setMovePlayerDown(false);
-      //gameController.setPlayerMoveDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
       GameControl.userPlayer.setMovePlayerUp(false);
-      //gameController.setPlayerMoveUp(false);
     }
     //check all movement bools
     //if all done set movement to false
     if (!gameController.checkIfPlayerMoving())
     {
       GameControl.userPlayer.stopAnimation();
-      //GameControl.userPlayer.resetPlayerFrame();
       GameControl.userPlayer.setMoving(false);
       GameControl.userPlayer.stopWalkingSound();
       GameControl.userPlayer.stopRunningSound();
@@ -340,22 +326,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
      * if player bounding rectangle does not intersect with a wall pixel,
      * then draw player
      */
-    //g.fillRect(d.width / 2, d.height / 2, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-    //
 
     g.drawImage(GameControl.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
-
-
-    g.setColor(Color.BLUE);
-    //g.fillOval(gameController.zombie1.getXPixel(), gameController.zombie1.getYPixel(), 30, 30);
-
-
-     /** for (Zombie zombie: gameController.zombieList)
-      {
-        g.fillOval(zombie.getXPixel(), zombie.getYPixel(), 30, 30);
-        //g.fillOval(zombie.getX() * SIZE, zombie.getY() * SIZE, 30, 30);
-      }
-      **/
 
 
     for (Zombie zombie: gameController.zombieList)

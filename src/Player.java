@@ -46,25 +46,25 @@ public class Player extends Entity
   Timer staminaRun = new Timer(10, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
-      //System.out.println("stamina is "+stamina);
 
-      if (stamina <= 0)
+      if (stamina <= 0 && running)
       {
-
+        running = false;
         playRunningSound.stop();
-        playWalkingSound.start();
-        //loop through images
+        if (!playWalkingSound.isRunning())
+        {
+          startWalkingSound();
+        }
         setSpeed(PLAYER_DEFAULT_SPEED);
       }
       //only subtract if moving as well
       else if (moving)
       {
-        //playRunningSound.setInitialDelay(0);
+        if (stamina > 0)
+        {
+          stamina -= .01;
+        }
 
-       // playRunningSound.start();
-        //playWalkingSound.stop();
-        //change speed of sound timer
-        stamina -= .01;
       }
     }
   });
@@ -75,6 +75,7 @@ public class Player extends Entity
     {
       if (stamina <= PLAYER_DEFAULT_STAMINA)
       {
+        System.out.println(stamina);
         stamina += PLAYER_REGEN_STAMINA;
       }
     }
@@ -96,6 +97,26 @@ public class Player extends Entity
       playSound(playerFootstepsFileName);
     }
   });
+
+  public void addSpeed()
+  {
+    running = true;
+    setSpeed(PLAYER_RUN_SPEED);
+    stopWalkingSound();
+    playRunningSound.start();
+    staminaRegen.stop();
+    staminaRun.start();
+  }
+  public void regenStamina()
+  {
+    running = false;
+    setSpeed(PLAYER_DEFAULT_SPEED);
+    staminaRun.stop();
+    playRunningSound.stop();
+    playWalkingSound.setInitialDelay(0);
+    playWalkingSound.start();
+    staminaRegen.start();
+  }
 
   public void move()
   {
@@ -136,6 +157,10 @@ public class Player extends Entity
     return movePlayerLeft;
   }
 
+  public double getStamina()
+  {
+    return stamina;
+  }
   public boolean canMove()
   {
     return canMove;
@@ -197,7 +222,7 @@ public class Player extends Entity
   }
   public void startWalkingSound()
   {
-    playWalkingSound.setInitialDelay(0);
+    //playWalkingSound.setInitialDelay(0);
     playWalkingSound.start();
   }
   public void stopRunningSound()
@@ -222,22 +247,9 @@ public class Player extends Entity
   {
     fireTrapInventory -= 1;
   }
-  public void addSpeed()
-  {
-    running = true;
-    setSpeed(PLAYER_RUN_SPEED);
-    //if im running, begin regen?
-    staminaRegen.stop();
-    staminaRun.start();
-    //System.out.println("keeps starting timer");
-  }
-  public void regenStamina()
-  {
-    running = false;
-    setSpeed(PLAYER_DEFAULT_SPEED);
-    staminaRun.stop();
-    staminaRegen.start();
-  }
+
+
+
 
   public void setSpeedZero()
   {
