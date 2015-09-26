@@ -160,8 +160,8 @@ public abstract class Entity implements Constants
     //System.out.println(Level.map[x][y].type);
     //if wall, black boid, or pillar
     //TODO zombies also cant be in the same space as one another
-    if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
-            || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
+    //if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
+    //        || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
     //if wall, black, or pillar
     if (x >= 0 && x < Level.width && y >= 0 && y < Level.height)
     {
@@ -194,7 +194,10 @@ public abstract class Entity implements Constants
       {
         if (Level.map[i+x][j+y].getType() == WALL || Level.map[i+x][j+y].getType() == PILLAR )
         {
-          surroundingWalls.add(Level.map[i+x][j+y]);
+          if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
+          {
+            surroundingWalls.add(Level.map[i + x][j + y]);
+          }
         }
       }
     }

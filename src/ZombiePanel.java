@@ -88,7 +88,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   }
 
 
-
   private void initializeImages()
   {
     floorImages = new BufferedImage[12];

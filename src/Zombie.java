@@ -53,14 +53,14 @@ public class Zombie extends Entity
       }
       double euclid = calculateEuclidDistance();
       double panValue = 1.0 / euclid * multiplier;
-      double gainValue = 4.0 * euclid;
+      //double gainValue = 4.0 * euclid;
       if (hitwall())
       {
-        playSound(zombieWallBump, panValue, 12f);
+        playSound(zombieWallBump, panValue);
       }
       else
       {
-        playSound(zombieStepsFileName, panValue, (float) gainValue);
+        playSound(zombieStepsFileName, panValue);
       }
     }
   });
@@ -104,7 +104,7 @@ public class Zombie extends Entity
     return euclidDist;
   }
 
-  public void playSound(String fileName, double panValue, float gainValue)
+  public void playSound(String fileName, double panValue)
   {
     try {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
@@ -112,8 +112,8 @@ public class Zombie extends Entity
       clip.open(audioInputStream);
       FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
       panControl.setValue((float) panValue);
-      FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-      gainControl.setValue(-1 * gainValue);
+      //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+      //gainControl.setValue(-1 * gainValue);
       //System.out.println("gainvalue "+gainValue);
       clip.start();
     } catch(Exception ex) {
@@ -121,8 +121,6 @@ public class Zombie extends Entity
       ex.printStackTrace();
     }
   }
-
-
 
   public void sniffForPlayer()
   {
@@ -138,6 +136,7 @@ public class Zombie extends Entity
       smellPlayer = false;
     }
   }
+
   public void seeIfPlayerCanHear()
   {
     double distToPlayer = calculateEuclidDistance();
