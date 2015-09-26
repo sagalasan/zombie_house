@@ -51,16 +51,23 @@ public class Zombie extends Entity
       {
         multiplier = -1;
       }
-      double euclid = calculateEuclidDistance();
-      double panValue = 1.0 / euclid * multiplier;
+      double euclid = calculateEuclidDistance();//calculate distance from zombie to player
+      //padding panvalue number with .4
+
+      double panValue = .4 + 1.0/ euclid;
+      System.out.println("pan value is " + (float)panValue);
+      if (panValue > 1.0)
+      {
+        panValue = 1.0;
+      }
       //double gainValue = 4.0 * euclid;
       if (hitwall())
       {
-        playSound(zombieWallBump, panValue);
+        playSound(zombieWallBump, panValue*multiplier);
       }
       else
       {
-        playSound(zombieStepsFileName, panValue);
+        playSound(zombieStepsFileName, panValue*multiplier);
       }
     }
   });

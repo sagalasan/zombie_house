@@ -72,6 +72,10 @@ public class GameControl implements Constants
         if (zombie.isAlive() && zombie != null)
         {
           zombie.move();
+          //seeifplayercanhear should just add to the panvalues that the clip played will play
+          //seeifplayercanhear will check the type of sounds that will be played and adjust the panvalue of them.
+          //then it will play the sounds.  the timers for those sounds will be in the gamecontrol
+
           zombie.seeIfPlayerCanHear();
           Tile zombieLocation = Level.map[zombie.getX()][zombie.getY()];
           if (zombieLocation.getType() == FIRETRAP)

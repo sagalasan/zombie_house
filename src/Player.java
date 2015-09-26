@@ -59,9 +59,10 @@ public class Player extends Entity
       //only subtract if moving as well
       else if (moving)
       {
-        playRunningSound.setInitialDelay(0);
-        playRunningSound.start();
-        playWalkingSound.stop();
+        //playRunningSound.setInitialDelay(0);
+
+       // playRunningSound.start();
+        //playWalkingSound.stop();
         //change speed of sound timer
         stamina -= .01;
       }
