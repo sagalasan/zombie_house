@@ -16,6 +16,8 @@ public class GameControl implements Constants
   ZombiePanel reference;
 
   ArrayList<Zombie> zombieList;
+
+  //moved to player class.
   //private boolean movePlayerUp = false;
   //private boolean movePlayerDown = false;
   //private boolean movePlayerRight = false;
@@ -53,6 +55,7 @@ public class GameControl implements Constants
     {
       if (userPlayer.canMove())
       {
+        userPlayer.setAnimationDirectionBasedOnMovementBooleans();
         userPlayer.move();
       }
 

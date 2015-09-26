@@ -13,7 +13,7 @@ public interface Constants {
   int BLACKNESS = 6;
   int FIRETRAP = 7;
 
-  double PLAYER_DEFAULT_SPEED = 10.0;
+  double PLAYER_DEFAULT_SPEED = 5.0;
   double PLAYER_RUN_SPEED = 2.0;
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;

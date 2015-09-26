@@ -151,35 +151,35 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
   });
 
+
   //todo fix player walking so it looks more natural
   @Override
   public void keyPressed(KeyEvent e)
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      GameControl.userPlayer.setAnimationDirection(ANIMATION_LEFT_WALKING);
+      //GameControl.userPlayer.setAnimationDirection(ANIMATION_LEFT_WALKING);
       GameControl.userPlayer.setMovePlayerLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      GameControl.userPlayer.setAnimationDirection(ANIMATION_RIGHT_WALKING);
+     // GameControl.userPlayer.setAnimationDirection(ANIMATION_RIGHT_WALKING);
       GameControl.userPlayer.setMovePlayerRight(true);
      // gameController.setPlayerMoveRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      GameControl.userPlayer.setAnimationDirection(ANIMATION_DOWN_WALKING);
+      //GameControl.userPlayer.setAnimationDirection(ANIMATION_DOWN_WALKING);
       GameControl.userPlayer.setMovePlayerDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      GameControl.userPlayer.setAnimationDirection(ANIMATION_TOP_WALKING);
+     // GameControl.userPlayer.setAnimationDirection(ANIMATION_TOP_WALKING);
       GameControl.userPlayer.setMovePlayerUp(true);
       //gameController.setPlayerMoveUp(true);
     }
     if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
     {
-
       GameControl.userPlayer.startAnimation();
       GameControl.userPlayer.setMoving(true);
       GameControl.userPlayer.startWalkingSound();

@@ -59,6 +59,7 @@ public class Player extends Entity
       //only subtract if moving as well
       else if (moving)
       {
+        playRunningSound.setInitialDelay(0);
         playRunningSound.start();
         playWalkingSound.stop();
         //change speed of sound timer
@@ -156,6 +157,25 @@ public class Player extends Entity
     return moving;
   }
 
+  public void setAnimationDirectionBasedOnMovementBooleans()
+  {
+    if (movePlayerLeft)
+    {
+      setAnimationDirection(ANIMATION_LEFT_WALKING);
+    }
+    else if (movePlayerRight)
+    {
+      setAnimationDirection(ANIMATION_RIGHT_WALKING);
+    }
+    else if (movePlayerUp)
+    {
+      setAnimationDirection(ANIMATION_TOP_WALKING);
+    }
+    else if (movePlayerDown)
+    {
+      setAnimationDirection(ANIMATION_DOWN_WALKING);
+    }
+  }
   public void playSound(String fileName)
   {
     //todo have gain level change according to whether or not player is running
@@ -176,12 +196,13 @@ public class Player extends Entity
   }
   public void startWalkingSound()
   {
+    playWalkingSound.setInitialDelay(0);
     playWalkingSound.start();
   }
   public void stopRunningSound()
-{
-  playRunningSound.stop();
-}
+  {
+    playRunningSound.stop();
+  }
 
 
   public boolean hasFiretraps()

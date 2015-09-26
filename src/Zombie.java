@@ -224,26 +224,10 @@ public class Zombie extends Entity
     moveZombieRight = false;
     moveZombieLeft = false;
     //sniffs for if player is within 7 euclid distance blocks
-
     sniffForPlayer();
 
 
     if (smellPlayer) {
-     /** if (!initialCheckFinished)
-      {
-        initialCheckFinished = true;
-        chasePlayer();
-      }
-      else if (hitwall())
-      {
-        //check if
-        //just try and follow the next coords
-      }
-      else {
-
-        chasePlayer();
-      }
-      **/
     //System.out.println("smells player");
       if (hitwall())
       {
@@ -290,7 +274,7 @@ public class Zombie extends Entity
 
       if (hitwall())
       {
-        //setHitWall(false);
+        setHitWall(false);
         int newDirectionDegree = rand.nextInt(8);
         while(newDirectionDegree == directionDegree)
         {
@@ -308,7 +292,7 @@ public class Zombie extends Entity
       int newDirectionDegree = rand.nextInt(8);
       if (hitwall())
       {
-        //setHitWall(false);
+        setHitWall(false);
         stopAnimation();
         //stopanimationtimer
         while(newDirectionDegree == directionDegree)

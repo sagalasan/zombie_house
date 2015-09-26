@@ -63,7 +63,7 @@ public abstract class Entity implements Constants
   });
   public void startAnimation()
   {
-
+    animationStart.setInitialDelay(0);
     animationStart.start();
   }
   public void stopAnimation()
@@ -252,11 +252,15 @@ public abstract class Entity implements Constants
         xPixel = possibleXPixel;
         yPixel = possibleYPixel;
       }
+      else
+      {
+        hitWall = true;
+      }
     }
     else
     {
       //if hit right wall or bottom wall, subtract
-      System.out.println("hitwall zombies at " + getX()+", "+getY());
+      //System.out.println("hitwall zombies at " + getX()+", "+getY());
       hitWall = true;
       //if map[x][possibleY] == wall
       //if possible y > y hit south
