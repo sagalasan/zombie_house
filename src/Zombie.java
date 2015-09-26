@@ -35,36 +35,7 @@ public class Zombie extends Entity
   //String
   //for the sound, may have to start the timer in the gamecontrol
   //that Way I could calculate each pan/gain value and add it
-  Timer zombieWalkSound = new Timer(1000, new ActionListener()
-  {
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-      double multiplier = 1;
-      if (getX() < GameControl.userPlayer.getX())
-      {
-        multiplier = -1;
-      }
-      double euclid = calculateEuclidDistance();//calculate distance from zombie to player
-      //padding panvalue number with .4
 
-      double panValue = .4 + 1.0/ euclid;
-      System.out.println("pan value is " + (float)panValue);
-      if (panValue > 1.0)
-      {
-        panValue = 1.0;
-      }
-      //double gainValue = 4.0 * euclid;
-      if (hitwall())
-      {
-        playSound(zombieWallBump, panValue*multiplier);
-      }
-      else
-      {
-        playSound(zombieStepsFileName, panValue*multiplier);
-      }
-    }
-  });
 
   public Zombie(int x, int y)
   {
@@ -72,12 +43,10 @@ public class Zombie extends Entity
     setSpeed(ZOMBIE_DEFAULT_SPEED);
     if (rand.nextDouble() > ZOMBIE_RANDOM_OR_LINE_RATE)
     {
-     // System.out.println("this is a line zombie1");
       lineZombie = true;
     }
     else
     {
-     // System.out.println("this is a random zombie1");
       lineZombie= false;
     }
     setHeading(directionDegree);
@@ -92,10 +61,6 @@ public class Zombie extends Entity
 
   }
 
-  public void setZombieSmell(boolean b)
-  {
-    smellPlayer = b;
-  }
   public double calculateEuclidDistance()
   {
     double euclidDist;
@@ -105,31 +70,12 @@ public class Zombie extends Entity
     return euclidDist;
   }
 
-  public void playSound(String fileName, double panValue)
-  {
-    try {
-      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
-      Clip clip = AudioSystem.getClip();
-      clip.open(audioInputStream);
-      FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
-      panControl.setValue((float) panValue);
-      //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-      //gainControl.setValue(-1 * gainValue);
-      //System.out.println("gainvalue "+gainValue);
-      clip.start();
-    } catch(Exception ex) {
-      System.out.println("Error with playing sound.");
-      ex.printStackTrace();
-    }
-  }
-
   public void sniffForPlayer()
   {
     //need to check if player is nearby
     double distToPlayer = calculateEuclidDistance();
     if (distToPlayer <= ZOMBIE_SMELL)
     {
-      //System.out.println("detected Player");
       smellPlayer = true;
     }
     else
@@ -138,27 +84,34 @@ public class Zombie extends Entity
     }
   }
 
-  public void seeIfPlayerCanHear()
+  public boolean playerCanHearZombie()
   {
     double distToPlayer = calculateEuclidDistance();
-    //this prob has to be seperate.  perhaps in move checker?
     if (distToPlayer <= PLAYER_HEARING_DISTANCE)
     {
-      //System.out.println("player can hear me");
-      // todo need to combine each zombies footsteps
-      zombieWalkSound.start();
+      return true;
     }
     else
     {
-      zombieWalkSound.stop();
+      return false;
     }
   }
-
-  public void stopZombieWalkSound()
+  public double calculatePanValue()
   {
-    zombieWalkSound.stop();
-  }
+    double multiplier = 1;
+    if (getX() < GameControl.userPlayer.getX())
+    {
+      multiplier = -1;
+    }
+    double euclid = calculateEuclidDistance();//calculate distance from zombie to player
 
+    double panValue = PANVALUE_PADDING + 1.0/ euclid;
+    if (panValue > 1.0)
+    {
+      panValue = 1.0;
+    }
+    return multiplier * panValue;
+  }
 
   private void setHeading(int directionDegree)
   {

@@ -1,6 +1,11 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,36 +22,46 @@ public class GameControl implements Constants
 
   ArrayList<Zombie> zombieList;
 
-  //moved to player class.
-  //private boolean movePlayerUp = false;
-  //private boolean movePlayerDown = false;
-  //private boolean movePlayerRight = false;
-  //private boolean movePlayerLeft = false;
+  String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
+  String zombieWallBump= "sound_files/wall_hit_zombie.wav";
+  double walkTotalPanValue;
+  double hitWallTotalPanValue;
 
   private Tile[][] mapCopy; //this will be used if the player dies to preserve the map
 
   Level level;
 
-
-  Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener()
-  {
-
+  Timer zombieWalkSound = new Timer(1000, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e)
     {
+      playSound(zombieStepsFileName, walkTotalPanValue);
+    }
+  });
+  Timer zombieHitWallSound = new Timer(1000, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      playSound(zombieWallBump, hitWallTotalPanValue);
+    }
+  });
+
+  Timer zombieReactionTimer = new Timer(ZOMBIE_DECISION_RATE, new ActionListener() {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
 
       //used for updating zombie direction every 2 sec
-      for (Zombie zombie : zombieList)
-      {
-        if (zombie.isAlive())
-        {
+      for (Zombie zombie : zombieList) {
+        if (zombie.isAlive()) {
           zombie.updateDirection();
         }
       }
       //zombie1.updateDirection();
     }
   });
+
 
   Timer guiTimer = new Timer(GUI_TIMER_SPEED, new ActionListener()
   {
@@ -66,17 +81,28 @@ public class GameControl implements Constants
       }
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
-
+      boolean stepsZombieHeard = false;
+      boolean hitWallZombieHeard = false;
+      hitWallTotalPanValue = 0;
+      walkTotalPanValue = 0;
       for(Zombie zombie : zombieList)
       {
-        if (zombie.isAlive() && zombie != null)
+        if (zombie.isAlive())// && zombie != null)
         {
           zombie.move();
-          //seeifplayercanhear should just add to the panvalues that the clip played will play
-          //seeifplayercanhear will check the type of sounds that will be played and adjust the panvalue of them.
-          //then it will play the sounds.  the timers for those sounds will be in the gamecontrol
-
-          zombie.seeIfPlayerCanHear();
+          if (zombie.playerCanHearZombie())
+          {
+            if (zombie.hitwall())
+            {
+              hitWallZombieHeard = true;
+              hitWallTotalPanValue += zombie.calculatePanValue();
+            }
+            else
+            {
+              stepsZombieHeard = true;
+              walkTotalPanValue += zombie.calculatePanValue();
+            }
+          }
           Tile zombieLocation = Level.map[zombie.getX()][zombie.getY()];
           if (zombieLocation.getType() == FIRETRAP)
           {
@@ -87,7 +113,7 @@ public class GameControl implements Constants
           {
             //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
             zombie.setAlive(false);
-            zombie.zombieWalkSound.stop();
+            //zombie.zombieWalkSound.stop();
           }
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
@@ -96,6 +122,32 @@ public class GameControl implements Constants
             reference.resetGame();
           }
         }
+      }
+      walkTotalPanValue = adjustPanValue(walkTotalPanValue);
+      hitWallTotalPanValue = adjustPanValue(hitWallTotalPanValue);
+
+      //if there was a zombie that could be heard
+      if (stepsZombieHeard)
+      {
+        if (!zombieWalkSound.isRunning())
+        {
+          zombieWalkSound.start();
+        }
+      }
+      else
+      {
+        zombieWalkSound.stop();
+      }
+      if (hitWallZombieHeard)
+      {
+        if (!zombieHitWallSound.isRunning())
+        {
+          zombieHitWallSound.start();
+        }
+      }
+      else
+      {
+        zombieHitWallSound.stop();
       }
       reference.repaint();
     }
@@ -145,11 +197,36 @@ public class GameControl implements Constants
 
   }
 
-  //public void setPlayerMoveUp(boolean b) { movePlayerUp = b; }
-  //public void setPlayerMoveDown(boolean b) { movePlayerDown = b; }
-  //public void setPlayerMoveRight(boolean b) { movePlayerRight = b; }
-  //public void setPlayerMoveLeft(boolean b) { movePlayerLeft = b; }
+  public void playSound(String fileName, double panValue)
+  {
+    try {
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
+      panControl.setValue((float) panValue);
+      //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+      //gainControl.setValue(-1 * gainValue);
+      //System.out.println("gainvalue "+gainValue);
+      clip.start();
+    } catch(Exception ex) {
+      System.out.println("Error with playing sound.");
+      ex.printStackTrace();
+    }
+  }
+  private double adjustPanValue(double panValue)
+  {
+    if (panValue > 1)
+    {
+      panValue = 1;
+    }
+    else if (panValue < -1)
+    {
+      panValue = -1;
+    }
+    return panValue;
 
+  }
   public boolean checkIfPlayerMoving()
   {
     //if player is moving, play sound every sec

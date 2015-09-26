@@ -79,10 +79,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   public void resetGame()
   {
     gameState = true;
-    for (Zombie zombie : gameController.zombieList)
-    {
-      zombie.stopZombieWalkSound();
-    }
+    gameController.zombieHitWallSound.stop();
+    gameController.zombieWalkSound.stop();
+    GameControl.userPlayer.stopWalkingSound();
+    GameControl.userPlayer.stopRunningSound();
     gameController.zombieList.clear();
     gameController = new GameControl(this);
   }

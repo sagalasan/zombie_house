@@ -41,6 +41,8 @@ public interface Constants {
   double ZOMBIE_SPAWN_RATE = .010;
   double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
   int ZOMBIE_DECISION_RATE = 2000;
+
+  double PANVALUE_PADDING = .25;
   //used to find blocks around tile
   //Directions          NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
   //    DIRECTIONS   = {    0,     1,    2,    3,         4,         5,         6,         7};
