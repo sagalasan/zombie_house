@@ -81,7 +81,6 @@ public class Player extends Entity
     }
   });
 
-
   Timer playWalkingSound = new Timer(walkSoundSpeed, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e)

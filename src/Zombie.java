@@ -26,14 +26,8 @@ public class Zombie extends Entity
   private boolean moveZombieRight;
   private boolean moveZombieLeft;
 
-  private boolean lastMoveLeft = false;
-  private boolean lastMoveRight = false;
-  private boolean lastMoveDown = false;
-  private boolean lastMoveUp = false;
-
   private int startX, startY;
 
-  private boolean initialCheckFinished = false;
   private String zombieSpriteSheet = "character_images/zombie_sprite_sheet.png";
 
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
