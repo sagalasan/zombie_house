@@ -86,6 +86,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   public void levelComplete()
   {
+
+    JOptionPane.showMessageDialog(null, "Level " + levelNumber +
+            " Complete!\nLevel " + (levelNumber+1) +
+            " will begin loading after you press 'OK'.",
+            null,JOptionPane.PLAIN_MESSAGE);
+
+
     gameState = false;
     gameController.zombieReactionTimer.stop();
     gameController.guiTimer.stop();
@@ -129,7 +136,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     //maybe play a death animation then show dialog
     int reply = JOptionPane.showConfirmDialog(null, "Your brain has been eaten.\n"
-                    +"Would you like to play again?", "You're dead bro.",
+                    + "Would you like to play again?", "You're dead bro.",
             JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, icon);//icon can be any saved image
 
     //If user chooses to reset then reset everythong and create a new gameController
@@ -174,6 +181,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private void initializeImages()
   {
+
     floorImages = new BufferedImage[12];
     try
     {

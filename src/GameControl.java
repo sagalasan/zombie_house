@@ -101,7 +101,7 @@ public class GameControl implements Constants
         //
         // resetGame
       }
-      if (Level.map[userPlayer.getX()][userPlayer.getY()-1].getType() == EXIT)
+      if (Level.map[userPlayer.getX()][userPlayer.getY()].getType() == EXIT)
       {
         //set the next level
         System.out.println("Found Exit!");

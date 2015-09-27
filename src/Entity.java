@@ -179,18 +179,12 @@ public abstract class Entity implements Constants
     if (x >= 0 && x < Level.width && y >= 0 && y < Level.height)
     {
       if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
-          || Level.map[x][y].getType() == PILLAR || Level.map[x][y].getType() == EXIT)
+          || Level.map[x][y].getType() == PILLAR)
       {
         return false;
       }
     }
-    if(Level.map[x][y].getType() == EXIT)
-    {
-      //TODO add constraints for making contact with the exit
-      System.out.println("Player has found the exit!");
-      //load the second level and clear the playerStatus
-    }
-      //TODO add constraints for making contact with the exit
+
     return true;
   }
 
