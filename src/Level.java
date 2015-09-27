@@ -116,36 +116,37 @@ public class Level implements Constants {
             map[rec.room.x + j][rec.room.y + i] = new Tile(FLOOR, rec.room.x + j, rec.room.y + i);
             //for floor tiles,
             //if the int is in the top 1 percent, create a zombie
-
-            if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
+            if (j > 0 && j < rec.room.height - 1 && i > 0 && i < rec.room.width - 1)
             {
-              //System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
-              map[rec.room.x + j][rec.room.y + i].setType(FIRETRAP);
-            }
-            if (rnd.nextDouble() < PILLAR_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != FIRETRAP)
-            {
-              map[rec.room.x + j][rec.room.y + i].setType(PILLAR);
-            }
-            if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != PILLAR)
-            {
-              zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
-            }
-            if (!masterZombieCreated)
-            {
-              if (rnd.nextDouble() < masterZombieSpawnRate)// ||
-                  //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
+              if (rnd.nextDouble() < FIRETRAP_SPAWN_RATE)
               {
-                masterZombieCreated = true;
-                System.out.println("masterZombie spawnned at " +rec.room.x + j + ", " + rec.room.y + i);
-                masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
-                masterZombie.setMaster(true);
+                //System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
+                map[rec.room.x + j][rec.room.y + i].setType(FIRETRAP);
               }
-              else
+              if (rnd.nextDouble() < PILLAR_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != FIRETRAP)
               {
-                masterZombieSpawnRate += .02;
+                map[rec.room.x + j][rec.room.y + i].setType(PILLAR);
+              }
+              if (rnd.nextDouble() < ZOMBIE_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != PILLAR)
+              {
+                zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
+              }
+              if (!masterZombieCreated)
+              {
+                if (rnd.nextDouble() < masterZombieSpawnRate)// ||
+                //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
+                {
+                  masterZombieCreated = true;
+                  System.out.println("masterZombie spawnned at " + rec.room.x + j + ", " + rec.room.y + i);
+                  masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
+                  masterZombie.setMaster(true);
+                }
+                else
+                {
+                  masterZombieSpawnRate += .02;
+                }
               }
             }
-
 
             //this line must be [j][i] or the map wont work!!
 
