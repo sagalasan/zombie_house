@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,9 +23,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -473,8 +472,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
      **/
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
     //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
-    //g2d.setPaint(playerGradient);
-    //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);
+    g2d.setPaint(playerGradient);
+    //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);\
     //g2d.fillRect(0, 0, getWidth(), getHeight());
 
     //Point2D center = new Point2D.Float(d.width / 2, d.height / 2);
@@ -485,7 +484,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //        new RadialGradientPaint(center, radius, dist, colors);
     //g2d.setPaint(p);
     //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
-    //createRayTracingPolygons();
+    createRayTracingPolygons(offsetX, offsetY);
     //g2d.drawImage(lightingMask, 0, 0, null);
   }
 
@@ -570,16 +569,21 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     return true;
   }
 
-  private void createRayTracingPolygons()
+  private void createRayTracingPolygons(int offsetX, int offsetY)
   {
     lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
     ArrayList<Polygon> lightPolygons = new ArrayList<Polygon>();
-    ArrayList<Integer> xVertices = new ArrayList<Integer>();
-    ArrayList<Integer> yVertices = new ArrayList<Integer>();
+    //ArrayList<Integer> xVertices = new ArrayList<Integer>();
+    //ArrayList<Integer> yVertices = new ArrayList<Integer>();
+
+    ArrayList<Point> vertices = new ArrayList<Point>();
+
     int x = gameController.getUserPlayer().getX();
     int y = gameController.getUserPlayer().getY();
     int xp = gameController.getUserPlayer().getXPixel();
     int yp = gameController.getUserPlayer().getYPixel();
+
+    Point origin = new Point(xp + offsetX, yp + offsetY);
 
     int xStart = x - 6;
     int xEnd = x + 6;
@@ -598,30 +602,27 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         int nPoints = 4;
         int[] xCoord = new int[nPoints];
         int[] yCoord = new int[nPoints];
+
         if(tile.getType() == WALL)
         {
-          int xTilePixel = i * SIZE;
-          int yTilePixel = j * SIZE;
+          int xTilePixel = i * SIZE + offsetX;
+          int yTilePixel = j * SIZE + offsetY;
           int xTilePixelOne = xTilePixel + SIZE;
           int yTilePixelOne = yTilePixel + SIZE;
 
-          xVertices.add(xTilePixel);
-          yVertices.add(yTilePixel);
+          vertices.add(new Point(xTilePixel, yTilePixel, origin));
           xCoord[0] = xTilePixel;
           yCoord[0] = yTilePixel;
 
-          xVertices.add(xTilePixelOne);
-          yVertices.add(yTilePixel);
+          vertices.add(new Point(xTilePixelOne, yTilePixel, origin));
           xCoord[1] = xTilePixelOne;
           yCoord[1] = yTilePixel;
 
-          xVertices.add(xTilePixelOne);
-          yVertices.add(yTilePixelOne);
+          vertices.add(new Point(xTilePixelOne, yTilePixelOne, origin));
           xCoord[2] = xTilePixelOne;
           yCoord[2] = yTilePixelOne;
 
-          xVertices.add(xTilePixel);
-          yVertices.add(yTilePixelOne);
+          vertices.add(new Point(xTilePixel, yTilePixelOne, origin));
           xCoord[3] = xTilePixel;
           yCoord[3] = yTilePixelOne;
 
@@ -645,6 +646,38 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       g2d.fillPolygon(lightPolygons.get(i));
     }
+
+    Collections.sort(vertices, Point.PointAngleComparator);
+    System.out.println("Sorted List");
+    for(int i = 0; i < vertices.size(); i++)
+    {
+      System.out.println(i + " " + vertices.get(i));
+    }
+    System.out.println("Clean List");
+    Point.cleanList(vertices);
+    for(int i = 0; i < vertices.size(); i++)
+    {
+      System.out.println(i + " " + vertices.get(i));
+    }
+    Polygon p = createPointPolygon(vertices);
+    g2d.fillPolygon(p);
+  }
+
+  private Polygon createPointPolygon(ArrayList<Point> points)
+  {
+    int l = points.size();
+    int xPoints[] = new int[l];
+    int yPoints[] = new int[l];
+    for(int i = 0; i < l; i++)
+    {
+      Point p = points.get(i);
+      int x = p.getX();
+      int y = p.getY();
+      xPoints[i] = x;
+      yPoints[i] = y;
+    }
+    Polygon polygon = new Polygon(xPoints, yPoints, l);
+    return polygon;
   }
 
   private class RayTracingRunnable implements Runnable
