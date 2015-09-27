@@ -75,7 +75,7 @@ public class Player extends Entity
     {
       if (stamina <= PLAYER_DEFAULT_STAMINA)
       {
-        System.out.println(stamina);
+       // System.out.println(stamina);
         stamina += PLAYER_REGEN_STAMINA;
       }
     }

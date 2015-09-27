@@ -122,7 +122,11 @@ public class Level implements Constants {
               //System.out.println("firetrap spawned at " +(rec.room.x + j)+", "+ (rec.room.y + i));
               map[rec.room.x + j][rec.room.y + i].setType(FIRETRAP);
             }
-            if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
+            if (rnd.nextDouble() < PILLAR_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != FIRETRAP)
+            {
+              map[rec.room.x + j][rec.room.y + i].setType(PILLAR);
+            }
+            if(rnd.nextDouble() < ZOMBIE_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != PILLAR)
             {
               zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
             }

@@ -18,8 +18,8 @@ public interface Constants {
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;
   double PLAYER_HEARING_DISTANCE = 10;
-  int PLAYER_SPRITE_HEIGHT = 80;
-  int PLAYER_SPRITE_WIDTH = 50;
+  int PLAYER_SPRITE_HEIGHT = 70;
+  int PLAYER_SPRITE_WIDTH = 45;
 
 
   int ANIMATION_DOWN_WALKING = 650;
@@ -31,9 +31,16 @@ public interface Constants {
   int ANIMATION_WIDTH = 33;
   int ANIMATION_HEIGHT= 50;
 
+  double FIRETRAP_SPAWN_RATE = 0.010;
+  int FIRE_ANIMATION_HEIGHT = 60;
+  int FIRE_ANIMATION_WIDTH = 40;
+
+
+  double PILLAR_SPAWN_RATE = 0.010;
+
   int SPRITE_SPREAD_DISTANCE = 64;
 
-  double FIRETRAP_SPAWN_RATE = 0.010;
+
 
   double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;

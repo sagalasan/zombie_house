@@ -14,8 +14,7 @@ import java.util.Random;
  * will hold the player/zombie objects/arrays, etc
  */
   //todo make sound sound better
-  //todo zombie death animation on death
-
+  //todo make scorched tiles show up
 public class GameControl implements Constants
 {
 
@@ -73,7 +72,11 @@ public class GameControl implements Constants
           }
         }
       }
-      masterZombie.updateDirection();
+      if (masterZombie.isAlive())
+      {
+        masterZombie.updateDirection();
+      }
+
       //zombie1.updateDirection();
     }
   });
@@ -94,6 +97,9 @@ public class GameControl implements Constants
       {
         Level.map[userPlayer.getX()][userPlayer.getY()].explode();
         userPlayer.setAlive(false);
+        //todo reset game if player dead
+        //
+        // resetGame
       }
       if (Level.map[userPlayer.getX()][userPlayer.getY()-1].getType() == EXIT)
       {
@@ -114,6 +120,7 @@ public class GameControl implements Constants
 
         if (zombie.isAlive())// && zombie != null)
         {
+          //zombie.startAnimation();
           zombie.move();
           if (zombie.playerCanHearZombie())
           {
@@ -238,12 +245,15 @@ public class GameControl implements Constants
 
    // if (masterZombie.isMasterZombie())
    // {
-   //   System.out.println("masterzombie seems to be set correctly");
+   //   /
+   // System.out.println("masterzombie seems to be set correctly");
    // }
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //zombie1 = new Zombie(9,9);
     //could possibly clone zombielist so level will always have the original info for reloading
+    zombieReactionTimer.setInitialDelay(0);
     zombieReactionTimer.start();
+
     guiTimer.start();
 
   }

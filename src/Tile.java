@@ -1,8 +1,13 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -23,8 +28,12 @@ public class Tile implements Constants {
   private double fCost;
   private double costSoFar;
   private boolean combusting = false;
+  private boolean combusted = false;
   private int type;
-
+  private int indexForImage = 0;
+  private int totalRunTime = 0;
+  private BufferedImage currentFrame;
+  private BufferedImage spriteSheet ;
 
 
   public Tile(int type, int x, int y){
@@ -64,6 +73,19 @@ public class Tile implements Constants {
     }
     setTileCost();
   }
+
+  public void setSpriteSheet()
+  {
+    try
+    {
+      this.spriteSheet = ImageIO.read(new File("tile_images/fire.png"));
+    }
+    catch (IOException e)
+    {
+      System.out.println("Player Image did not load");
+    }
+  }
+
   public void setChosen(boolean b)
   {
     chosen = b;
@@ -108,12 +130,21 @@ public class Tile implements Constants {
     return (double)(y * SIZE);
   }
 
+  public boolean hasCombusted()
+  {
+    return combusted;
+  }
+  public void setCombusted(boolean b)
+  {
+    combusted = b;
+  }
   public java.awt.Rectangle getBoundingRectangle()
   {
 
 
     return new Rectangle((int)getXPixel(), (int)getYPixel(), SIZE, SIZE);
   }
+
 
   public void setTileCost()
   {
@@ -128,20 +159,54 @@ public class Tile implements Constants {
     }
   }
 
-  private void combust()
+
+
+  private void setFireFrame(int indexForPicture)
   {
-    //runs for 15 seconds
-    Timer CombustTimer = new Timer(15000, new ActionListener()
+    currentFrame = spriteSheet.getSubimage(15 + (indexForPicture * SPRITE_SPREAD_DISTANCE),
+        0, FIRE_ANIMATION_WIDTH, FIRE_ANIMATION_HEIGHT);
+
+  }
+  Timer CombustTimer = new Timer(150, new ActionListener()
+  {
+
+    int totalFireImages = 5;
+    @Override
+    public void actionPerformed(ActionEvent e)
     {
-      @Override
-      public void actionPerformed(ActionEvent e)
+      totalRunTime += 150;
+      System.out.println(totalRunTime);
+      if (totalRunTime >= 15000)
       {
         combusting = false;
+        //combusted = true;
         System.out.println("finsihed combusting");
+        stopCombust();
       }
-    });
-    CombustTimer.setRepeats(false);
+
+      setFireFrame(indexForImage % totalFireImages);
+      indexForImage += 1;
+
+
+    }
+  });
+  public Image getCurrentFrame()
+  {
+    return currentFrame.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
+  }
+  private void combust()
+  {
+    totalRunTime = 0;
+    setSpriteSheet();
     CombustTimer.start();
+    //if this tile is a wall or tile
+    //and is inside the level with no black around
+    //then turn into a floor
+  }
+
+  private void stopCombust()
+  {
+    CombustTimer.stop();
   }
   public void explode()
   {
@@ -156,12 +221,14 @@ public class Tile implements Constants {
           Tile checkingTile = Level.map[x+i][y+j];
           if (checkingTile.type == FLOOR)
           {
+            checkingTile.setCombusted(true);
             checkingTile.type = SCORCHED_FLOOR;
           }
           if (checkingTile.type == WALL || checkingTile.type == PILLAR)
           {
             if (checkingTile.checkIfInsideTile())
             {
+              checkingTile.setCombusted(true);
               checkingTile.type = SCORCHED_WALL;
             }
           }

@@ -1,3 +1,4 @@
+import com.sun.glass.ui.Size;
 import javafx.application.Application;
 import javafx.scene.effect.Light;
 import javafx.scene.media.Media;
@@ -36,6 +37,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage[] floorImages;
   private BufferedImage  blacknessImage;
   private BufferedImage wallImage;
+  private BufferedImage pillarImage;
   private BufferedImage firetrapImage;
   private BufferedImage exitImage;
   private BufferedImage scorchedMask;
@@ -146,6 +148,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       //cuause a concurrent exception.
       gameController.zombieList.clear();
 
+
       gameController.masterZombie = null;
       gameController = new GameControl(this);
 
@@ -193,7 +196,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
-
+      pillarImage = wallImage;
       playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
@@ -421,6 +424,33 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       //    }
     }
 
+    //combusting a tile slightly causes some lag
+
+    for (int i =0; i < Level.width;i++)
+    {
+      for (int j = 0; j < Level.height; j++)
+      {
+        int tileDrawX = offsetX + i * SIZE;
+        int tileDrawY = offsetY + j*SIZE;
+        Tile checkTile = Level.map[i][j];
+        if (checkTile.hasCombusted())
+        {
+          g.drawImage(scorchedMask , tileDrawX, tileDrawY ,null );
+        }
+        if (checkTile.isCombusting())
+        {
+          g.drawImage(checkTile.getCurrentFrame() , tileDrawX, tileDrawY ,null );
+                   //drawCenteredImg(g, Level.map[i][j].getCurrentFrame(), i, j);
+        }
+        if (checkTile.getType() == FIRETRAP)
+        {
+          //draw firetrap instead
+          g.drawImage(scorchedMask, tileDrawX, tileDrawY, null);
+        }
+
+      }
+    }
+
     g.drawImage(gameController.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
 
 
@@ -473,14 +503,14 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         {
           mapImages[i][j] = wallImage;
         }
-        else if(Level.map[i][j].getType() == FLOOR)
+        else if(Level.map[i][j].getType() == PILLAR)
+        {
+          mapImages[i][j] = pillarImage;
+        }
+        else if(Level.map[i][j].getType() == FLOOR || Level.map[i][j].getType() == FIRETRAP )
         {
           int index = random.nextInt(floorImages.length);
           mapImages[i][j] = floorImages[index];
-        }
-        else if (Level.map[i][j].getType() == FIRETRAP)
-        {
-          mapImages[i][j] = firetrapImage;
         }
         else if (Level.map[i][j].getType() == EXIT)
         {

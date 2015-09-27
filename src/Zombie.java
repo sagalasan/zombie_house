@@ -288,6 +288,7 @@ public class Zombie extends Entity
       //startAnimation();
       setHeading(newDirectionDegree);
     }
+    startAnimation();
   }
 
   public void move()
