@@ -246,7 +246,10 @@ public class Player extends Entity
     fireTrapInventory -= 1;
   }
 
-
+  public int totalFiretraps()
+  {
+    return fireTrapInventory;
+  }
 
 
   public void setSpeedZero()

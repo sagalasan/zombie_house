@@ -18,8 +18,11 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -53,13 +56,14 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private float[] fractions = {0.0f, 0.7f, 1.0f};
 
   private BufferedImage lightingMask;
-  public boolean gameState = false;
-  
+
+
   private int startX, startY, exitX, exitY;
   private Tile[][] mapCopy;
   ArrayList<Zombie> zombieListCopy;
   Zombie masterZombieCopy;
-  
+  public boolean gameState = false;
+
   public ZombiePanel()
   {
     gameController = new GameControl(this);
@@ -79,14 +83,45 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   public void resetGame()
   {
-    gameState = true;
-    gameController.zombieHitWallSound.stop();
-    gameController.zombieWalkSound.stop();
-    GameControl.userPlayer.stopWalkingSound();
-    GameControl.userPlayer.stopRunningSound();
-    gameController.zombieList.clear();
-    gameController.masterZombie = null;
-    gameController = new GameControl(this);
+
+    ImageIcon icon = null;
+    try {
+      icon = new ImageIcon(new URL("http://cdn.makeagif.com/media/9-16-2015/YVHhGp.gif"));
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    }
+
+    //maybe play a death animation then show dialog
+    int reply = JOptionPane.showConfirmDialog(null, "Your brain has been eaten.\n"
+                    +"Would you like to play again?", "You're dead bro.",
+            JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, icon);//icon can be any saved image
+
+    //If user chooses to reset then reset everythong and create a new gameController
+    if (reply == JOptionPane.YES_OPTION)
+    {
+      gameState = true;
+      gameController.zombieHitWallSound.stop();
+      gameController.zombieWalkSound.stop();
+      GameControl.userPlayer.stopWalkingSound();
+      GameControl.userPlayer.stopRunningSound();
+
+      //****************************************************************************************
+      //this line is associated with causing the clone() method to
+      //cuause a concurrent exception.
+      gameController.zombieList.clear();
+
+
+      gameController.masterZombie = null;
+      gameController = new GameControl(this);
+
+    }
+    else {
+      //optional goodbye message
+      //JOptionPane.showMessageDialog(null, "GOODBYE");
+      System.exit(0);
+    }
+
+
   }
 
 
@@ -140,6 +175,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     public void actionPerformed(ActionEvent e)
     {
       GameControl.userPlayer.takeFiretrap();
+      System.out.println("Picking up firetrap " + GameControl.userPlayer.totalFiretraps());
       Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()].setType(FLOOR);
       GameControl.userPlayer.setCanMove(true);
     }
@@ -544,7 +580,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   }
 
 
-
+  /**
+   * @param mc the current map of tiles that needs to be copied over to the next game
+   *           type.
+   * This method will copy all tiles in the file and copy them into the new map file.
+   * This method of copying the map avoids have a "reference" of the map.
+   * */
   public void setMapCopy(Tile[][] mc)
   {
     mapCopy = new Tile[50][50];
@@ -568,7 +609,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   public void setZombieListCopy(ArrayList<Zombie> zl)
   {
+    //This is the second part causing a concurrent exception**********************************************
     zombieListCopy = (ArrayList<Zombie>)zl.clone();
+
     //copy each zombie to a new zombie list for use later on
     //and remove the clone method and also the clear() method.
 

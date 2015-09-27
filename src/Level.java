@@ -52,18 +52,6 @@ public class Level implements Constants {
   {
     map = t;
 
-   /* for (int i = 0; i < width; i++)
-    {
-      for (int j = 0; j < height; j++)
-      {
-        if(map[j][i].getType() == FIRETRAP)
-        {
-          System.out.println("firetrap at [" + j + "," + i + "]");
-          map[j][i].setType(FIRETRAP);
-        }
-      }
-    }*/
-
   }
 
 
