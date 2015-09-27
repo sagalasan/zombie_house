@@ -39,7 +39,7 @@ public abstract class Entity implements Constants
   private BufferedImage currentFrame;
   private BufferedImage spriteSheet;
   private int indexForImage = 0;
-
+  private int totalImages = 9;
   public Entity(String type, int x, int y)
   {
     this.type = type;
@@ -52,17 +52,23 @@ public abstract class Entity implements Constants
     speed = 0;
   }
 
-  Timer animationStart = new Timer(200, new ActionListener() {
+  Timer animationStart = new Timer(100, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e)
     {
       indexForImage+=1;
-      int totalImages = 9;
+      //total images will be either 9 or 6 depending one which animation
+
       setPlayerFrame(indexForImage % totalImages);
+      if (totalImages == 6 && indexForImage == 5)
+      {
+        stopAnimation();
+      }
     }
   });
   public void startAnimation()
   {
+    totalImages = 9;
     animationStart.setInitialDelay(0);
     animationStart.start();
   }
@@ -71,6 +77,13 @@ public abstract class Entity implements Constants
     animationStart.stop();
   }
 
+  public void startDeathAnimation()
+  {
+    indexForImage = 0;
+    animationDirection = ANIMATION_DEATH;
+    totalImages = 6;
+    animationStart.start();
+  }
   public void setSpriteSheet(String spriteSheet)
   {
     try
@@ -257,11 +270,13 @@ public abstract class Entity implements Constants
       }
       else
       {
+        stopAnimation();
         hitWall = true;
       }
     }
     else
     {
+      stopAnimation();
       //if hit right wall or bottom wall, subtract
       //System.out.println("hitwall zombies at " + getX()+", "+getY());
       hitWall = true;

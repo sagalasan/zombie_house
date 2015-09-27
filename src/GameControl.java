@@ -13,9 +13,9 @@ import java.util.Random;
  * Created by Jalen on 9/10/2015.
  * will hold the player/zombie objects/arrays, etc
  */
-//todo make sound sound better
+  //todo make sound sound better
   //todo zombie death animation on death
-  //todo make masterZombie
+
 public class GameControl implements Constants
 {
 
@@ -128,8 +128,8 @@ public class GameControl implements Constants
           //this has to be last so removing zombie is seemless?
           if (zombieLocation.isCombusting())
           {
-            //todo be sure to save the original zombies probably in a seperate unused zombielist for level reloading on player death
             zombie.setAlive(false);
+            zombie.startDeathAnimation();
           }
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {

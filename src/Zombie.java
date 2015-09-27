@@ -31,8 +31,6 @@ public class Zombie extends Entity
 
   private String zombieSpriteSheet = "character_images/zombie_sprite_sheet.png";
 
-  String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
-  String zombieWallBump= "sound_files/wall_hit_zombie.wav";
   //String
   //for the sound, may have to start the timer in the gamecontrol
   //that Way I could calculate each pan/gain value and add it
@@ -74,6 +72,8 @@ public class Zombie extends Entity
   public void setMaster(boolean b)
   {
     isMasterZombie = true;
+    zombieSpriteSheet = "character_images/masterZombie_sprite_sheet.png";
+    setSpriteSheet(zombieSpriteSheet);
   }
   public boolean isMasterZombie()
   {
@@ -198,9 +198,17 @@ public class Zombie extends Entity
     moveZombieLeft = false;
     //sniffs for if player is within 7 euclid distance blocks
 
-    if (!isMasterZombie)
+    if (isMasterZombie && smellPlayer == false)
     {
       sniffForPlayer();
+    }
+    else if (!isMasterZombie)
+    {
+      sniffForPlayer();
+    }
+    if (hitwall())
+    {
+      startAnimation();
     }
 
 
@@ -251,13 +259,16 @@ public class Zombie extends Entity
       if (hitwall())
       {
         setHitWall(false);
+
         int newDirectionDegree = rand.nextInt(8);
         while(newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
         }
+
         directionDegree = newDirectionDegree;
       }
+      //startAnimation();
       setHeading(directionDegree);
     }
     else
@@ -267,13 +278,14 @@ public class Zombie extends Entity
       if (hitwall())
       {
         setHitWall(false);
-        stopAnimation();
+
 
         while(newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
         }
       }
+      //startAnimation();
       setHeading(newDirectionDegree);
     }
   }
@@ -365,8 +377,6 @@ public class Zombie extends Entity
    * @throws IndexOutOfBoundsException
    * Finds the shortest path between a zombie and player
    */
-  //todo, fix never ending loop to search for tile
-  //try making master zombie and getting that working first
   private Tile findBestPath(Tile start, Tile end, Tile[][] map, int numberOfFrontierDirections) {
     //if distance is only one tile away, just skip the whole pathfinding algo.
 

@@ -250,7 +250,6 @@ public class Tile implements Constants {
         {
           //i set this to be a tile in the grid
           directions[i] = map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]];
-          //todo fix bug, sometimes gives array out of bounds for above line
           //if it hasnt been visited before
           if (directions[i].parent == null)
           {

@@ -329,20 +329,22 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
      * then draw player
      */
 
+    for (Zombie zombie: gameController.zombieList)
+    {
+      // if (zombie.isAlive())
+      //  {
+      int zombieXPixel = zombie.getXPixel();
+      int zombieYPixel = zombie.getYPixel();
+      int zombieDrawX = offsetX + zombieXPixel;
+      int zombieDrawY = offsetY + zombieYPixel;
+      g.drawImage(zombie.getCurrentFrame() ,zombieDrawX, zombieDrawY ,null );
+      //    }
+    }
+
     g.drawImage(GameControl.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
 
 
-    for (Zombie zombie: gameController.zombieList)
-    {
-      if (zombie.isAlive())
-      {
-        int zombieXPixel = zombie.getXPixel();
-        int zombieYPixel = zombie.getYPixel();
-        int zombieDrawX = offsetX + zombieXPixel;
-        int zombieDrawY = offsetY + zombieYPixel;
-        g.drawImage(zombie.getCurrentFrame() ,zombieDrawX, zombieDrawY ,null );
-      }
-    }
+
     /**
     int zombieXPixel = GameControl.zombie1.getXPixel();
     int zombieYPixel = GameControl.zombie1.getYPixel();
