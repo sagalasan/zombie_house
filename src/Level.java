@@ -16,8 +16,9 @@ public class Level implements Constants {
 
   static Tile[][] map;
   static int height = 50, width = 50; //may change these with the level progression
-  int startX = 1, startY = 1;
-  int exitX = 1, exitY = 1;
+  private int startX = 1, startY = 1;
+  private int exitX = 1, exitY = 1;
+  private int levelNumber = 0;
 
   ArrayList<Zombie> zombieList;
   Zombie masterZombie;
@@ -30,8 +31,13 @@ public class Level implements Constants {
   ArrayList<Tile> possiblePlayerTiles = new ArrayList<>();
 
 
-  public Level(){
+  public Level(int n)
+  {
     //creates map, use helper methods later
+    levelNumber = n;
+
+    System.out.println("Using NEW map");
+
     map = new Tile[width][height];
 
     for (int i = 0; i < width; i++)
@@ -48,10 +54,11 @@ public class Level implements Constants {
   }
 
   //this constructor is used if the player dies
-  public Level(Tile[][] t)
+  public Level(int n, Tile[][] t)
   {
+    levelNumber = n;
+    System.out.println("Using old map");
     map = t;
-
   }
 
 

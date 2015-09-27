@@ -63,6 +63,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   ArrayList<Zombie> zombieListCopy;
   Zombie masterZombieCopy;
   public boolean gameState = false;
+  private int levelNumber = 1;
 
   public ZombiePanel()
   {
@@ -81,9 +82,42 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
   }
 
+  public void levelComplete()
+  {
+    gameState = false;
+    gameController.zombieReactionTimer.stop();
+    gameController.guiTimer.stop();
+
+    levelNumber++;
+    gameController.userPlayer.setTotalFiretraps(0);
+    setLevelNumber(levelNumber);
+    gameController.zombieHitWallSound.stop();
+    gameController.zombieWalkSound.stop();
+    gameController.userPlayer.stopWalkingSound();
+    gameController.userPlayer.stopRunningSound();
+    gameController.userPlayer.speed = 0;
+    //****************************************************************************************
+    //this line is associated with causing the clone() method to
+    //cuause a concurrent exception.
+    gameController.zombieList.clear();
+
+    gameController.userPlayer.setMovePlayerLeft(false);
+    gameController.userPlayer.setMovePlayerRight(false);
+    gameController.userPlayer.setMovePlayerUp(false);
+    gameController.userPlayer.setMovePlayerDown(false);
+
+
+    gameController.userPlayer.setCanMove(false);
+    gameController.masterZombie = null;
+    gameController.userPlayer = null;
+
+    gameController = new GameControl(this);
+    constructArrayImages();
+    constructBufferedImage();
+  }
+
   public void resetGame()
   {
-
     ImageIcon icon = null;
     try {
       icon = new ImageIcon(new URL("http://cdn.makeagif.com/media/9-16-2015/YVHhGp.gif"));
@@ -100,16 +134,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (reply == JOptionPane.YES_OPTION)
     {
       gameState = true;
+      gameController.zombieReactionTimer.stop();
+      gameController.guiTimer.stop();
       gameController.zombieHitWallSound.stop();
       gameController.zombieWalkSound.stop();
-      GameControl.userPlayer.stopWalkingSound();
-      GameControl.userPlayer.stopRunningSound();
+      gameController.userPlayer.stopWalkingSound();
+      gameController.userPlayer.stopRunningSound();
 
       //****************************************************************************************
       //this line is associated with causing the clone() method to
       //cuause a concurrent exception.
       gameController.zombieList.clear();
-
 
       gameController.masterZombie = null;
       gameController = new GameControl(this);
@@ -118,12 +153,21 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     else {
       //optional goodbye message
       //JOptionPane.showMessageDialog(null, "GOODBYE");
+      //should return to the main menu
       System.exit(0);
     }
 
 
   }
 
+  public void setLevelNumber(int n)
+  {
+   levelNumber = n;
+  }
+  public int getLevelNumber()
+  {
+    return levelNumber;
+  }
 
   private void initializeImages()
   {
@@ -174,10 +218,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      GameControl.userPlayer.takeFiretrap();
-      System.out.println("Picking up firetrap " + GameControl.userPlayer.totalFiretraps());
-      Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()].setType(FLOOR);
-      GameControl.userPlayer.setCanMove(true);
+      gameController.userPlayer.takeFiretrap();
+      System.out.println("Picking up firetrap " + gameController.userPlayer.getTotalFiretraps());
+      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(FLOOR);
+      gameController.userPlayer.setCanMove(true);
     }
   });
 
@@ -186,9 +230,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     @Override
     public void actionPerformed(ActionEvent e)
     {
-      GameControl.userPlayer.useFiretrap();
-      Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()].setType(FIRETRAP);
-      GameControl.userPlayer.setCanMove(true);
+      gameController.userPlayer.useFiretrap();
+      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(FIRETRAP);
+      gameController.userPlayer.setCanMove(true);
     }
   });
 
@@ -199,51 +243,51 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      GameControl.userPlayer.setMovePlayerLeft(true);
+      gameController.userPlayer.setMovePlayerLeft(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      GameControl.userPlayer.setMovePlayerRight(true);
+      gameController.userPlayer.setMovePlayerRight(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      GameControl.userPlayer.setMovePlayerDown(true);
+      gameController.userPlayer.setMovePlayerDown(true);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      GameControl.userPlayer.setMovePlayerUp(true);
+      gameController.userPlayer.setMovePlayerUp(true);
     }
-    if(gameController.checkIfPlayerMoving() && GameControl.userPlayer.canMove())
+    if(gameController.checkIfPlayerMoving() && gameController.userPlayer.canMove())
     {
-      GameControl.userPlayer.startAnimation();
-      GameControl.userPlayer.setMoving(true);
-      GameControl.userPlayer.startWalkingSound();
+      gameController.userPlayer.startAnimation();
+      gameController.userPlayer.setMoving(true);
+      gameController.userPlayer.startWalkingSound();
 
-      if (GameControl.userPlayer.isRunning() && GameControl.userPlayer.getStamina() > 0)
+      if (gameController.userPlayer.isRunning() && gameController.userPlayer.getStamina() > 0)
       {
-        GameControl.userPlayer.stopWalkingSound();
+        gameController.userPlayer.stopWalkingSound();
       }
     }
-    if (e.getKeyCode() == KeyEvent.VK_R && GameControl.userPlayer.canMove()
-        && !GameControl.userPlayer.isRunning() && GameControl.userPlayer.getStamina() > 0)
+    if (e.getKeyCode() == KeyEvent.VK_R && gameController.userPlayer.canMove()
+        && !gameController.userPlayer.isRunning() && gameController.userPlayer.getStamina() > 0)
     {
-      GameControl.userPlayer.addSpeed();
+      gameController.userPlayer.addSpeed();
 
     }
-    if (e.getKeyCode() == KeyEvent.VK_P && !GameControl.userPlayer.isRunning())
+    if (e.getKeyCode() == KeyEvent.VK_P && !gameController.userPlayer.isRunning())
     {
-      Tile playerTile = Level.map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()];
+      Tile playerTile = Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()];
       if (playerTile.getType() == FIRETRAP)
       {
         //disable moving
-        GameControl.userPlayer.setCanMove(false);
+        gameController.userPlayer.setCanMove(false);
         pickUpFiretrap.setRepeats(false);
         pickUpFiretrap.start();
         //start waiting timer,
       }
-      else if (GameControl.userPlayer.hasFiretraps()&& playerTile.getType() == FLOOR)
+      else if (gameController.userPlayer.hasFiretraps()&& playerTile.getType() == FLOOR)
       {
-        GameControl.userPlayer.setCanMove(false);
+        gameController.userPlayer.setCanMove(false);
         setFiretrap.setRepeats(false);
         setFiretrap.start();
 
@@ -256,37 +300,37 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   {
     if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A)
     {
-      GameControl.userPlayer.setMovePlayerLeft(false);
+      gameController.userPlayer.setMovePlayerLeft(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D)
     {
-      GameControl.userPlayer.setMovePlayerRight(false);
+      gameController.userPlayer.setMovePlayerRight(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S)
     {
-      GameControl.userPlayer.setMovePlayerDown(false);
+      gameController.userPlayer.setMovePlayerDown(false);
     }
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
-      GameControl.userPlayer.setMovePlayerUp(false);
+      gameController.userPlayer.setMovePlayerUp(false);
     }
     //check all movement bools
     //if all done set movement to false
     if (!gameController.checkIfPlayerMoving())
     {
-      GameControl.userPlayer.stopAnimation();
-      GameControl.userPlayer.setMoving(false);
-      GameControl.userPlayer.stopWalkingSound();
-      GameControl.userPlayer.stopRunningSound();
+      gameController.userPlayer.stopAnimation();
+      gameController.userPlayer.setMoving(false);
+      gameController.userPlayer.stopWalkingSound();
+      gameController.userPlayer.stopRunningSound();
     }
     if (e.getKeyCode() == KeyEvent.VK_R)
     {
-      GameControl.userPlayer.stopRunningSound();
-      if (GameControl.userPlayer.isMoving())
+      gameController.userPlayer.stopRunningSound();
+      if (gameController.userPlayer.isMoving())
       {
-        GameControl.userPlayer.startWalkingSound();
+        gameController.userPlayer.startWalkingSound();
       }
-      GameControl.userPlayer.regenStamina();
+      gameController.userPlayer.regenStamina();
     }
     if(e.getKeyCode() == KeyEvent.VK_H)
     {
@@ -377,7 +421,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       //    }
     }
 
-    g.drawImage(GameControl.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
+    g.drawImage(gameController.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
 
 
 

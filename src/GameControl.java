@@ -95,6 +95,14 @@ public class GameControl implements Constants
         Level.map[userPlayer.getX()][userPlayer.getY()].explode();
         userPlayer.setAlive(false);
       }
+      if (Level.map[userPlayer.getX()][userPlayer.getY()-1].getType() == EXIT)
+      {
+        //set the next level
+        System.out.println("Found Exit!");
+        reference.levelComplete();
+
+      }
+
       //if zombie hits player, reload map and players in same location
       //zombie1.move();
       boolean stepsZombieHeard = false;
@@ -133,7 +141,6 @@ public class GameControl implements Constants
           }
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
-            System.out.println("Player just died. Should be reloading");
             //set player death to true so we can reload the map
             reference.resetGame();
           }
@@ -175,9 +182,14 @@ public class GameControl implements Constants
     guiTimer.stop();
     reference = panel;
 
+    System.out.println("level = " + reference.getLevelNumber());
+    System.out.println("gameState =  = " + reference.gameState);
+
+
+    //The game restarts because youre dead
     if(reference.gameState)
     {
-      level = new Level(reference.getMapCopy());
+      level = new Level(reference.getLevelNumber(), reference.getMapCopy());
       zombieList = reference.getZombieListCopy();
       //masterZombie = reference.getMasterZombieCopy();
 
@@ -205,7 +217,8 @@ public class GameControl implements Constants
     }
     else
     {
-      level = new Level();
+      level = new Level(reference.getLevelNumber());
+
     }
 
     mapCopy = level.getMapCopy();

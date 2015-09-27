@@ -33,7 +33,7 @@ public abstract class Entity implements Constants
   private String type;
   private boolean hitWall;
   //speed is in tiles per second
-  private double speed;
+  double speed;
 
   private int animationDirection = ANIMATION_DOWN_WALKING;
   private BufferedImage currentFrame;

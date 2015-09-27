@@ -38,7 +38,7 @@ public class Player extends Entity
   public Player(int x, int y)
   {
     super("Player", x, y);
-    setSpeed(Constants.PLAYER_DEFAULT_SPEED);
+    setSpeed(PLAYER_DEFAULT_SPEED);
     setSpriteSheet(playerSpriteSheet);
     resetCurrentFrame();
   }
@@ -246,10 +246,15 @@ public class Player extends Entity
     fireTrapInventory -= 1;
   }
 
-  public int totalFiretraps()
+  public int getTotalFiretraps()
   {
     return fireTrapInventory;
   }
+  public void setTotalFiretraps(int n)
+  {
+    fireTrapInventory = n;
+  }
+
 
 
   public void setSpeedZero()
