@@ -18,9 +18,11 @@ public interface Constants {
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;
   double PLAYER_HEARING_DISTANCE = 10;
+
   int PLAYER_SPRITE_HEIGHT = 70;
   int PLAYER_SPRITE_WIDTH = 45;
 
+  double PANVALUE_PADDING = .25;
 
   int ANIMATION_DOWN_WALKING = 650;
   int ANIMATION_TOP_WALKING = 525;
@@ -35,23 +37,21 @@ public interface Constants {
   int FIRE_ANIMATION_HEIGHT = 60;
   int FIRE_ANIMATION_WIDTH = 40;
 
-
   double PILLAR_SPAWN_RATE = 0.010;
 
   int SPRITE_SPREAD_DISTANCE = 64;
 
-
-
   double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;
-  int SIZE = 80;
-  int TOTAL_DIRECTIONS = 8;
-  int FOUR_CARDINAL_DIRECTIONS = 4;
   double ZOMBIE_SPAWN_RATE = .010;
   double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
   int ZOMBIE_DECISION_RATE = 2000;
 
-  double PANVALUE_PADDING = .25;
+  int SIZE = 80;
+
+  int TOTAL_DIRECTIONS = 8;
+  int FOUR_CARDINAL_DIRECTIONS = 4;
+
   //used to find blocks around tile
   //Directions          NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
   //    DIRECTIONS   = {    0,     1,    2,    3,         4,         5,         6,         7};
@@ -59,6 +59,7 @@ public interface Constants {
   int[] Y_DIRECTIONS = {   -1,     1,    0,    0,        -1,        -1,         1,         1};
 
   double SIN_OF_PI_4 = 0.70710678118;
+
   int GUI_TIMER_SPEED = 16;
 
   int PLAYER_SIGHT = 5;
