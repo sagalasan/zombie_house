@@ -222,11 +222,13 @@ public class Zombie extends Entity
     {
       startAnimation();
     }
-
-    if (smellPlayer) {
+    if (smellPlayer)
+    {
       if (hitwall())
       {
-        setHitWall(false);
+
+       // setHitWall(false);
+
         chasePlayer(FOUR_CARDINAL_DIRECTIONS);
       }
       else
@@ -296,6 +298,7 @@ public class Zombie extends Entity
 
   public void move()
   {
+
     super.move(moveZombieUp, moveZombieDown, moveZombieRight, moveZombieLeft);
   }
 
@@ -328,6 +331,7 @@ public class Zombie extends Entity
       }
     }
   }
+
   /**
    * used for sorting the priority queue
    */

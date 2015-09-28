@@ -13,15 +13,15 @@ public interface Constants {
   int BLACKNESS = 6;
   int FIRETRAP = 7;
 
-  double PLAYER_DEFAULT_SPEED = 10.0;
+  double PLAYER_DEFAULT_SPEED = 5.0;
   double PLAYER_RUN_SPEED = 2.0;
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;
   double PLAYER_HEARING_DISTANCE = 10;
 
-  int PLAYER_SPRITE_HEIGHT = 70;
-  int PLAYER_SPRITE_WIDTH = 45;
-  int PLAYER_FEET_PIXEL_Y = 50;
+  int PLAYER_SPRITE_HEIGHT = 60;
+  int PLAYER_SPRITE_WIDTH = 40;
+  int PLAYER_FEET_PIXEL_Y = 40;
   int PLAYER_FEET_PIXEL_X = 3;
 
   double PANVALUE_PADDING = .25;
@@ -31,7 +31,6 @@ public interface Constants {
   int ANIMATION_LEFT_WALKING = 587;
   int ANIMATION_RIGHT_WALKING = 715;
   int ANIMATION_DEATH = 1294;
-
   int ANIMATION_WIDTH = 33;
   int ANIMATION_HEIGHT= 50;
 

@@ -188,8 +188,8 @@ public class GameControl implements Constants
     guiTimer.stop();
     reference = panel;
 
-    System.out.println("level = " + reference.getLevelNumber());
-    System.out.println("gameState =  = " + reference.gameState);
+    //System.out.println("level = " + reference.getLevelNumber());
+    //System.out.println("gameState =  = " + reference.gameState);
     //The game restarts because youre dead
     if(reference.gameState)
     {

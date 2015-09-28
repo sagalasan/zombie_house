@@ -36,7 +36,7 @@ public class Level implements Constants {
     //creates map, use helper methods later
     levelNumber = n;
 
-    System.out.println("Using NEW map");
+    //System.out.println("Using NEW map");
 
     map = new Tile[width][height];
 
@@ -57,7 +57,7 @@ public class Level implements Constants {
   public Level(int n, Tile[][] t)
   {
     levelNumber = n;
-    System.out.println("Using old map");
+    //System.out.println("Using old map");
     map = t;
   }
 
@@ -127,25 +127,32 @@ public class Level implements Constants {
               {
                 map[rec.room.x + j][rec.room.y + i].setType(PILLAR);
               }
-              if (rnd.nextDouble() < ZOMBIE_SPAWN_RATE && map[rec.room.x + j][rec.room.y + i].getType() != PILLAR)
+              if (map[rec.room.x + j][rec.room.y + i].getType() != PILLAR)
               {
-                zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
-              }
-              if (!masterZombieCreated)
-              {
-                if (rnd.nextDouble() < masterZombieSpawnRate)// ||
-                //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
+                if (rnd.nextDouble() < ZOMBIE_SPAWN_RATE)
+                // && map[rec.room.x + j][rec.room.y + i].getType() != WALL)
                 {
-                  masterZombieCreated = true;
-                 // System.out.println("masterZombie spawnned at " + rec.room.x + j + ", " + rec.room.y + i);
-                  masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
-                  masterZombie.setMaster(true);
+                  zombieList.add(new Zombie(rec.room.x + j, rec.room.y + i));
                 }
-                else
+                if (!masterZombieCreated)
                 {
-                  masterZombieSpawnRate += .02;
+                  if (rnd.nextDouble() < masterZombieSpawnRate)// ||
+                  //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
+                  {
+                    masterZombieCreated = true;
+                    // System.out.println("masterZombie spawnned at " + rec.room.x + j + ", " + rec.room.y + i);
+                    masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
+                    masterZombie.setMaster(true);
+                  }
+                  else
+                  {
+                    masterZombieSpawnRate += .02;
+                  }
                 }
               }
+
+
+
             }
 
             //this line must be [j][i] or the map wont work!!
@@ -315,7 +322,7 @@ public class Level implements Constants {
     }
     if (currentRec == 0)
     {
-      System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
+      //System.out.println("Farthest room" + farthest.room.x + "x" + farthest.room.y);
       setExitX(farthest.room.x);
       setExitY(farthest.room.y);
     }

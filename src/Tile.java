@@ -175,12 +175,12 @@ public class Tile implements Constants {
     public void actionPerformed(ActionEvent e)
     {
       totalRunTime += 150;
-      System.out.println(totalRunTime);
+      //System.out.println(totalRunTime);
       if (totalRunTime >= 15000)
       {
         combusting = false;
         //combusted = true;
-        System.out.println("finsihed combusting");
+        //System.out.println("finsihed combusting");
         stopCombust();
       }
       combusting = true;

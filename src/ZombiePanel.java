@@ -241,7 +241,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     public void actionPerformed(ActionEvent e)
     {
       gameController.userPlayer.takeFiretrap();
-      System.out.println("Picking up firetrap " + gameController.userPlayer.getTotalFiretraps());
+      //System.out.println("Picking up firetrap " + gameController.userPlayer.getTotalFiretraps());
       Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(FLOOR);
       gameController.userPlayer.setCanMove(true);
     }

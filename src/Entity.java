@@ -140,6 +140,13 @@ public abstract class Entity implements Constants
         (int)yPixel + PLAYER_FEET_PIXEL_Y, PLAYER_SPRITE_WIDTH - PLAYER_FEET_PIXEL_X, PLAYER_SPRITE_HEIGHT - PLAYER_FEET_PIXEL_Y );
     return feet;
   }
+  //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
+  //false if does not intersect with wall
+  public Rectangle getBoundingRectangleForFire()
+  {
+    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel - 5, (int)yPixel + 40, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT - 50);
+    return legalRectangle;
+  }
   public void setX(int x)
   {
     this.x = x;
@@ -186,13 +193,7 @@ public abstract class Entity implements Constants
     return true;
   }
 
-  //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
-  //false if does not intersect with wall
-  public Rectangle getBoundingRectangleForFire()
-  {
-    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel - 5, (int)yPixel - 10, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT - 10);
-    return legalRectangle;
-  }
+
   /**
    *
    * @param possibleXPixel
@@ -202,7 +203,7 @@ public abstract class Entity implements Constants
    */
   private boolean intersectsWithWall(double possibleXPixel, double possibleYPixel)
   {
-    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel , PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
     ArrayList<Tile> surroundingWalls = new ArrayList<>();
     //check in 9 directions if legalrect intersects with a wall.
     for (int i = -1; i < 2;i++)
@@ -273,6 +274,7 @@ public abstract class Entity implements Constants
       y = possibleY;
       if (!intersectsWithWall(possibleXPixel, possibleYPixel))
       {
+        hitWall = true;
         xPixel = possibleXPixel;
         yPixel = possibleYPixel;
       }
