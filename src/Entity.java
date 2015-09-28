@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * intersection, bounding rectangle
  * player, zombie, and master zombie extend this
  */
-public abstract class Entity implements Constants
+public abstract class Entity extends Constants
 {
   private long previousTime;
 

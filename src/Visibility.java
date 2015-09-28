@@ -7,7 +7,7 @@ import java.util.Collections;
 /**
  * Created by kasac on 9/27/2015.
  */
-public class Visibility implements Constants
+public class Visibility extends Constants
 {
   private ArrayList<Segment> segments;
   private ArrayList<Point> vertices;

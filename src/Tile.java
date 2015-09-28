@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
  * Created by Jalen on 9/9/2015.
  * @description - used to also help for astar algorithm
  */
-public class Tile implements Constants {
+public class Tile extends Constants {
 
 
 

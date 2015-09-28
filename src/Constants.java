@@ -1,67 +1,128 @@
 /**
  * Created by Jalen on 9/9/2015.
  */
-public interface Constants {
+public class Constants {
 
-  int FLOOR = 0;
-  int WALL = 1;
+  final int FLOOR = 0;
+  final int WALL = 1;
   //NOTICE THIS IS 1 FOR NOW SO MAP LOADING DOESNT GET MESSED UP  WILL NEED TO HAVE MASK APPLIED LATER
-  int SCORCHED_WALL = 1;
-  int PILLAR = 2;
-  int EXIT = 3;
-  int SCORCHED_FLOOR = 5;
-  int BLACKNESS = 6;
-  int FIRETRAP = 7;
+  final int SCORCHED_WALL = 1;
+  final int PILLAR = 2;
+  final int EXIT = 3;
+  final int SCORCHED_FLOOR = 5;
+  final int BLACKNESS = 6;
+  final int FIRETRAP = 7;
 
   double PLAYER_DEFAULT_SPEED = 5.0;
   double PLAYER_RUN_SPEED = 2.0;
   double PLAYER_DEFAULT_STAMINA = 5.0;
   double PLAYER_REGEN_STAMINA = .20;
   double PLAYER_HEARING_DISTANCE = 10;
+  int PLAYER_SIGHT = 5;
 
-  int PLAYER_SPRITE_HEIGHT = 60;
-  int PLAYER_SPRITE_WIDTH = 40;
-  int PLAYER_FEET_PIXEL_Y = 40;
-  int PLAYER_FEET_PIXEL_X = 3;
+  /**
+   *
+   player sight,
+   player hearing,
+   player speed,
+   player stamina,
+   player regen,
+   zombie spawn,
+   zombie speed,
+   zombie decision rate,
+   zombie smell,
+   and firetrap spawn
+   *
+   */
+  public void setPlayerSight(int newPlayerSight)
+  {
+    PLAYER_SIGHT = newPlayerSight;
+  }
+  public void setPlayerDefaultSpeed(double newPlayerSpeed)
+  {
+    PLAYER_DEFAULT_SPEED = newPlayerSpeed;
+  }
+  public void setPlayerRunSpeed(double newRunSpeed)
+  {
+    PLAYER_RUN_SPEED = newRunSpeed;
+  }
+  public void setPlayerHearing(double newPlayerHearing)
+  {
+    PLAYER_HEARING_DISTANCE = newPlayerHearing;
+  }
+  public void setPlayerStamina(double newDefaultStamina)
+  {
+    PLAYER_DEFAULT_STAMINA = newDefaultStamina;
+  }
+  public void setPlayerStaminaRegen(double newDefaultRegen)
+  {
+    PLAYER_REGEN_STAMINA = newDefaultRegen;
+  }
+  public void setZombieSpawnRate(double newZombieSpawnRate)
+  {
+    ZOMBIE_SPAWN_RATE = newZombieSpawnRate;
+  }
+  public void setZombieDefaultSpeed(double newDefaultSpeed)
+  {
+    ZOMBIE_DEFAULT_SPEED = newDefaultSpeed;
+  }
+  public void setZombieDecisionRate(int newDecisionRate)
+  {
+    ZOMBIE_DECISION_RATE = newDecisionRate;
+  }
+  public void setZombieSmell(int newZombieSmell)
+  {
+    ZOMBIE_SMELL = newZombieSmell;
+  }
+  public void setFiretrapSpawnRate(double newFiretrapSpawnRate)
+  {
+    FIRETRAP_SPAWN_RATE = newFiretrapSpawnRate;
+  }
+  final int PLAYER_SPRITE_HEIGHT = 60;
+  final int PLAYER_SPRITE_WIDTH = 40;
+  final int PLAYER_FEET_PIXEL_Y = 40;
+  final int PLAYER_FEET_PIXEL_X = 3;
 
-  double PANVALUE_PADDING = .25;
+  final double PANVALUE_PADDING = .25;
 
-  int ANIMATION_DOWN_WALKING = 650;
-  int ANIMATION_TOP_WALKING = 525;
-  int ANIMATION_LEFT_WALKING = 587;
-  int ANIMATION_RIGHT_WALKING = 715;
-  int ANIMATION_DEATH = 1294;
-  int ANIMATION_WIDTH = 33;
-  int ANIMATION_HEIGHT= 50;
+  final int ANIMATION_DOWN_WALKING = 650;
+  final int ANIMATION_TOP_WALKING = 525;
+  final int ANIMATION_LEFT_WALKING = 587;
+  final  int ANIMATION_RIGHT_WALKING = 715;
+  final int ANIMATION_DEATH = 1294;
+  final int ANIMATION_WIDTH = 33;
+  final int ANIMATION_HEIGHT= 50;
 
   double FIRETRAP_SPAWN_RATE = 0.010;
-  int FIRE_ANIMATION_HEIGHT = 60;
-  int FIRE_ANIMATION_WIDTH = 40;
+  final int FIRE_ANIMATION_HEIGHT = 60;
+  final  int FIRE_ANIMATION_WIDTH = 40;
 
   double PILLAR_SPAWN_RATE = 0.080;
 
   int SPRITE_SPREAD_DISTANCE = 64;
 
+  double MASTER_ZOMBIE_SPEED = 1.5;
   double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;
   double ZOMBIE_SPAWN_RATE = .010;
-  double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
+  final double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
   int ZOMBIE_DECISION_RATE = 2000;
 
   int SIZE = 80;
 
-  int TOTAL_DIRECTIONS = 8;
-  int FOUR_CARDINAL_DIRECTIONS = 4;
+  final int TOTAL_DIRECTIONS = 8;
+  final int FOUR_CARDINAL_DIRECTIONS = 4;
+
 
   //used to find blocks around tile
   //Directions          NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
   //    DIRECTIONS   = {    0,     1,    2,    3,         4,         5,         6,         7};
-  int[] X_DIRECTIONS = {    0,     0,   -1,    1,        -1,         1,        -1,         1};
-  int[] Y_DIRECTIONS = {   -1,     1,    0,    0,        -1,        -1,         1,         1};
+  final int[] X_DIRECTIONS = {    0,     0,   -1,    1,        -1,         1,        -1,         1};
+  final int[] Y_DIRECTIONS = {   -1,     1,    0,    0,        -1,        -1,         1,         1};
 
-  double SIN_OF_PI_4 = 0.70710678118;
+  final double SIN_OF_PI_4 = 0.70710678118;
 
-  int GUI_TIMER_SPEED = 16;
+  final int GUI_TIMER_SPEED = 16;
 
-  int PLAYER_SIGHT = 5;
+
 }

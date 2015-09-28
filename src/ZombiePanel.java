@@ -17,7 +17,8 @@ import java.util.*;
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class ZombiePanel extends JPanel implements KeyListener, Constants{
+public class ZombiePanel extends JPanel implements KeyListener
+{
   //Level level = new Level();
 
   //paints buffered image of map and characters on top
@@ -47,7 +48,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage lightingMask;
 
   private Visibility visibility;
-  private int tileSize = SIZE;
+  private int tileSize;
 
 
   private int startX, startY, exitX, exitY;
@@ -68,7 +69,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     constructArrayImages();
     constructBufferedImage();
 
-    playerSight = PLAYER_SIGHT * SIZE;
+    tileSize = gameController.SIZE;
+
+    playerSight = gameController.PLAYER_SIGHT * gameController.SIZE;
     colorBlackOpaque = new Color(0, 0, 0, 255);
     colorBlackPartial = new Color(0, 0, 0, 220);
     colorBlackTransparent = new Color(0, 0, 0, 0);
@@ -215,7 +218,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
       firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
-      firetrapImage = firetrapImage.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
+      firetrapImage = firetrapImage.getScaledInstance(gameController.SIZE, gameController.SIZE, Image.SCALE_DEFAULT);
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
       pillarImage = wallImage;
@@ -245,7 +248,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       gameController.userPlayer.takeFiretrap();
       //System.out.println("Picking up firetrap " + gameController.userPlayer.getTotalFiretraps());
-      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(FLOOR);
+      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(gameController.FLOOR);
       gameController.userPlayer.setCanMove(true);
     }
   });
@@ -256,7 +259,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     public void actionPerformed(ActionEvent e)
     {
       gameController.userPlayer.useFiretrap();
-      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(FIRETRAP);
+      Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(gameController.FIRETRAP);
       gameController.userPlayer.setCanMove(true);
     }
   });
@@ -302,7 +305,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (e.getKeyCode() == KeyEvent.VK_P && !gameController.userPlayer.isRunning())
     {
       Tile playerTile = Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()];
-      if (playerTile.getType() == FIRETRAP && gameController.userPlayer.getFeetBoundingRectangle().intersects(playerTile.getRectangleForFiretrap()))
+      if (playerTile.getType() == gameController.FIRETRAP &&
+          gameController.userPlayer.getFeetBoundingRectangle().intersects(playerTile.getRectangleForFiretrap()))
       {
         //disable moving
         gameController.userPlayer.setCanMove(false);
@@ -310,7 +314,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         pickUpFiretrap.start();
 
       }
-      else if (gameController.userPlayer.hasFiretraps() && playerTile.getType() == FLOOR)
+      else if (gameController.userPlayer.hasFiretraps() && playerTile.getType() == gameController.FLOOR)
       {
         gameController.userPlayer.setCanMove(false);
         setFiretrap.setRepeats(false);
@@ -437,10 +441,10 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       for (int j = 0; j < Level.height; j++)
       {
-        int tileDrawX = offsetX + i * SIZE;
-        int tileDrawY = offsetY + j*SIZE;
+        int tileDrawX = offsetX + i * gameController.SIZE;
+        int tileDrawY = offsetY + j*gameController.SIZE;
         Tile checkTile = Level.map[i][j];
-        if (checkTile.getType() == FIRETRAP) {
+        if (checkTile.getType() == gameController.FIRETRAP) {
           //draw firetrap instead
           g.drawImage(firetrapImage, tileDrawX, tileDrawY, null);
         }
@@ -465,8 +469,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       for (int j = 0; j < Level.height; j++)
       {
-        int tileDrawX = offsetX + i * SIZE;
-        int tileDrawY = offsetY + j*SIZE;
+        int tileDrawX = offsetX + i * gameController.SIZE;
+        int tileDrawY = offsetY + j * gameController.SIZE;
         Tile checkTile = Level.map[i][j];
         if (checkTile.hasCombusted())
         {
@@ -507,7 +511,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //createRayTracingPolygons(offsetX, offsetY);
     createVisibilityMask(offsetX, offsetY);
 
-    playerSight = PLAYER_SIGHT * SIZE;
+    playerSight = gameController.PLAYER_SIGHT * gameController.SIZE;
     colorBlackOpaque = new Color(0, 0, 0, 255);
     colorBlackPartial = new Color(0, 0, 0, 220);
     colorBlackTransparent = new Color(0, 0, 0, 0);
@@ -537,20 +541,20 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       for(int j = 0; j < Level.height; j++)
       {
-        if(Level.map[i][j].getType() == WALL)
+        if(Level.map[i][j].getType() == gameController.WALL)
         {
           mapImages[i][j] = wallImage;
         }
-        else if(Level.map[i][j].getType() == PILLAR)
+        else if(Level.map[i][j].getType() == gameController.PILLAR)
         {
           mapImages[i][j] = pillarImage;
         }
-        else if(Level.map[i][j].getType() == FLOOR || Level.map[i][j].getType() == FIRETRAP )
+        else if(Level.map[i][j].getType() == gameController.FLOOR || Level.map[i][j].getType() == gameController.FIRETRAP )
         {
           int index = random.nextInt(floorImages.length);
           mapImages[i][j] = floorImages[index];
         }
-        else if (Level.map[i][j].getType() == EXIT)
+        else if (Level.map[i][j].getType() == gameController.EXIT)
         {
           mapImages[i][j] = exitImage;
         }
@@ -558,7 +562,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         {
           mapImages[i][j] = blacknessImage;
         }
-        if(Level.map[i][j].getType() == SCORCHED_FLOOR)
+        if(Level.map[i][j].getType() == gameController.SCORCHED_FLOOR)
         {
           scorchedLocations[i][j] = 1;
         }
@@ -572,17 +576,17 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private void constructBufferedImage()
   {
-    mapBufferedImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
-    mapScorchedMaskImage = new BufferedImage(SIZE * Level.width, SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
+    mapBufferedImage = new BufferedImage(gameController.SIZE * Level.width, gameController.SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
+    mapScorchedMaskImage = new BufferedImage(gameController.SIZE * Level.width, gameController.SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
 
     for (int i = 0; i < Level.width; i++)
     {
       for (int j = 0; j < Level.height; j++)
       {
-        mapBufferedImage.createGraphics().drawImage(mapImages[i][j], SIZE * i, SIZE * j, null);
+        mapBufferedImage.createGraphics().drawImage(mapImages[i][j], gameController.SIZE * i, gameController.SIZE * j, null);
         if (scorchedLocations[i][j] == 1)
         {
-          mapBufferedImage.createGraphics().drawImage(scorchedMask, SIZE * i, SIZE * j, null);
+          mapBufferedImage.createGraphics().drawImage(scorchedMask, gameController.SIZE * i, gameController.SIZE * j, null);
         }
       }
     }
@@ -623,7 +627,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     visibility.setOrigin(xp + offsetX, yp + offsetY);
     visibility.setBoundingTiles(xStart, yStart, xEnd, yEnd);
     visibility.setTileSize(tileSize);
-    visibility.setSightTileRadius(PLAYER_SIGHT);
+    visibility.setSightTileRadius(gameController.PLAYER_SIGHT);
     visibilityPolygons = visibility.returnVisibilityPolygon();
 
 
@@ -688,12 +692,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         int[] xCoord = new int[nPoints];
         int[] yCoord = new int[nPoints];
 
-        if(tile.getType() == WALL)
+        if(tile.getType() == gameController.WALL)
         {
-          int xTilePixel = i * SIZE + offsetX;
-          int yTilePixel = j * SIZE + offsetY;
-          int xTilePixelOne = xTilePixel + SIZE;
-          int yTilePixelOne = yTilePixel + SIZE;
+          int xTilePixel = i * gameController.SIZE + offsetX;
+          int yTilePixel = j * gameController.SIZE + offsetY;
+          int xTilePixelOne = xTilePixel + gameController.SIZE;
+          int yTilePixelOne = yTilePixel + gameController.SIZE;
 
           vertices.add(new Point(xTilePixel, yTilePixel, origin));
           xCoord[0] = xTilePixel;

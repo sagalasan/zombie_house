@@ -12,7 +12,7 @@ import java.util.Random;
 
 
 //gaurav.munjal.us/universal-LPC-Spritesheet-Character-Generator/#
-public class Level implements Constants {
+public class Level extends Constants {
 
   static Tile[][] map;
   static int height = 50, width = 50; //may change these with the level progression

@@ -13,9 +13,7 @@ import java.util.Random;
  * Created by Jalen on 9/10/2015.
  * will hold the player/zombie objects/arrays, etc
  */
-  //todo make sound sound better
-  //todo make scorched tiles show up
-public class GameControl implements Constants
+public class GameControl extends Constants
 {
 
   static Player userPlayer;

@@ -112,6 +112,8 @@ public class Player extends Entity
     moving = false;
     running = false;
   }
+
+
   public void move()
   {
     super.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);

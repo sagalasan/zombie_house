@@ -66,6 +66,7 @@ public class Zombie extends Entity
    */
   public void setMaster(boolean b)
   {
+    setSpeed(MASTER_ZOMBIE_SPEED);
     isMasterZombie = true;
     setSpriteSheet(masterZombieSpriteSheet);
   }
@@ -226,9 +227,7 @@ public class Zombie extends Entity
     {
       if (hitwall())
       {
-
        // setHitWall(false);
-
         chasePlayer(FOUR_CARDINAL_DIRECTIONS);
       }
       else
