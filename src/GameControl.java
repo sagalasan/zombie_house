@@ -95,7 +95,7 @@ public class GameControl implements Constants
         //
         // resetGame
 
-        reference.resetGame();
+        //reference.resetGame();
       }
       if (playerTile.isCombusting() && userPlayer.getBoundingRectangleForFire().intersects(playerTile.getBoundingRectangle()))
       {

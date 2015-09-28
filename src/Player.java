@@ -105,7 +105,13 @@ public class Player extends Entity
     playWalkingSound.start();
     staminaRegen.start();
   }
-
+  public void resetMovement()
+  {
+    stopRunningSound();
+    stopWalkingSound();
+    moving = false;
+    running = false;
+  }
   public void move()
   {
     super.move(movePlayerUp, movePlayerDown, movePlayerRight, movePlayerLeft);

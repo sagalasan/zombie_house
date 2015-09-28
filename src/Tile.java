@@ -183,6 +183,7 @@ public class Tile implements Constants {
         System.out.println("finsihed combusting");
         stopCombust();
       }
+      combusting = true;
       setFireFrame(indexForImage % totalFireImages);
       indexForImage += 1;
     }
@@ -226,7 +227,7 @@ public class Tile implements Constants {
           {
             checkingTile.explode();
           }
-          checkingTile.combusting = true;
+          //checkingTile.combusting = true;
           checkingTile.combust();
         }
       }

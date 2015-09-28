@@ -151,8 +151,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       gameController.guiTimer.stop();
       gameController.zombieHitWallSound.stop();
       gameController.zombieWalkSound.stop();
-      gameController.userPlayer.stopWalkingSound();
-      gameController.userPlayer.stopRunningSound();
+      gameController.userPlayer.resetMovement();
+     // gameController.userPlayer.stopWalkingSound();
+     // gameController.userPlayer.stopRunningSound();
 
       //****************************************************************************************
       //this line is associated with causing the clone() method to
