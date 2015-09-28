@@ -56,9 +56,12 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   Zombie masterZombieCopy;
   public boolean gameState = false;
   private int levelNumber = 1;
+  ZombieFrame frame;
 
   public ZombiePanel()
   {
+
+
     gameController = new GameControl(this);
     addKeyListener(this);
     initializeImages();
@@ -75,6 +78,13 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
     visibility = new Visibility();
   }
+
+  public void setReference(ZombieFrame f)
+  {
+    frame = f;
+  }
+
+
 
   public void levelComplete()
   {
@@ -155,8 +165,15 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     else {
       //optional goodbye message
       //JOptionPane.showMessageDialog(null, "GOODBYE");
-      //should return to the main menu
-      System.exit(0);
+
+      setLevelNumber(1);
+      gameState = false;
+      gameController.zombieReactionTimer.stop();
+      gameController.guiTimer.stop();
+      frame.welcomeText.setVisible(true);
+      frame.button.setVisible(true);
+      frame.exit.setVisible(true);
+      this.setVisible(false);
     }
 
 
