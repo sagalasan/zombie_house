@@ -31,7 +31,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage scorchedMask;
   private BufferedImage playerVisibleMask;
   private BufferedImage playerSprite;
-  private Image currentPlayerImage;
 
   private BufferedImage mapBufferedImage;
   private BufferedImage mapScorchedMaskImage;
@@ -423,6 +422,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
     for (Zombie zombie: gameController.zombieList)
     {
+      //uncomment these is alive lines if zombies are supposed to vanish after dying
       // if (zombie.isAlive())
       //  {
       int zombieXPixel = zombie.getXPixel();
@@ -449,13 +449,11 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         if (checkTile.isCombusting())
         {
           g.drawImage(checkTile.getCurrentFrame() , tileDrawX, tileDrawY ,null );
-                   //drawCenteredImg(g, Level.map[i][j].getCurrentFrame(), i, j);
         }
       }
     }
 
     g.drawImage(gameController.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
-
 
 
     /**

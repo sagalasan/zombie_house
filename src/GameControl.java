@@ -59,15 +59,9 @@ public class GameControl implements Constants
       {
         if (zombie.isAlive())
         {
-          //if (a zombie can smell the player)
-
-          //set masterzombie to able to smell player
-
           zombie.updateDirection();
           if (zombie.getSmellPlayer())
           {
-            //System.out.println("masterZombie can smell your stench");
-           // System.out.println("coords are "+masterZombie.getX()+", "+masterZombie.getY());
             masterZombie.setSmellPlayer(true);
           }
         }
@@ -76,11 +70,8 @@ public class GameControl implements Constants
       {
         masterZombie.updateDirection();
       }
-
-      //zombie1.updateDirection();
     }
   });
-
 
   Timer guiTimer = new Timer(GUI_TIMER_SPEED, new ActionListener()
   {
@@ -109,8 +100,6 @@ public class GameControl implements Constants
 
       }
 
-      //if zombie hits player, reload map and players in same location
-      //zombie1.move();
       boolean stepsZombieHeard = false;
       boolean hitWallZombieHeard = false;
       hitWallTotalPanValue = 0;
@@ -118,9 +107,8 @@ public class GameControl implements Constants
       for(Zombie zombie : zombieList)
       {
 
-        if (zombie.isAlive())// && zombie != null)
+        if (zombie.isAlive())
         {
-          //zombie.startAnimation();
           zombie.move();
           if (zombie.playerCanHearZombie())
           {
@@ -140,7 +128,6 @@ public class GameControl implements Constants
           {
             zombieLocation.explode();
           }
-          //this has to be last so removing zombie is seemless?
           if (zombieLocation.isCombusting())
           {
             zombie.setAlive(false);
@@ -155,7 +142,6 @@ public class GameControl implements Constants
       }
       walkTotalPanValue = adjustPanValue(walkTotalPanValue);
       hitWallTotalPanValue = adjustPanValue(hitWallTotalPanValue);
-
       //if there was a zombie that could be heard
       if (stepsZombieHeard)
       {
@@ -191,8 +177,6 @@ public class GameControl implements Constants
 
     System.out.println("level = " + reference.getLevelNumber());
     System.out.println("gameState =  = " + reference.gameState);
-
-
     //The game restarts because youre dead
     if(reference.gameState)
     {
@@ -201,10 +185,6 @@ public class GameControl implements Constants
       //masterZombie = reference.getMasterZombieCopy();
 
       masterZombie = zombieList.get(zombieList.size()-1);
-      //if (masterZombie.isMasterZombie())
-      //{
-     ///   System.out.println("masterzombie seems to be set correctly");
-    //  }
       level.setMasterZombie(masterZombie);
       level.setZombieList(zombieList);
       level.setStartX(reference.getStartX());
@@ -217,9 +197,6 @@ public class GameControl implements Constants
         z.setXPixel(z.getStartX()*SIZE);
         z.setYPixel(z.getStartY()*SIZE);
       }
-   //   masterZombie.setAlive(true);
-    //  masterZombie.setXPixel((masterZombie.getStartX()*SIZE));
-    //  masterZombie.setYPixel((masterZombie.getStartY()*SIZE));
       //TODO make sure the traps come back!
     }
     else
@@ -236,20 +213,12 @@ public class GameControl implements Constants
     reference.setZombieListCopy(level.getZombieList());
 
     reference.setMasterZombieCopy(masterZombie);
-
     reference.setStartX(level.getStartRoomX());
     reference.setStartY(level.getStartRoomY());
     reference.setExitX(level.getExitRoomX());
     reference.setExitY(level.getStartExitY());
 
-
-   // if (masterZombie.isMasterZombie())
-   // {
-   //   /
-   // System.out.println("masterzombie seems to be set correctly");
-   // }
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
-    //zombie1 = new Zombie(9,9);
     //could possibly clone zombielist so level will always have the original info for reloading
     zombieReactionTimer.setInitialDelay(0);
     zombieReactionTimer.start();
@@ -260,17 +229,17 @@ public class GameControl implements Constants
 
   public void playSound(String fileName, double panValue)
   {
-    try {
+    try
+    {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
       FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
       panControl.setValue((float) panValue);
-      //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-      //gainControl.setValue(-1 * gainValue);
-      //System.out.println("gainvalue "+gainValue);
       clip.start();
-    } catch(Exception ex) {
+    }
+    catch(Exception ex)
+    {
       System.out.println("Error with playing sound.");
       ex.printStackTrace();
     }
@@ -286,12 +255,15 @@ public class GameControl implements Constants
       panValue = -1;
     }
     return panValue;
-
   }
+
+  /**
+   *
+   * @return returns true if any of the player booleans are true
+   * returns false if the player booleans are all false.(the player is not moving)
+   */
   public boolean checkIfPlayerMoving()
   {
-    //if player is moving, play sound every sec
-    //if stopped, then stop the timer
     if (userPlayer.getMovePlayerDown() || userPlayer.getMovePlayerLeft() || userPlayer.getMovePlayerRight() || userPlayer.getMovePlayerUp())
     {
       return true;

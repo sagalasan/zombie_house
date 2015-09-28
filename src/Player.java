@@ -23,13 +23,10 @@ public class Player extends Entity
   private boolean movePlayerRight = false;
   private boolean movePlayerLeft = false;
 
+  private String playerSpriteSheet = "character_images/player_sprite_sheet.png";
   private String playerFootstepsFileName = "sound_files/player_footsteps.wav";
   private int fireTrapInventory = 0;
 
-
-  private String playerSpriteSheet = "character_images/player_sprite_sheet.png";
-  //private int animationWidth = ANIMATION_FORWARD_WIDTH;
-  //private int animationHeight = ANIMATION_FORWARD_HEIGHT;
   public Player(int x, int y)
   {
     super("Player", x, y);
@@ -37,7 +34,6 @@ public class Player extends Entity
     setSpriteSheet(playerSpriteSheet);
     resetCurrentFrame();
   }
-
   Timer staminaRun = new Timer(10, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -59,7 +55,6 @@ public class Player extends Entity
         {
           stamina -= .01;
         }
-
       }
     }
   });
@@ -70,7 +65,6 @@ public class Player extends Entity
     {
       if (stamina <= PLAYER_DEFAULT_STAMINA)
       {
-       // System.out.println(stamina);
         stamina += PLAYER_REGEN_STAMINA;
       }
     }
@@ -198,12 +192,15 @@ public class Player extends Entity
   }
   public void playSound(String fileName)
   {
-    try {
+    try
+    {
       AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
       clip.start();
-    } catch(Exception ex) {
+    }
+    catch(Exception ex)
+    {
       System.out.println("Error with playing sound.");
       ex.printStackTrace();
     }
@@ -222,7 +219,6 @@ public class Player extends Entity
   {
     playRunningSound.stop();
   }
-
 
   public boolean hasFiretraps()
   {
@@ -248,13 +244,6 @@ public class Player extends Entity
   public void setTotalFiretraps(int n)
   {
     fireTrapInventory = n;
-  }
-
-
-
-  public void setSpeedZero()
-  {
-
   }
 
 }
