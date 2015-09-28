@@ -188,7 +188,11 @@ public abstract class Entity implements Constants
 
   //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
   //false if does not intersect with wall
-
+  public Rectangle getBoundingRectangleForFire()
+  {
+    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel - 5, (int)yPixel - 10, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT - 10);
+    return legalRectangle;
+  }
   /**
    *
    * @param possibleXPixel

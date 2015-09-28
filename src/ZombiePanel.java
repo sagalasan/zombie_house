@@ -298,7 +298,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if (e.getKeyCode() == KeyEvent.VK_P && !gameController.userPlayer.isRunning())
     {
       Tile playerTile = Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()];
-      if (playerTile.getType() == FIRETRAP)
+      if (playerTile.getType() == FIRETRAP && gameController.userPlayer.getFeetBoundingRectangle().intersects(playerTile.getRectangleForFiretrap()))
       {
         //disable moving
         gameController.userPlayer.setCanMove(false);
@@ -306,7 +306,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         pickUpFiretrap.start();
         //start waiting timer,
       }
-      else if (gameController.userPlayer.hasFiretraps()&& playerTile.getType() == FLOOR)
+      else if (gameController.userPlayer.hasFiretraps() && playerTile.getType() == FLOOR)
       {
         gameController.userPlayer.setCanMove(false);
         setFiretrap.setRepeats(false);

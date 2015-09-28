@@ -132,7 +132,7 @@ public class GameControl implements Constants
           {
             zombieLocation.explode();
           }
-          if (zombieLocation.isCombusting() && zombie.getFeetBoundingRectangle().intersects(zombieLocation.getBoundingRectangle()))
+          if (zombieLocation.isCombusting() && zombie.getBoundingRectangleForFire().intersects(zombieLocation.getBoundingRectangle()))
           {
             zombie.setAlive(false);
             zombie.startDeathAnimation();
