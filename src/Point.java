@@ -64,7 +64,7 @@ public class Point implements Comparator<Point>
   public String toString()
   {
     String result = "";
-    result += "(" + dx + ", " + dy + ") ";
+    result += "(" + x + ", " + y + ") ";
     result += (angle) + " " + distance;
     return result;
   }
@@ -76,7 +76,7 @@ public class Point implements Comparator<Point>
     dx = this.x - ox;
     dy = this.y - oy;
 
-    distance = dx * dx + dy * dy;
+    distance = Math.sqrt(dx * dx + dy * dy);
 
     if(dx == 0)
     {

@@ -46,6 +46,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
 
   private BufferedImage lightingMask;
 
+  private Visibility visibility;
+  private int tileSize = SIZE;
+
 
   private int startX, startY, exitX, exitY;
   private Tile[][] mapCopy;
@@ -69,6 +72,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
     playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
+
+    visibility = new Visibility();
   }
 
   public void levelComplete()
@@ -188,7 +193,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
-      firetrapImage = ImageIO.read(new File("tile_images/fire_trap.png"));
+      firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
       firetrapImage = firetrapImage.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
@@ -196,7 +201,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
-      playerVisibleMask = ImageIO.read(new File("opacity_masks/zombie_house_player_mask.png"));
+      //playerVisibleMask = ImageIO.read(new File("opacity_masks/zombie_house_player_mask.png"));
     }
     catch (IOException e)
     {
@@ -478,8 +483,19 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     //        new RadialGradientPaint(center, radius, dist, colors);
     //g2d.setPaint(p);
     //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
-    createRayTracingPolygons(offsetX, offsetY);
-    //g2d.drawImage(lightingMask, 0, 0, null);
+    //createRayTracingPolygons(offsetX, offsetY);
+    createVisibilityMask(offsetX, offsetY);
+
+    playerSight = PLAYER_SIGHT * SIZE;
+    colorBlackOpaque = new Color(0, 0, 0, 255);
+    colorBlackPartial = new Color(0, 0, 0, 220);
+    colorBlackTransparent = new Color(0, 0, 0, 0);
+    Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
+
+    //playerGradient = new RadialGradientPaint(getWidth() / 2, getHeight() / 2, playerSight, fractions, colors);
+    //g2d.setPaint(playerGradient);
+    //g2d.fillRect(0, 0, getWidth(), getHeight());
+    g2d.drawImage(lightingMask, 0, 0, null);
   }
 
   private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
@@ -563,6 +579,59 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     return true;
   }
 
+  private void createVisibilityMask(int offsetX, int offsetY)
+  {
+    ArrayList<Polygon> visibilityPolygons;
+
+    int x = gameController.getUserPlayer().getX();
+    int y = gameController.getUserPlayer().getY();
+    int xp = gameController.getUserPlayer().getXPixel();
+    int yp = gameController.getUserPlayer().getYPixel();
+    //System.out.println("originx: " + (xp + offsetX));
+
+    int xStart = x - 6;
+    int xEnd = x + 6;
+    int yStart = y - 6;
+    int yEnd = y + 6;
+    if(xStart < 0) xStart = 0;
+    if(xEnd >= Level.width) xEnd = Level.width;
+    if(yStart < 0) yStart = 0;
+    if (yEnd >= Level.height) yEnd = Level.height;
+
+    visibility.setOffset(offsetX, offsetY);
+    visibility.setOrigin(xp + offsetX, yp + offsetY);
+    visibility.setBoundingTiles(xStart, yStart, xEnd, yEnd);
+    visibility.setTileSize(tileSize);
+    visibility.setSightTileRadius(PLAYER_SIGHT);
+    visibilityPolygons = visibility.returnVisibilityPolygon();
+
+
+
+
+    lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2 = lightingMask.createGraphics();
+    //g2.setPaint(Color.black);
+    g2.setPaint(new Color(0, 0, 0, 0));
+    g2.fillRect(0, 0, lightingMask.getWidth(), lightingMask.getHeight());
+    g2.dispose();
+
+    Graphics2D g2d = (Graphics2D) lightingMask.getGraphics();
+    g2d.drawImage(lightingMask, 0, 0, null);
+
+    int type = AlphaComposite.DST_OUT;
+    AlphaComposite alphaComposite = AlphaComposite.getInstance(type, 1f);
+    //g2d.setComposite(alphaComposite);
+    g2d.setPaint(Color.BLUE);
+
+    for(int i = 0; i < visibilityPolygons.size(); i++)
+    {
+      g2d.drawPolygon(visibilityPolygons.get(i));
+    }
+
+
+    g2d.dispose();
+  }
+
   private void createRayTracingPolygons(int offsetX, int offsetY)
   {
     lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -587,6 +656,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     if(xEnd >= Level.width) xEnd = Level.width;
     if(yStart < 0) yStart = 0;
     if(yEnd >= Level.height) yEnd = Level.height;
+
 
     for(int i = xStart; i < xEnd; i++)
     {
