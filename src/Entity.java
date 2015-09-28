@@ -17,16 +17,10 @@ import java.util.ArrayList;
  */
 public abstract class Entity implements Constants
 {
-  public static int LEFT = 0;
-  public static int RIGHT = 1;
-  public static int UP = 2;
-  public static int DOWN = 3;
-
   private long previousTime;
 
   private int x,y;
   private double xPixel, yPixel;
-
 
   private boolean isAlive = true;
   private String type;
@@ -47,11 +41,34 @@ public abstract class Entity implements Constants
     this.xPixel = this.x * SIZE;
     this.yPixel = this.y * SIZE;
     previousTime = System.currentTimeMillis();
-
     speed = 0;
   }
 
-  Timer animationStart = new Timer(100, new ActionListener() {
+  public void setSpriteSheet(String spriteSheet)
+  {
+    try
+    {
+      this.spriteSheet = ImageIO.read(new File(spriteSheet));
+    }
+    catch (IOException e)
+    {
+      System.out.println("Player Image did not load");
+    }
+  }
+  public BufferedImage getPlayerSprite()
+  {
+    return spriteSheet;
+  }
+  /**
+   * @param indexForPicture
+   * sets which frame the animation will be set to
+   */
+  private void setPlayerFrame(int indexForPicture)
+  {
+    currentFrame = spriteSheet.getSubimage(15+(indexForPicture*SPRITE_SPREAD_DISTANCE),
+        animationDirection, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+  }
+  Timer animationStart = new Timer(180, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -64,6 +81,7 @@ public abstract class Entity implements Constants
       }
     }
   });
+
   public void startAnimation()
   {
     totalImages = 9;
@@ -82,29 +100,10 @@ public abstract class Entity implements Constants
     totalImages = 6;
     animationStart.start();
   }
-  public void setSpriteSheet(String spriteSheet)
-  {
-    try
-    {
-      this.spriteSheet = ImageIO.read(new File(spriteSheet));
-    }
-    catch (IOException e)
-    {
-      System.out.println("Player Image did not load");
-    }
-  }
-
-  private void setPlayerFrame(int indexForPicture)
-  {
-    currentFrame = spriteSheet.getSubimage(15+(indexForPicture*SPRITE_SPREAD_DISTANCE),
-        animationDirection, ANIMATION_WIDTH, ANIMATION_HEIGHT);
-  }
-
   public void setAnimationDirection(int direction)
   {
     animationDirection = direction;
   }
-
   public void resetCurrentFrame()
   {
     indexForImage = 0;
@@ -114,11 +113,6 @@ public abstract class Entity implements Constants
   public Image getCurrentFrame()
   {
     return currentFrame.getScaledInstance(PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT, Image.SCALE_DEFAULT);
-  }
-
-  public BufferedImage getPlayerSprite()
-  {
-    return spriteSheet;
   }
 
   public int getXPixel()
@@ -151,9 +145,7 @@ public abstract class Entity implements Constants
   public void setAlive(boolean aliveStatus)
   {
     isAlive = aliveStatus;
-
   }
-
   public boolean isAlive()
   {
     return isAlive;
@@ -162,6 +154,11 @@ public abstract class Entity implements Constants
   {
     return hitWall;
   }
+  public void setHitWall(boolean b)
+  {
+    hitWall = b;
+  }
+
   public void setSpeed(double speed)
   {
     this.speed = speed;
@@ -184,6 +181,14 @@ public abstract class Entity implements Constants
 
   //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
   //false if does not intersect with wall
+
+  /**
+   *
+   * @param possibleXPixel
+   * @param possibleYPixel
+   * @return returns true if the rectangle made with the possible x and y pixels intersects with a nearby wall
+   *   If it does not intersect with a wall, returns false
+   */
   private boolean intersectsWithWall(double possibleXPixel, double possibleYPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
@@ -211,11 +216,18 @@ public abstract class Entity implements Constants
     }
     return false;
   }
-  public void setHitWall(boolean b)
-  {
-    hitWall = b;
-  }
 
+
+  /**
+   *
+   * @param up
+   * @param down
+   * @param right
+   * @param left
+   *  using the booleans provided as paramaters, adjusts the position
+   *  of whatever object is moving(players or zombies)
+   *
+   */
   public void move(boolean up, boolean down, boolean right, boolean left)
   {
     double xVector = 0;
