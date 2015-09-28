@@ -66,8 +66,8 @@ public class GameControl implements Constants
           zombie.updateDirection();
           if (zombie.getSmellPlayer())
           {
-            System.out.println("masterZombie can smell your stench");
-            System.out.println("coords are "+masterZombie.getX()+", "+masterZombie.getY());
+            //System.out.println("masterZombie can smell your stench");
+           // System.out.println("coords are "+masterZombie.getX()+", "+masterZombie.getY());
             masterZombie.setSmellPlayer(true);
           }
         }

@@ -24,7 +24,6 @@ public abstract class Entity implements Constants
 
   private long previousTime;
 
-  //posibly make these double?
   private int x,y;
   private double xPixel, yPixel;
 
@@ -32,7 +31,6 @@ public abstract class Entity implements Constants
   private boolean isAlive = true;
   private String type;
   private boolean hitWall;
-  //speed is in tiles per second
   double speed;
 
   private int animationDirection = ANIMATION_DOWN_WALKING;
@@ -40,6 +38,7 @@ public abstract class Entity implements Constants
   private BufferedImage spriteSheet;
   private int indexForImage = 0;
   private int totalImages = 9;
+
   public Entity(String type, int x, int y)
   {
     this.type = type;
@@ -57,8 +56,7 @@ public abstract class Entity implements Constants
     public void actionPerformed(ActionEvent e)
     {
       indexForImage+=1;
-      //total images will be either 9 or 6 depending one which animation
-
+      //total images will be either 9 or 6 depending on which animation
       setPlayerFrame(indexForImage % totalImages);
       if (totalImages == 6 && indexForImage == 5)
       {
@@ -170,9 +168,6 @@ public abstract class Entity implements Constants
   }
 
   public boolean legalMove(int x, int y) {
-    //System.out.println(Level.map[x][y].type);
-    //if wall, black boid, or pillar
-    //TODO zombies also cant be in the same space as one another
     //if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
     //        || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
     //if wall, black, or pillar
@@ -184,7 +179,6 @@ public abstract class Entity implements Constants
         return false;
       }
     }
-
     return true;
   }
 
@@ -249,12 +243,9 @@ public abstract class Entity implements Constants
     double possibleYPixel = yPixel + yMove;
     int possibleX = (int)possibleXPixel / SIZE;
     int possibleY = (int)possibleYPixel / SIZE;
-    //added check to see if move will be legal or not.
-    //this will not allow ability to move through walls/blackvoid/pillars
+
     if (legalMove(possibleX, possibleY))
     {
-      //could try testing to see if the pixels are valid instead
-      //hitWall = false;
       x = possibleX;
       y = possibleY;
       if (!intersectsWithWall(possibleXPixel, possibleYPixel))
@@ -271,14 +262,7 @@ public abstract class Entity implements Constants
     else
     {
       stopAnimation();
-      //if hit right wall or bottom wall, subtract
-      //System.out.println("hitwall zombies at " + getX()+", "+getY());
       hitWall = true;
-      //if map[x][possibleY] == wall
-      //if possible y > y hit south
-      //else hit north
-      //
     }
-
   }
 }

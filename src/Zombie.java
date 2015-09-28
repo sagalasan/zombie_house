@@ -1,12 +1,3 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -14,14 +5,16 @@ import java.util.*;
  */
 public class Zombie extends Entity
 {
-  //used for the movements that need to be painted for zombie
   private LinkedList<Tile> movementQueue;
+
   private Random rand = new Random();
+
   private boolean lineZombie;
   private boolean smellPlayer = false;
   private int directionDegree = rand.nextInt(8);
 
   private boolean isMasterZombie = false;
+
   private boolean moveZombieUp;
   private boolean moveZombieDown;
   private boolean moveZombieRight;
@@ -30,11 +23,6 @@ public class Zombie extends Entity
   private int startX, startY;
 
   private String zombieSpriteSheet = "character_images/zombie_sprite_sheet.png";
-
-  //String
-  //for the sound, may have to start the timer in the gamecontrol
-  //that Way I could calculate each pan/gain value and add it
-
 
   public Zombie(int x, int y)
   {
@@ -52,14 +40,14 @@ public class Zombie extends Entity
     setSpriteSheet(zombieSpriteSheet);
     resetCurrentFrame();
     startAnimation();
-    //set zombie intial direction
-
     setStartX(x);
     setStartY(y);
-
-
   }
 
+  /**
+   *
+   * @return calculated the euclidian distance from the player to this zombie
+   */
   public double calculateEuclidDistance()
   {
     double euclidDist;
@@ -69,16 +57,18 @@ public class Zombie extends Entity
     return euclidDist;
   }
 
+  /**
+   *
+   * @param b boolean used to set this zombie to a master
+   *          also sets the sprite sheet to be used in drawing
+   */
   public void setMaster(boolean b)
   {
     isMasterZombie = true;
     zombieSpriteSheet = "character_images/masterZombie_sprite_sheet.png";
     setSpriteSheet(zombieSpriteSheet);
   }
-  public boolean isMasterZombie()
-  {
-    return isMasterZombie;
-  }
+
   public boolean getSmellPlayer()
   {
     return smellPlayer;
@@ -87,9 +77,14 @@ public class Zombie extends Entity
   {
     smellPlayer = b;
   }
+
+  /**
+   *  @description sets whether or not the zombie can
+   *  smell the player if in ZOMBIE_SMELL DISTANCE
+   */
   public void sniffForPlayer()
   {
-    //need to check if player is nearby
+
     double distToPlayer = calculateEuclidDistance();
     if (distToPlayer <= ZOMBIE_SMELL)
     {
@@ -113,6 +108,12 @@ public class Zombie extends Entity
       return false;
     }
   }
+
+  /**
+   *
+   * @return calculates the pan value(right and left ear values) for where
+   * the player will hear in headphones
+   */
   public double calculatePanValue()
   {
     double multiplier = 1;
@@ -130,10 +131,14 @@ public class Zombie extends Entity
     return multiplier * panValue;
   }
 
+  /**
+   *
+   * @param directionDegree
+   * depending on the direction degree,
+   * determines which cardinal direction the zombie will face in
+   */
   private void setHeading(int directionDegree)
   {
-    //if it hit a wall,
-    //get a new heading
     if (directionDegree == 0)
     {
       //east
@@ -189,15 +194,18 @@ public class Zombie extends Entity
   }
 
 
-
+  /**
+   * called in game control.  Updates which direction the zombie should be facing
+   * dependent on smell or whether or not its a random/line zombie
+   */
   public void updateDirection()
   {
     moveZombieUp = false;
     moveZombieDown = false;
     moveZombieRight = false;
     moveZombieLeft = false;
-    //sniffs for if player is within 7 euclid distance blocks
 
+    //checks specific to the masterZombie
     if (isMasterZombie && smellPlayer == false)
     {
       sniffForPlayer();
@@ -206,17 +214,15 @@ public class Zombie extends Entity
     {
       sniffForPlayer();
     }
+
+    //since animation stops on wall hit,
+    //this restarts animation for zombies
     if (hitwall())
     {
       startAnimation();
     }
 
-
-
-
-
     if (smellPlayer) {
-    //System.out.println("smells player");
       if (hitwall())
       {
         setHitWall(false);
@@ -226,8 +232,9 @@ public class Zombie extends Entity
       {
         chasePlayer(TOTAL_DIRECTIONS);
       }
-
-
+      //movement queue is created when chaseplayer is called
+      //the movement queue is a list of shortest path tiles to player
+      //this if statment figures out what direction the zombie needs to face and animate in
       if (!movementQueue.isEmpty())
       {
         if (getX() > movementQueue.getLast().x)
@@ -255,37 +262,32 @@ public class Zombie extends Entity
     }
     else if (lineZombie)
     {
-      //choose random heading, move until hit wall, then recalc
+      //choose random heading, move until hit wall
+      //if hitwall chooses another direction
       if (hitwall())
       {
         setHitWall(false);
-
         int newDirectionDegree = rand.nextInt(8);
         while(newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
         }
-
         directionDegree = newDirectionDegree;
       }
-      //startAnimation();
       setHeading(directionDegree);
     }
     else
     {
-      //randomZombies
+      //the zombie is a randomzombie
       int newDirectionDegree = rand.nextInt(8);
       if (hitwall())
       {
         setHitWall(false);
-
-
-        while(newDirectionDegree == directionDegree)
+        while (newDirectionDegree == directionDegree)
         {
           newDirectionDegree = rand.nextInt(8);
         }
       }
-      //startAnimation();
       setHeading(newDirectionDegree);
     }
     startAnimation();
@@ -296,9 +298,8 @@ public class Zombie extends Entity
     super.move(moveZombieUp, moveZombieDown, moveZombieRight, moveZombieLeft);
   }
 
-
   /**
-   * finds the be astar path to player
+   * finds the shortest path to player
    * puts results in a queue that is called later to draw movements of zombie
    */
   private void chasePlayer(int numberOfFrontierDirections)
@@ -310,18 +311,12 @@ public class Zombie extends Entity
     {
       for (int j = 0; j<Level.height;j++)
       {
-        //reset board here
-        //I wanted to do it on only the affected nodes but cant seem to get it
         map[i][j].setChosen(false);
         map[i][j].parent = null;
-        //System.out.println("coords for map x, y " + map[i][j].x +", "+map[i][j].y);
       }
     }
-
     movementQueue = new LinkedList<>();
     Tile next = findBestPath(start, end, map, numberOfFrontierDirections);
-    //System.out.println(next.x+", "+ next.y);
-
     while (next != null )
     {
       movementQueue.addLast(next);
@@ -341,7 +336,6 @@ public class Zombie extends Entity
     public int compare(Tile one, Tile two) {
       if (one.getfCost() == two.getfCost())
       {
-        //this could be screwy since it involves casting double values to int
         if (one.getHeuristicCost() < two.getHeuristicCost())
         {
           return -1;
@@ -363,11 +357,8 @@ public class Zombie extends Entity
       {
         return 1;
       }
-//      GameControl.testCount +=1;
-      System.out.println("returned 0");
       return 0;
     }
-
   }
 
   /**
@@ -379,8 +370,7 @@ public class Zombie extends Entity
    * Finds the shortest path between a zombie and player
    */
   private Tile findBestPath(Tile start, Tile end, Tile[][] map, int numberOfFrontierDirections) {
-    //if distance is only one tile away, just skip the whole pathfinding algo.
-
+    //quick check to see if zombie is next to player
     int xDiff = Math.abs(start.x - end.x);
     int yDiff = Math.abs(start.y - end.y);
     if ((xDiff == 1 || xDiff == 0 )&& (yDiff == 1 || yDiff == 0))
@@ -388,7 +378,6 @@ public class Zombie extends Entity
       end.parent = start;
       return end;
     }
-
     start.setChosen(true);
     Tile currentNode;
     PQsort sorter = new PQsort();
@@ -396,20 +385,18 @@ public class Zombie extends Entity
     PriorityQueue<Tile> queue = new PriorityQueue<>(1, sorter);
     queue.clear();
     queue.add(start);
-    //System.out.println("start (" + start.x + ", " + start.y + "), end (" + end.x +", "+end.y+")");
-    while (!queue.isEmpty()) {
+    while (!queue.isEmpty())
+    {
       currentNode = queue.remove();
       currentNode.setChosen(true);
-      if (currentNode.x == end.x && currentNode.y == end.y) {
+      if (currentNode.x == end.x && currentNode.y == end.y)
+      {
         break;
       }
       currentNode.setFrontier(queue, end, map, numberOfFrontierDirections);
     }
     return end;
   }
-
-
-
 
   public void setStartX(int x)
   {

@@ -1,16 +1,6 @@
-import com.sun.glass.ui.Size;
-import javafx.application.Application;
-import javafx.scene.effect.Light;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.*;
 
 /**
@@ -37,7 +26,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
   private BufferedImage  blacknessImage;
   private BufferedImage wallImage;
   private BufferedImage pillarImage;
-  private BufferedImage firetrapImage;
+  private Image firetrapImage;
   private BufferedImage exitImage;
   private BufferedImage scorchedMask;
   private BufferedImage playerVisibleMask;
@@ -200,7 +189,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
-      firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
+      firetrapImage = ImageIO.read(new File("tile_images/fire_trap.png"));
+      firetrapImage = firetrapImage.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
       pillarImage = wallImage;
@@ -300,7 +290,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         gameController.userPlayer.setCanMove(false);
         setFiretrap.setRepeats(false);
         setFiretrap.start();
-
       }
     }
   }
@@ -418,7 +407,20 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
      * if player bounding rectangle does not intersect with a wall pixel,
      * then draw player
      */
-
+    //can move this down a little bit
+    for (int i =0; i < Level.width;i++)
+    {
+      for (int j = 0; j < Level.height; j++)
+      {
+        int tileDrawX = offsetX + i * SIZE;
+        int tileDrawY = offsetY + j*SIZE;
+        Tile checkTile = Level.map[i][j];
+        if (checkTile.getType() == FIRETRAP) {
+          //draw firetrap instead
+          g.drawImage(firetrapImage, tileDrawX, tileDrawY, null);
+        }
+      }
+    }
     for (Zombie zombie: gameController.zombieList)
     {
       // if (zombie.isAlive())
@@ -449,12 +451,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
           g.drawImage(checkTile.getCurrentFrame() , tileDrawX, tileDrawY ,null );
                    //drawCenteredImg(g, Level.map[i][j].getCurrentFrame(), i, j);
         }
-        if (checkTile.getType() == FIRETRAP)
-        {
-          //draw firetrap instead
-          g.drawImage(scorchedMask, tileDrawX, tileDrawY, null);
-        }
-
       }
     }
 
@@ -648,6 +644,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     }
 
     Collections.sort(vertices, Point.PointAngleComparator);
+  /**
     System.out.println("Sorted List");
     for(int i = 0; i < vertices.size(); i++)
     {
@@ -659,6 +656,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       System.out.println(i + " " + vertices.get(i));
     }
+   **/
     Polygon p = createPointPolygon(vertices);
     g2d.fillPolygon(p);
   }

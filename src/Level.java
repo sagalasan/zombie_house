@@ -137,7 +137,7 @@ public class Level implements Constants {
                 //(rec.room.x + j == Level.width-1 && rec.room.y + i == Level.height-1))//if last possible tile to spawn
                 {
                   masterZombieCreated = true;
-                  System.out.println("masterZombie spawnned at " + rec.room.x + j + ", " + rec.room.y + i);
+                 // System.out.println("masterZombie spawnned at " + rec.room.x + j + ", " + rec.room.y + i);
                   masterZombie = new Zombie(rec.room.x + j, rec.room.y + i);
                   masterZombie.setMaster(true);
                 }
@@ -149,7 +149,6 @@ public class Level implements Constants {
             }
 
             //this line must be [j][i] or the map wont work!!
-
             if(rooms == 0)
             {
               setStartX(startX = rec.room.x + j);
