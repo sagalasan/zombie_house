@@ -21,6 +21,8 @@ public interface Constants {
 
   int PLAYER_SPRITE_HEIGHT = 70;
   int PLAYER_SPRITE_WIDTH = 45;
+  int PLAYER_FEET_PIXEL_Y = 50;
+  int PLAYER_FEET_PIXEL_X = 3;
 
   double PANVALUE_PADDING = .25;
 
@@ -37,7 +39,7 @@ public interface Constants {
   int FIRE_ANIMATION_HEIGHT = 60;
   int FIRE_ANIMATION_WIDTH = 40;
 
-  double PILLAR_SPAWN_RATE = 0.010;
+  double PILLAR_SPAWN_RATE = 0.080;
 
   int SPRITE_SPREAD_DISTANCE = 64;
 

@@ -145,9 +145,14 @@ public class Tile implements Constants {
   {
     combusted = b;
   }
+
   public java.awt.Rectangle getBoundingRectangle()
   {
     return new Rectangle((int)getXPixel(), (int)getYPixel(), SIZE, SIZE);
+  }
+  public java.awt.Rectangle getRectangleForFiretrap()
+  {
+    return new Rectangle((int)getXPixel(), (int)getYPixel() + SIZE /2, SIZE , SIZE );
   }
 
   /**

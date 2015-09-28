@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -132,6 +133,12 @@ public abstract class Entity implements Constants
   public int getY()
   {
     return y;
+  }
+  public Rectangle getFeetBoundingRectangle()
+  {
+    Rectangle feet = new Rectangle((int)xPixel + PLAYER_FEET_PIXEL_X,
+        (int)yPixel + PLAYER_FEET_PIXEL_Y, PLAYER_SPRITE_WIDTH - PLAYER_FEET_PIXEL_X, PLAYER_SPRITE_HEIGHT - PLAYER_FEET_PIXEL_Y );
+    return feet;
   }
   public void setX(int x)
   {

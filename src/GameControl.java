@@ -83,16 +83,19 @@ public class GameControl implements Constants
         userPlayer.setAnimationDirectionBasedOnMovementBooleans();
         userPlayer.move();
       }
-
-      if (userPlayer.isRunning() && Level.map[userPlayer.getX()][userPlayer.getY()].getType() == FIRETRAP)
+      //get feet of user player and test if feet are walking on the tile
+      Tile playerTile = Level.map[userPlayer.getX()][userPlayer.getY()];
+      //Tile abovePlayer = Level.map[userPlayer.getX()][userPlayer.getY()+1];
+      if (userPlayer.isRunning() && userPlayer.getFeetBoundingRectangle().intersects(playerTile.getRectangleForFiretrap())
+          && playerTile.getType() == FIRETRAP)
       {
-        Level.map[userPlayer.getX()][userPlayer.getY()].explode();
+        playerTile.explode();
         userPlayer.setAlive(false);
         //todo reset game if player dead
         //
         // resetGame
       }
-      if (Level.map[userPlayer.getX()][userPlayer.getY()].getType() == EXIT)
+      if (playerTile.getType() == EXIT)
       {
         //set the next level
         System.out.println("Found Exit!");
@@ -124,15 +127,18 @@ public class GameControl implements Constants
             }
           }
           Tile zombieLocation = Level.map[zombie.getX()][zombie.getY()];
-          if (zombieLocation.getType() == FIRETRAP)
+
+          if (zombieLocation.getType() == FIRETRAP && zombie.getFeetBoundingRectangle().intersects(zombieLocation.getRectangleForFiretrap()))
           {
             zombieLocation.explode();
           }
-          if (zombieLocation.isCombusting())
+          if (zombieLocation.isCombusting() && zombie.getFeetBoundingRectangle().intersects(zombieLocation.getBoundingRectangle()))
           {
             zombie.setAlive(false);
             zombie.startDeathAnimation();
           }
+
+
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
             //set player death to true so we can reload the map

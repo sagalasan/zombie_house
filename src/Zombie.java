@@ -22,22 +22,24 @@ public class Zombie extends Entity
 
   private int startX, startY;
 
-  private String zombieSpriteSheet = "character_images/zombie_sprite_sheet.png";
+  private String lineZombieSpriteSheet = "character_images/line_zombie_sprite_sheet.png";
+  private String randomZombieSpriteSheet = "character_images/random_zombie_sprite_sheet.png";
+  private String masterZombieSpriteSheet = "character_images/masterZombie_sprite_sheet.png";
 
-  public Zombie(int x, int y)
-  {
+  public Zombie(int x, int y) {
     super("Zombie", x, y);
     setSpeed(ZOMBIE_DEFAULT_SPEED);
     if (rand.nextDouble() > ZOMBIE_RANDOM_OR_LINE_RATE)
     {
+      setSpriteSheet(lineZombieSpriteSheet);
       lineZombie = true;
     }
     else
     {
+      setSpriteSheet(randomZombieSpriteSheet);
       lineZombie= false;
     }
     setHeading(directionDegree);
-    setSpriteSheet(zombieSpriteSheet);
     resetCurrentFrame();
     startAnimation();
     setStartX(x);
@@ -65,8 +67,7 @@ public class Zombie extends Entity
   public void setMaster(boolean b)
   {
     isMasterZombie = true;
-    zombieSpriteSheet = "character_images/masterZombie_sprite_sheet.png";
-    setSpriteSheet(zombieSpriteSheet);
+    setSpriteSheet(masterZombieSpriteSheet);
   }
 
   public boolean getSmellPlayer()
