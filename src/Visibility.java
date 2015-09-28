@@ -70,7 +70,7 @@ public class Visibility implements Constants
     Point.cleanList(vertices);
 
     extendRaysToBounds();
-    System.out.println(finalPoints.size());
+    //System.out.println(finalPoints.size());
 
     Polygon shadow = createPointPolygon(finalPoints);
     visibilityPolygons.add(shadow);
@@ -104,12 +104,12 @@ public class Visibility implements Constants
     double eAngle = extension.getAngle();
     ArrayList<Point> possiblePoints = getPossiblePoints(extension, eAngle);
 
-    System.out.println("\n\nOrigin: " + origin);
-    System.out.println("Extension: " + extension);
-    for(Point p : possiblePoints)
-    {
-      System.out.println(p);
-    }
+    //System.out.println("\n\nOrigin: " + origin);
+    //System.out.println("Extension: " + extension);
+    //for(Point p : possiblePoints)
+    //{
+      //System.out.println(p);
+    //}
 
     Point shortest = getShortest(possiblePoints);
 
@@ -117,8 +117,8 @@ public class Visibility implements Constants
     {
       shortest = extension;
     }
-    System.out.println("Shortest: " + shortest);
-    System.out.println("\n\n");
+    //System.out.println("Shortest: " + shortest);
+    //System.out.println("\n\n");
 
     return shortest;
   }
