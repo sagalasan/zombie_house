@@ -132,7 +132,9 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     ImageIcon icon = null;
     try {
       icon = new ImageIcon(new URL("http://cdn.makeagif.com/media/9-16-2015/YVHhGp.gif"));
-    } catch (MalformedURLException e) {
+    }
+    catch (MalformedURLException e)
+    {
       e.printStackTrace();
     }
 
@@ -156,7 +158,6 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       //this line is associated with causing the clone() method to
       //cuause a concurrent exception.
       gameController.zombieList.clear();
-
 
       gameController.masterZombie = null;
       gameController = new GameControl(this);
@@ -304,7 +305,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
         gameController.userPlayer.setCanMove(false);
         pickUpFiretrap.setRepeats(false);
         pickUpFiretrap.start();
-        //start waiting timer,
+
       }
       else if (gameController.userPlayer.hasFiretraps() && playerTile.getType() == FLOOR)
       {
