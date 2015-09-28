@@ -164,20 +164,19 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
       gameController = new GameControl(this);
 
     }
-    else {
-      //optional goodbye message
-      //JOptionPane.showMessageDialog(null, "GOODBYE");
-
+    else
+    {
       setLevelNumber(1);
       gameState = false;
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
+      gameController.zombieHitWallSound.stop();
+      gameController.zombieWalkSound.stop();
       frame.welcomeText.setVisible(true);
       frame.button.setVisible(true);
       frame.exit.setVisible(true);
       this.setVisible(false);
     }
-
 
   }
 

@@ -14,6 +14,9 @@ public class Main {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(screenSize);
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    //frame.getContentPane().setBackground(new Color(255, 255, 255));
+    //frame.setContentPane(new JLabel(new ImageIcon("tile_images/background.png")));
+
   }
   public static void main(String[] args)
   {
