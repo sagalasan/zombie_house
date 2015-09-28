@@ -122,6 +122,7 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     gameController.masterZombie = null;
     gameController.userPlayer = null;
 
+
     gameController = new GameControl(this);
     constructArrayImages();
     constructBufferedImage();
@@ -168,6 +169,8 @@ public class ZombiePanel extends JPanel implements KeyListener, Constants{
     {
       setLevelNumber(1);
       gameState = false;
+      gameController.userPlayer.stopRunningSound();
+      gameController.userPlayer.stopRunningSound();
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
       gameController.zombieHitWallSound.stop();

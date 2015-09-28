@@ -52,10 +52,11 @@ public class ZombieFrame extends JFrame{
     welcomeText.setPreferredSize(new Dimension(this.getWidth(), 200));
     welcomeText.setIcon(headerBackground);
 
-    Font font = new Font("", Font.PLAIN,32);
+    Font font = new Font("", Font.BOLD,32);
 
     //set font for JLabel
     exit.setFont(font);
+    exit.setForeground(new Color(225,0,0));
 
     //Add action listener to button
     this.add(welcomeText, BorderLayout.NORTH);
