@@ -158,33 +158,6 @@ public class Point implements Comparator<Point>
     }
   };
 
-  public static void cleanList(ArrayList<Point> points)
-  {
-    for(int i = 0; i < points.size() - 1; i++)
-    {
-      Point current = points.get(i);
-      Point next = points.get(i + 1);
-      double angleDiff = current.getAngle() - next.getAngle();
-      if(Math.abs(angleDiff) < .001)
-      {
-        double dx = current.getX() - next.getX();
-        double dy = current.getY() - next.getY();
-        if(dx == 0 && dy == 0)
-        {
-          points.remove(i);
-          points.remove(i);
-          i -= 2;
-        }
-        else
-        {
-          points.remove(i);
-          i--;
-        }
-        if(i < 0) i = 0;
-      }
-    }
-  }
-
   public static void removeDuplicateAngles(ArrayList<Point> points)
   {
     for(int i = 0; i < points.size() - 1; i++)
