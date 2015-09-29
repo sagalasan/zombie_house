@@ -27,19 +27,19 @@ public class ZombieFrame extends JFrame implements KeyListener{
   private SpinnerNumberModel modelPlayerStaminaRegen = new SpinnerNumberModel(value1, min1, max1, stepSize1);
   //Player speed
   private double min2 = 0.000;
-  private double value2 = 1.0;
+  private double value2 = .10;
   private double max2 = 10.00;
   private double stepSize2 = 0.25;
   SpinnerNumberModel modelPlayerSpeed = new SpinnerNumberModel(value2, min2, max2, stepSize2);
   //Player run speed
   private double min4 = 0.000;
-  private double value4 = 2.0;
+  private double value4 = 1.0;
   private double max4 = 12.00;
   private double stepSize4 = 0.25;
   SpinnerNumberModel modelPlayerRunSpeed = new SpinnerNumberModel(value4, min4, max4, stepSize4);
   //Player hearing
   private double min5 = 0.000;
-  private double value5 = 10.0;
+  private double value5 = 2.0;
   private double max5 = 20.00;
   private double stepSize5 = 1.0;
   SpinnerNumberModel modelPlayerHearing = new SpinnerNumberModel(value5, min5, max5, stepSize5);
@@ -51,7 +51,7 @@ public class ZombieFrame extends JFrame implements KeyListener{
   SpinnerNumberModel modelPlayerStamina = new SpinnerNumberModel(value6, min6, max6, stepSize6);
   //Zombie Speed
   private double min7 = 0.000;
-  private double value7 = 5.0;
+  private double value7 = .50;
   private double max7 = 20.00;
   private double stepSize7 = 0.5;
   SpinnerNumberModel modelZombieSpeed = new SpinnerNumberModel(value7, min7, max7, stepSize7);

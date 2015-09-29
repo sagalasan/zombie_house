@@ -20,20 +20,6 @@ public class Constants {
   static double PLAYER_HEARING_DISTANCE = 10;
   static int PLAYER_SIGHT = 5;
 
-  /**
-   *
-   player sight,
-   player hearing,
-   player speed,
-   player stamina,
-   player regen,
-   zombie spawn,
-   zombie speed,
-   zombie decision rate,
-   zombie smell,
-   and firetrap spawn
-   *
-   */
 
   public void setPlayerSight(int newPlayerSight)
   {
