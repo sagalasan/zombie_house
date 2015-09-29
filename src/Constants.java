@@ -13,7 +13,7 @@ public class Constants {
   final int BLACKNESS = 6;
   final int FIRETRAP = 7;
 
-  static double PLAYER_DEFAULT_SPEED = 10.0;
+  static double PLAYER_DEFAULT_SPEED = 3.0;
   static double PLAYER_RUN_SPEED = 2.0;
   static double PLAYER_DEFAULT_STAMINA = 5.0;
   static double PLAYER_REGEN_STAMINA = .20;
@@ -128,7 +128,7 @@ public class Constants {
 
   final double SIN_OF_PI_4 = 0.70710678118;
 
-  final int GUI_TIMER_SPEED = 16;
+  final int GUI_TIMER_SPEED = 33;
 
 
 }

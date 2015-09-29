@@ -147,11 +147,11 @@ public class Point implements Comparator<Point>
         double d = p1.getDistance() - p2.getDistance();
         if(d < 0)
         {
-          return -1;
+          return 1;
         }
         else if(d > 0)
         {
-          return 1;
+          return -1;
         }
       }
       return 0;
@@ -192,10 +192,12 @@ public class Point implements Comparator<Point>
       Point current = points.get(i);
       Point next = points.get(i + 1);
       double angleDiff = current.getAngle() - next.getAngle();
-      if(Math.abs(angleDiff) < .001)
+      double distDiff = current.getDistance() - next.getDistance();
+      if(Math.abs(angleDiff) < .001)// && Math.abs(distDiff) < .1)
       {
         points.remove(i + 1);
-        points.get(i).setOuterPoint(false);
+        if(Math.abs(distDiff) < .1) points.get(i).setOuterPoint(false);
+        //points.get(i+1).setOuterPoint(false);
         i--;
       }
     }

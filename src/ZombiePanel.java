@@ -44,6 +44,7 @@ public class ZombiePanel extends JPanel implements KeyListener
   private Color colorBlackTransparent;
   private int playerSight;
   private float[] fractions = {0.0f, 0.7f, 1.0f};
+  private Color[] colors;
 
   private BufferedImage lightingMask;
 
@@ -68,6 +69,7 @@ public class ZombiePanel extends JPanel implements KeyListener
     initializeImages();
     constructArrayImages();
     constructBufferedImage();
+    visibility = new Visibility();
 
     tileSize = gameController.SIZE;
 
@@ -75,11 +77,10 @@ public class ZombiePanel extends JPanel implements KeyListener
     colorBlackOpaque = new Color(0, 0, 0, 255);
     colorBlackPartial = new Color(0, 0, 0, 220);
     colorBlackTransparent = new Color(0, 0, 0, 0);
-    Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
+    Color[] color = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
+    colors = color;
 
-    playerGradient = new RadialGradientPaint(1920 / 2, 1080 / 2, playerSight, fractions, colors);
 
-    visibility = new Visibility();
   }
 
   public void setReference(ZombieFrame f)
@@ -426,6 +427,7 @@ public class ZombiePanel extends JPanel implements KeyListener
   @Override
   public void paintComponent(Graphics g)
   {
+
     Graphics2D g2d = (Graphics2D) g;
     Dimension d = this.getSize();
 
@@ -531,7 +533,7 @@ public class ZombiePanel extends JPanel implements KeyListener
      **/
     // Will finish this later, I need to subtract this from a black image to get the proper visibility.
     //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
-    g2d.setPaint(playerGradient);
+    //g2d.setPaint(playerGradient);
     //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);\
     //g2d.fillRect(0, 0, getWidth(), getHeight());
 
@@ -544,18 +546,14 @@ public class ZombiePanel extends JPanel implements KeyListener
     //g2d.setPaint(p);
     //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
     //createRayTracingPolygons(offsetX, offsetY);
+    long start = System.currentTimeMillis();
     createVisibilityMask(offsetX, offsetY);
-
-    playerSight = gameController.PLAYER_SIGHT * gameController.SIZE;
-    colorBlackOpaque = new Color(0, 0, 0, 255);
-    colorBlackPartial = new Color(0, 0, 0, 220);
-    colorBlackTransparent = new Color(0, 0, 0, 0);
-    Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
     playerGradient = new RadialGradientPaint(getWidth() / 2, getHeight() / 2, playerSight, fractions, colors);
     g2d.setPaint(playerGradient);
     g2d.fillRect(0, 0, getWidth(), getHeight());
     g2d.drawImage(lightingMask, 0, 0, null);
+    System.out.println(System.currentTimeMillis() - start);
   }
 
   private void constructArrayImages()
@@ -657,9 +655,6 @@ public class ZombiePanel extends JPanel implements KeyListener
     visibility.setSightTileRadius(gameController.PLAYER_SIGHT);
     visibilityPolygons = visibility.returnVisibilityPolygon();
 
-
-
-
     lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2 = lightingMask.createGraphics();
     g2.setPaint(Color.black);
@@ -680,136 +675,7 @@ public class ZombiePanel extends JPanel implements KeyListener
       g2d.fillPolygon(visibilityPolygons.get(i));
     }
 
-
     g2d.dispose();
-  }
-
-  private void createRayTracingPolygons(int offsetX, int offsetY)
-  {
-    lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-    ArrayList<Polygon> lightPolygons = new ArrayList<Polygon>();
-    //ArrayList<Integer> xVertices = new ArrayList<Integer>();
-    //ArrayList<Integer> yVertices = new ArrayList<Integer>();
-
-    ArrayList<Point> vertices = new ArrayList<Point>();
-
-    int x = gameController.getUserPlayer().getX();
-    int y = gameController.getUserPlayer().getY();
-    int xp = gameController.getUserPlayer().getXPixel();
-    int yp = gameController.getUserPlayer().getYPixel();
-
-    Point origin = new Point(xp + offsetX, yp + offsetY);
-
-    int xStart = x - 6;
-    int xEnd = x + 6;
-    int yStart = y - 6;
-    int yEnd = y + 6;
-    if(xStart < 0) xStart = 0;
-    if(xEnd >= Level.width) xEnd = Level.width;
-    if(yStart < 0) yStart = 0;
-    if(yEnd >= Level.height) yEnd = Level.height;
-
-
-    for(int i = xStart; i < xEnd; i++)
-    {
-      for(int j = yStart; j < yEnd; j++)
-      {
-        Tile tile = Level.map[i][j];
-        int nPoints = 4;
-        int[] xCoord = new int[nPoints];
-        int[] yCoord = new int[nPoints];
-
-        if(tile.getType() == gameController.WALL)
-        {
-          int xTilePixel = i * gameController.SIZE + offsetX;
-          int yTilePixel = j * gameController.SIZE + offsetY;
-          int xTilePixelOne = xTilePixel + gameController.SIZE;
-          int yTilePixelOne = yTilePixel + gameController.SIZE;
-
-          vertices.add(new Point(xTilePixel, yTilePixel, origin));
-          xCoord[0] = xTilePixel;
-          yCoord[0] = yTilePixel;
-
-          vertices.add(new Point(xTilePixelOne, yTilePixel, origin));
-          xCoord[1] = xTilePixelOne;
-          yCoord[1] = yTilePixel;
-
-          vertices.add(new Point(xTilePixelOne, yTilePixelOne, origin));
-          xCoord[2] = xTilePixelOne;
-          yCoord[2] = yTilePixelOne;
-
-          vertices.add(new Point(xTilePixel, yTilePixelOne, origin));
-          xCoord[3] = xTilePixel;
-          yCoord[3] = yTilePixelOne;
-
-          lightPolygons.add(new Polygon(xCoord, yCoord, nPoints));
-        }
-      }
-    }
-    Graphics2D g2 = lightingMask.createGraphics();
-    g2.setPaint(Color.black);
-    g2.fillRect(0, 0, lightingMask.getWidth(), lightingMask.getHeight());
-    g2.dispose();
-
-    Graphics2D g2d = (Graphics2D) lightingMask.getGraphics();
-    g2d.drawImage(lightingMask, 0, 0, null);
-
-    int type = AlphaComposite.DST_OUT;
-    AlphaComposite alphaComposite = AlphaComposite.getInstance(type, 1f);
-    g2d.setComposite(alphaComposite);
-
-    for(int i = 0; i < lightPolygons.size(); i++)
-    {
-      g2d.fillPolygon(lightPolygons.get(i));
-    }
-
-    Collections.sort(vertices, Point.PointAngleComparator);
-  /**
-    System.out.println("Sorted List");
-    for(int i = 0; i < vertices.size(); i++)
-    {
-      System.out.println(i + " " + vertices.get(i));
-    }
-    System.out.println("Clean List");
-    Point.cleanList(vertices);
-    for(int i = 0; i < vertices.size(); i++)
-    {
-      System.out.println(i + " " + vertices.get(i));
-    }
-   **/
-    Polygon p = createPointPolygon(vertices);
-    g2d.fillPolygon(p);
-  }
-
-  private Polygon createPointPolygon(ArrayList<Point> points)
-  {
-    int l = points.size();
-    int xPoints[] = new int[l];
-    int yPoints[] = new int[l];
-    for(int i = 0; i < l; i++)
-    {
-      Point p = points.get(i);
-      double x = p.getX();
-      double y = p.getY();
-      xPoints[i] = (int) x;
-      yPoints[i] = (int) y;
-    }
-    Polygon polygon = new Polygon(xPoints, yPoints, l);
-    return polygon;
-  }
-
-  private class RayTracingRunnable implements Runnable
-  {
-    ArrayList<Point2D> vertices;
-    @Override
-    public void run()
-    {
-      int x = gameController.getUserPlayer().getX();
-      int y = gameController.getUserPlayer().getY();
-      int xp = gameController.getUserPlayer().getXPixel();
-      int yp = gameController.getUserPlayer().getYPixel();
-
-    }
   }
 
 

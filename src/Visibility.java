@@ -12,6 +12,7 @@ public class Visibility extends Constants
   private ArrayList<Segment> segments;
   private ArrayList<Point> vertices;
   private ArrayList<Point> finalPoints;
+  private ArrayList<Box> boxes;
 
   private int offsetX, offsetY;
   private Point origin;
@@ -24,6 +25,7 @@ public class Visibility extends Constants
     segments = new ArrayList<Segment>();
     vertices = new ArrayList<Point>();
     finalPoints = new ArrayList<Point>();
+    boxes = new ArrayList<Box>();
   }
 
   public void setOffset(int offsetX, int offsetY)
@@ -104,17 +106,9 @@ public class Visibility extends Constants
         //visibilityPolygons.add(t);
         if(point.getOuterPoint())
         {
-          possiblePoints.clear();
-          possiblePoints = getPossiblePoints(extension, extension.getAngle());
-          Point edgePoint;
-          if(possiblePoints.size() != 0)
-          {
-            edgePoint = getShortest(possiblePoints);
-          }
-          else
-          {
-            edgePoint = extension;
-          }
+          //possiblePoints.clear();
+          //possiblePoints = getPossiblePoints(extension, extension.getAngle());
+          Point edgePoint = extension;//shortenExtension(extension, point);
 
           if(point.getRight())
           {
@@ -172,13 +166,18 @@ public class Visibility extends Constants
     }
   }
 
-  private Point shortenExtension(Point extension)
+  private Point shortenExtension(Point extension, Point original)
   {
     double eAngle = extension.getAngle();
     ArrayList<Point> possiblePoints = getPossiblePoints(extension, eAngle);
-    if(possiblePoints.size() > 0) return null;
 
-    Point shortest = getShortest(possiblePoints);
+    if(possiblePoints.size() > 0)
+    {
+      System.out.println("hi");
+      return extension;
+    }
+
+    Point shortest = getShortest(possiblePoints, original);
 
     //System.out.println("Extension: " + extension);
     ////for(Point p : possiblePoints)
@@ -194,7 +193,7 @@ public class Visibility extends Constants
     }
     else
     {
-      return null;
+      return shortest;
     }
 
     //return shortest;
@@ -291,7 +290,7 @@ public class Visibility extends Constants
     return result;
   }
 
-  private Point getShortest(ArrayList<Point> points)
+  private Point getShortest(ArrayList<Point> points, Point vertex)
   {
     int size = points.size();
     if(size == 0)
@@ -304,7 +303,8 @@ public class Visibility extends Constants
     for(int i = 0; i < points.size(); i++)
     {
       double d = points.get(i).getDistance();
-      if(d <= minimum)
+      double vd = vertex.getDistance();
+      if(d <= minimum && d > vd + 2)
       {
         minimum = d;
         index = i;
@@ -375,28 +375,24 @@ public class Visibility extends Constants
           tempVertices.get(0).setRight(true);
           tempVertices.get(size - 1).setOuterPoint(true);
           tempVertices.get(size - 1).setRight(false);
-          //vertices.add(tempVertices.get(0));
-          //vertices.add(tempVertices.get(size - 1));
-//
-          //if(size == 4)
+
+          Point v0 = tempVertices.get(0);
+          Point v1 = tempVertices.get(1);
+          Point v2 = tempVertices.get(2);
+          Point v3 = tempVertices.get(3);
+
+          //if(Math.abs(v0.getAngle() - v1.getAngle()) < .01)
           //{
-          //  Point v1 = tempVertices.get(1);
-          //  Point v2 = tempVertices.get(2);
-          //  v1.setOuterPoint(false);
-          //  v2.setOuterPoint(false);
-          //  if(Math.abs(v1.getX() - v2.getX()) > .1 && Math.abs(v1.getY() - v2.getY()) > .1)
-          //  {
-          //    if(v1.getDistance() < v2.getDistance())
-          //    {
-          //      vertices.add(v1);
-          //    }
-          //    else
-          //    {
-          //      vertices.add(v2);
-          //    }
-          //  }
+          //  tempVertices.get(1).setOuterPoint(true);
+          //  tempVertices.get(1).setRight(true);
+          //}
+          //if(Math.abs(v2.getAngle() - v3.getAngle()) < .01)
+          //{
+          //  tempVertices.get(2).setOuterPoint(true);
+          //  tempVertices.get(2).setRight(false);
           //}
 
+          boxes.add(new Box(zero, tileSize));
           vertices.addAll(tempVertices);
           segments.addAll(tempSegment);
           polygons.add(new Polygon(xCoord, yCoord, nPoints));
