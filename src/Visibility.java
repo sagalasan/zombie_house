@@ -6,6 +6,7 @@ import java.util.Collections;
 
 /**
  * Created by kasac on 9/27/2015.
+ * Class is designed to compute shadows
  */
 public class Visibility extends Constants
 {
@@ -20,6 +21,9 @@ public class Visibility extends Constants
   private int tileSize, sightTileRadius;
   private int boundingRadius;
 
+  /**
+   * Public constructor for creating the object
+   */
   public Visibility()
   {
     segments = new ArrayList<Segment>();
@@ -28,18 +32,35 @@ public class Visibility extends Constants
     boxes = new ArrayList<Box>();
   }
 
+  /**
+   * Sets the offset from the actual position for proper drawing
+   * @param offsetX
+   * @param offsetY
+   */
   public void setOffset(int offsetX, int offsetY)
   {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
   }
 
+  /**
+   * Sets the origin or center of player for drawing
+   * @param originX
+   * @param originY
+   */
   public void setOrigin(int originX, int originY)
   {
     Point p = new Point(originX, originY);
     this.origin = p;
   }
 
+  /**
+   * Set the bounding tiles over wich the shadows will be calculated
+   * @param xStart
+   * @param yStart
+   * @param xEnd
+   * @param yEnd
+   */
   public void setBoundingTiles(int xStart, int yStart, int xEnd, int yEnd)
   {
     this.xStart = xStart;
@@ -48,16 +69,28 @@ public class Visibility extends Constants
     this.yEnd = yEnd;
   }
 
+  /**
+   * Sets the size of the tile for proper handling
+   * @param tileSize
+   */
   public void setTileSize(int tileSize)
   {
     this.tileSize = tileSize;
   }
 
+  /**
+   * Sets the sight radius in terms of tile distances
+   * @param sightTileRadius
+   */
   public void setSightTileRadius(int sightTileRadius)
   {
     this.sightTileRadius = sightTileRadius;
   }
 
+  /**
+   * Returns all the polygons that will be visible.
+   * @return arraylist of visible polygons
+   */
   public ArrayList<Polygon> returnVisibilityPolygon()
   {
     //System.out.println(origin);
