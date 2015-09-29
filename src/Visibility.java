@@ -58,44 +58,117 @@ public class Visibility extends Constants
 
   public ArrayList<Polygon> returnVisibilityPolygon()
   {
-    //System.out.println(origin);
+    System.out.println(origin);
     vertices.clear();
     finalPoints.clear();
     segments.clear();
     ArrayList<Polygon> visibilityPolygons = new ArrayList<Polygon>();
-    boundingRadius = sightTileRadius * tileSize + tileSize;
+    boundingRadius = sightTileRadius * tileSize + tileSize * 2;
 
     createGeometry(visibilityPolygons);
     Collections.sort(vertices, Point.PointAngleComparator);
-    Point.cleanList(vertices);
+    Point.removeDuplicateAngles(vertices);
 
-    extendRaysToBounds();
-    //System.out.println(finalPoints.size());
+    extendRaysToBounds(visibilityPolygons);
+    System.out.println(finalPoints.size());
 
-    Polygon shadow = createPointPolygon(finalPoints);
-    visibilityPolygons.add(shadow);
+    //Polygon shadow = createPointPolygon(finalPoints);
+    //visibilityPolygons.add(shadow);
 
     return visibilityPolygons;
   }
 
-  private void extendRaysToBounds()
+  private void extendRaysToBounds(ArrayList<Polygon> visibilityPolygons)
   {
     ArrayList<Point> possiblePoints = new ArrayList<Point>();
+    ArrayList<Point> actualPoints = new ArrayList<Point>();
+    Point previousPoint = null;
     for(Point point : vertices)
     {
+      possiblePoints.clear();
       double angle = point.getAngle();
       double distance = point.getDistance();
-      int dx = (int) (boundingRadius * Math.cos(angle));
-      int dy = (int) (boundingRadius * Math.sin(angle));
-      int x = dx + origin.getX();
-      int y = dy + origin.getY();
+      double dx = (boundingRadius * Math.cos(angle));
+      double dy = (boundingRadius * Math.sin(angle));
+      double x = dx + origin.getX();
+      double y = dy + origin.getY();
       Point extension = new Point(x, y, origin);
 
-      Point p = shortenExtension(extension);
+      possiblePoints = getPossiblePoints(point, angle);
+
+      if(possiblePoints.size() == 0)
+      {
+
+        //possiblePoints.add(origin);
+        //Polygon t = createPointPolygon(possiblePoints);
+        //visibilityPolygons.add(t);
+        if(point.getOuterPoint())
+        {
+          possiblePoints.clear();
+          possiblePoints = getPossiblePoints(extension, extension.getAngle());
+          Point edgePoint;
+          if(possiblePoints.size() != 0)
+          {
+            edgePoint = getShortest(possiblePoints);
+          }
+          else
+          {
+            edgePoint = extension;
+          }
+
+          if(point.getRight())
+          {
+            actualPoints.add(edgePoint);
+            actualPoints.add(point);
+          }
+          else
+          {
+            actualPoints.add(point);
+            actualPoints.add(edgePoint);
+          }
+
+          //possiblePoints.clear();
+
+          //possiblePoints.add(origin);
+          //Polygon o = createPointPolygon(possiblePoints);
+          //visibilityPolygons.add(o);
+        }
+        else
+        {
+          actualPoints.add(point);
+        }
+      }
 
 
-      finalPoints.add(p);
-      finalPoints.add(origin);
+      System.out.println("Point" + point);
+
+      //Point p = shortenExtension(point);
+
+      System.out.println("\n\n");
+    }
+
+    //Collections.sort(actualPoints, Point.PointAngleComparator);
+    //Polygon finalPolygon = createPointPolygon(actualPoints);
+    //visibilityPolygons.add(finalPolygon);
+
+    ArrayList<Point> currentPointList = new ArrayList<Point>();
+    for(int i = 0; i < actualPoints.size(); i++)
+    {
+      currentPointList.clear();
+      int nextIndex = i + 1;
+      Point current = actualPoints.get(i);
+
+      if(nextIndex == actualPoints.size())
+      {
+        nextIndex = 0;
+      }
+      Point next = actualPoints.get(nextIndex);
+
+      currentPointList.add(origin);
+      currentPointList.add(current);
+      currentPointList.add(next);
+      Polygon triangle = createPointPolygon(currentPointList);
+      visibilityPolygons.add(triangle);
     }
   }
 
@@ -103,24 +176,28 @@ public class Visibility extends Constants
   {
     double eAngle = extension.getAngle();
     ArrayList<Point> possiblePoints = getPossiblePoints(extension, eAngle);
-
-    //System.out.println("\n\nOrigin: " + origin);
-    //System.out.println("Extension: " + extension);
-    //for(Point p : possiblePoints)
-    //{
-      //System.out.println(p);
-    //}
+    if(possiblePoints.size() > 0) return null;
 
     Point shortest = getShortest(possiblePoints);
 
+    System.out.println("Extension: " + extension);
+    for(Point p : possiblePoints)
+    {
+      System.out.println("Possible: " + p);
+    }
+    if(shortest != null) System.out.println("Shortest: " + shortest);
+
+
     if(shortest == null)
     {
-      shortest = extension;
+      return extension;
     }
-    //System.out.println("Shortest: " + shortest);
-    //System.out.println("\n\n");
+    else
+    {
+      return null;
+    }
 
-    return shortest;
+    //return shortest;
   }
 
   private ArrayList<Point> getPossiblePoints(Point boundary, double angle)
@@ -139,13 +216,21 @@ public class Visibility extends Constants
       }
       boolean case1 = (a1 < angle && a2 > angle);
       boolean case2 = (a1 > angle && a2 < angle);
-      if(case1 || case2)
+      boolean case3 = (p1.getDistance() < boundary.getDistance());
+      boolean case4 = (p2.getDistance() < boundary.getDistance());
+      if((case1 || case2) && (case3 && case4))
       {
         Point p = getIntersection(s, origin, boundary);
         possible.add(p);
       }
     }
     return possible;
+  }
+
+  private boolean doesIntersect()
+  {
+
+    return false;
   }
 
   private Point getIntersection(Segment s, Point p1, Point p2)
@@ -190,8 +275,6 @@ public class Visibility extends Constants
       x = top / slopeDiff;
       y = slope1 * (x - x1) + y1;
     }
-
-
     //System.out.println(x);
     //System.out.println(y);
 
@@ -236,10 +319,16 @@ public class Visibility extends Constants
     vertices.add(new Point(xStart * tileSize + offsetX, yEnd * tileSize + offsetY, origin));
     vertices.add(new Point(xEnd * tileSize + offsetX, yStart * tileSize + offsetY, origin));
     vertices.add(new Point(xEnd * tileSize + offsetX, yEnd * tileSize + offsetY, origin));
+
+    ArrayList<Segment> tempSegment = new ArrayList<Segment>();
+    ArrayList<Point> tempVertices = new ArrayList<Point>();
+
     for(int i = xStart; i < xEnd; i++)
     {
       for(int j = yStart; j < yEnd; j++)
       {
+        tempSegment.clear();
+        tempVertices.clear();
         Tile tile = Level.map[i][j];
         int nPoints = 4;
         int[] xCoord = new int[nPoints];
@@ -253,30 +342,63 @@ public class Visibility extends Constants
           int yTilePixelOne = yTilePixel + tileSize;
 
           Point zero = new Point(xTilePixel, yTilePixel, origin);
-          vertices.add(zero);
           xCoord[0] = xTilePixel;
           yCoord[0] = yTilePixel;
 
           Point one = new Point(xTilePixelOne, yTilePixel, origin);
-          vertices.add(one);
           xCoord[1] = xTilePixelOne;
           yCoord[1] = yTilePixel;
 
           Point two = new Point(xTilePixelOne, yTilePixelOne, origin);
-          vertices.add(two);
           xCoord[2] = xTilePixelOne;
           yCoord[2] = yTilePixelOne;
 
           Point three = new Point(xTilePixel, yTilePixelOne, origin);
-          vertices.add(three);
           xCoord[3] = xTilePixel;
           yCoord[3] = yTilePixelOne;
 
-          segments.add(new Segment(zero, one));
-          segments.add(new Segment(zero, three));
-          segments.add(new Segment(two, three));
-          segments.add(new Segment(two, one));
+          tempSegment.add(new Segment(zero, one));
+          tempSegment.add(new Segment(zero, three));
+          tempSegment.add(new Segment(two, three));
+          tempSegment.add(new Segment(two, one));
 
+          tempVertices.add(zero);
+          tempVertices.add(one);
+          tempVertices.add(two);
+          tempVertices.add(three);
+
+          Collections.sort(tempVertices, Point.PointAngleComparator);
+          //Point.removeDuplicateAngles(tempVertices);
+
+          int size = tempVertices.size();
+          tempVertices.get(0).setOuterPoint(true);
+          tempVertices.get(0).setRight(true);
+          tempVertices.get(size - 1).setOuterPoint(true);
+          tempVertices.get(size - 1).setRight(false);
+          //vertices.add(tempVertices.get(0));
+          //vertices.add(tempVertices.get(size - 1));
+//
+          //if(size == 4)
+          //{
+          //  Point v1 = tempVertices.get(1);
+          //  Point v2 = tempVertices.get(2);
+          //  v1.setOuterPoint(false);
+          //  v2.setOuterPoint(false);
+          //  if(Math.abs(v1.getX() - v2.getX()) > .1 && Math.abs(v1.getY() - v2.getY()) > .1)
+          //  {
+          //    if(v1.getDistance() < v2.getDistance())
+          //    {
+          //      vertices.add(v1);
+          //    }
+          //    else
+          //    {
+          //      vertices.add(v2);
+          //    }
+          //  }
+          //}
+
+          vertices.addAll(tempVertices);
+          segments.addAll(tempSegment);
           polygons.add(new Polygon(xCoord, yCoord, nPoints));
         }
       }
@@ -291,10 +413,10 @@ public class Visibility extends Constants
     for(int i = 0; i < l; i++)
     {
       Point p = points.get(i);
-      int x = p.getX();
-      int y = p.getY();
-      xPoints[i] = x;
-      yPoints[i] = y;
+      double x = p.getX();
+      double y = p.getY();
+      xPoints[i] = (int) x;
+      yPoints[i] = (int) y;
       //System.out.println(i + "(" + x + ", " + y + ")");
     }
     Polygon polygon = new Polygon(xPoints, yPoints, l);
@@ -319,6 +441,41 @@ public class Visibility extends Constants
     public Point getPointTwo()
     {
       return p2;
+    }
+  }
+
+  private class Box
+  {
+    private Point p;
+    private double dimension;
+    private double distanceAdd;
+
+    public Box(Point p, double dimension)
+    {
+      this.p = p;
+      this.dimension = dimension;
+      this.distanceAdd = Math.sqrt(dimension * dimension + dimension * dimension) / 4;
+    }
+
+    public boolean extendsInside(Point ray, Point origin)
+    {
+      double boxX = p.getX();
+      double boxY = p.getY();
+
+      double angle = ray.getAngle();
+      double distance = ray.getDistance();
+
+      double x = (distance + distanceAdd) * Math.cos(angle);
+      double y = (distance + distanceAdd) * Math.sin(angle);
+
+      if((boxX < x && x < (boxX + dimension)))
+      {
+        if(boxY < y && y < (boxY + dimension))
+        {
+          return true;
+        }
+      }
+      return false;
     }
   }
 }

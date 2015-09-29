@@ -624,7 +624,7 @@ public class ZombiePanel extends JPanel implements KeyListener
     if (yEnd >= Level.height) yEnd = Level.height;
 
     visibility.setOffset(offsetX, offsetY);
-    visibility.setOrigin(xp + offsetX, yp + offsetY);
+    visibility.setOrigin(xp + offsetX + tileSize / 4, yp + offsetY + tileSize / 4);
     visibility.setBoundingTiles(xStart, yStart, xEnd, yEnd);
     visibility.setTileSize(tileSize);
     visibility.setSightTileRadius(gameController.PLAYER_SIGHT);
@@ -635,8 +635,8 @@ public class ZombiePanel extends JPanel implements KeyListener
 
     lightingMask = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2 = lightingMask.createGraphics();
-    //g2.setPaint(Color.black);
-    g2.setPaint(new Color(0, 0, 0, 0));
+    g2.setPaint(Color.black);
+    //g2.setPaint(new Color(0, 0, 0, 0));
     g2.fillRect(0, 0, lightingMask.getWidth(), lightingMask.getHeight());
     g2.dispose();
 
@@ -645,12 +645,12 @@ public class ZombiePanel extends JPanel implements KeyListener
 
     int type = AlphaComposite.DST_OUT;
     AlphaComposite alphaComposite = AlphaComposite.getInstance(type, 1f);
-    //g2d.setComposite(alphaComposite);
-    g2d.setPaint(Color.BLUE);
+    g2d.setComposite(alphaComposite);
+    //g2d.setPaint(Color.BLUE);
 
     for(int i = 0; i < visibilityPolygons.size(); i++)
     {
-      g2d.drawPolygon(visibilityPolygons.get(i));
+      g2d.fillPolygon(visibilityPolygons.get(i));
     }
 
 
@@ -762,10 +762,10 @@ public class ZombiePanel extends JPanel implements KeyListener
     for(int i = 0; i < l; i++)
     {
       Point p = points.get(i);
-      int x = p.getX();
-      int y = p.getY();
-      xPoints[i] = x;
-      yPoints[i] = y;
+      double x = p.getX();
+      double y = p.getY();
+      xPoints[i] = (int) x;
+      yPoints[i] = (int) y;
     }
     Polygon polygon = new Polygon(xPoints, yPoints, l);
     return polygon;

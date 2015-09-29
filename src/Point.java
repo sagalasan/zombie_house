@@ -8,15 +8,17 @@ public class Point implements Comparator<Point>
 {
   private static final double PI = Math.PI;
   private static final double TWO_PI = Math.PI * 2;
-  private int x;
-  private int y;
+  private double x;
+  private double y;
   private double dx;
   private double dy;
   private double angle;
   private boolean noAngle;
   private double distance;
+  private boolean outerPoint = false;
+  private boolean rightSide;
 
-  public Point(int x, int y, Point origin)
+  public Point(double x, double y, Point origin)
   {
     this.x = x;
     this.y = y;
@@ -24,17 +26,37 @@ public class Point implements Comparator<Point>
     if(!this.noAngle) calculateAngle(origin);
   }
 
-  public Point(int x, int y)
+  public Point(double x, double y)
   {
     this(x, y, null);
   }
 
-  public int getX()
+  public void setOuterPoint(boolean outerPoint)
+  {
+    this.outerPoint = outerPoint;
+  }
+
+  public void setRight(boolean rightSide)
+  {
+    this.rightSide = rightSide;
+  }
+
+  public boolean getOuterPoint()
+  {
+    return outerPoint;
+  }
+
+  public boolean getRight()
+  {
+    return rightSide;
+  }
+
+  public double getX()
   {
     return x;
   }
 
-  public int getY()
+  public double getY()
   {
     return y;
   }
@@ -49,7 +71,7 @@ public class Point implements Comparator<Point>
     return distance;
   }
 
-  public void translate(int dx, int dy)
+  public void translate(double dx, double dy)
   {
     this.x += dx;
     this.y += dy;
@@ -71,8 +93,8 @@ public class Point implements Comparator<Point>
 
   private void calculateAngle(Point origin)
   {
-    int ox = origin.getX();
-    int oy = origin.getY();
+    double ox = origin.getX();
+    double oy = origin.getY();
     dx = this.x - ox;
     dy = this.y - oy;
 
@@ -145,8 +167,8 @@ public class Point implements Comparator<Point>
       double angleDiff = current.getAngle() - next.getAngle();
       if(Math.abs(angleDiff) < .001)
       {
-        int dx = current.getX() - next.getX();
-        int dy = current.getY() - next.getY();
+        double dx = current.getX() - next.getX();
+        double dy = current.getY() - next.getY();
         if(dx == 0 && dy == 0)
         {
           points.remove(i);
@@ -159,6 +181,22 @@ public class Point implements Comparator<Point>
           i--;
         }
         if(i < 0) i = 0;
+      }
+    }
+  }
+
+  public static void removeDuplicateAngles(ArrayList<Point> points)
+  {
+    for(int i = 0; i < points.size() - 1; i++)
+    {
+      Point current = points.get(i);
+      Point next = points.get(i + 1);
+      double angleDiff = current.getAngle() - next.getAngle();
+      if(Math.abs(angleDiff) < .001)
+      {
+        points.remove(i + 1);
+        points.get(i).setOuterPoint(false);
+        i--;
       }
     }
   }
