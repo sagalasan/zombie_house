@@ -2,10 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,8 +14,11 @@ import java.util.*;
 /**
  * Created by Jalen on 9/9/2015.
  */
-public class ZombiePanel extends JPanel implements KeyListener
+public class ZombiePanel extends JPanel implements KeyListener, ComponentListener
 {
+  private static final int DEFAULT_WIDTH = 1920;
+  private static final int DEFAULT_HEIGHT = 1080;
+  private int width, height;
   //Level level = new Level();
 
   //paints buffered image of map and characters on top
@@ -62,18 +62,22 @@ public class ZombiePanel extends JPanel implements KeyListener
 
   public ZombiePanel()
   {
+    width = DEFAULT_WIDTH;
+    height = DEFAULT_HEIGHT;
 
 
     gameController = new GameControl(this);
+    tileSize = gameController.SIZE;
+    //addComponentListener(this);
     addKeyListener(this);
     initializeImages();
     constructArrayImages();
     constructBufferedImage();
     visibility = new Visibility();
 
-    tileSize = gameController.SIZE;
 
-    playerSight = gameController.PLAYER_SIGHT * gameController.SIZE;
+
+    playerSight = gameController.PLAYER_SIGHT * tileSize;
     colorBlackOpaque = new Color(0, 0, 0, 255);
     colorBlackPartial = new Color(0, 0, 0, 220);
     colorBlackTransparent = new Color(0, 0, 0, 0);
@@ -235,7 +239,10 @@ public class ZombiePanel extends JPanel implements KeyListener
     {
       floorImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_0.png"));
       floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_90.png"));
+      floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_90.png"));
       floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_180.png"));
+      floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_180.png"));
+      floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_270.png"));
       floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_270.png"));
 
       floorImages[4] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_0.png"));
@@ -252,7 +259,7 @@ public class ZombiePanel extends JPanel implements KeyListener
       firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
       firetrapImage = firetrapImage.getScaledInstance(gameController.SIZE, gameController.SIZE, Image.SCALE_DEFAULT);
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
-      blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
+      blacknessImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       pillarImage = wallImage;
       playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
 
@@ -478,8 +485,8 @@ public class ZombiePanel extends JPanel implements KeyListener
     {
       for (int j = 0; j < Level.height; j++)
       {
-        int tileDrawX = offsetX + i * gameController.SIZE;
-        int tileDrawY = offsetY + j*gameController.SIZE;
+        int tileDrawX = offsetX + i * tileSize;//gameController.SIZE;
+        int tileDrawY = offsetY + j * tileSize;//gameController.SIZE;
         Tile checkTile = Level.map[i][j];
         if (checkTile.getType() == gameController.FIRETRAP) {
           //draw firetrap instead
@@ -506,8 +513,8 @@ public class ZombiePanel extends JPanel implements KeyListener
     {
       for (int j = 0; j < Level.height; j++)
       {
-        int tileDrawX = offsetX + i * gameController.SIZE;
-        int tileDrawY = offsetY + j * gameController.SIZE;
+        int tileDrawX = offsetX + i * tileSize;//gameController.SIZE;
+        int tileDrawY = offsetY + j * tileSize;//gameController.SIZE;
         Tile checkTile = Level.map[i][j];
         if (checkTile.hasCombusted())
         {
@@ -577,18 +584,25 @@ public class ZombiePanel extends JPanel implements KeyListener
   {
     mapBufferedImage = new BufferedImage(gameController.SIZE * Level.width, gameController.SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
     mapScorchedMaskImage = new BufferedImage(gameController.SIZE * Level.width, gameController.SIZE * Level.height, BufferedImage.TYPE_INT_ARGB);
+    //mapBufferedImage = new BufferedImage(tileSize * Level.width, tileSize * Level.height, BufferedImage.TYPE_INT_ARGB);
+    //mapScorchedMaskImage = new BufferedImage(tileSize * Level.width, tileSize * Level.height, BufferedImage.TYPE_INT_ARGB);
+
+
 
     for (int i = 0; i < Level.width; i++)
     {
       for (int j = 0; j < Level.height; j++)
       {
         mapBufferedImage.createGraphics().drawImage(mapImages[i][j], gameController.SIZE * i, gameController.SIZE * j, null);
+        //mapBufferedImage.createGraphics().drawImage(mapImages[i][j], tileSize * i, tileSize * j, null);
         if (scorchedLocations[i][j] == 1)
         {
           mapBufferedImage.createGraphics().drawImage(scorchedMask, gameController.SIZE * i, gameController.SIZE * j, null);
+          //mapBufferedImage.createGraphics().drawImage(scorchedMask, tileSize * i, tileSize * j, null);
         }
       }
     }
+
   }
 
   private void createVisibilityMask(int offsetX, int offsetY)
@@ -638,6 +652,14 @@ public class ZombiePanel extends JPanel implements KeyListener
     }
 
     g2d.dispose();
+  }
+
+  private void windowResized()
+  {
+    int w = getWidth();
+    int h = getHeight();
+    tileSize = (int) (w / 13.5);
+    constructBufferedImage();
   }
 
 
@@ -731,4 +753,27 @@ public class ZombiePanel extends JPanel implements KeyListener
     return exitY;
   }
 
+  @Override
+  public void componentResized(ComponentEvent e)
+  {
+    windowResized();
+  }
+
+  @Override
+  public void componentMoved(ComponentEvent e)
+  {
+
+  }
+
+  @Override
+  public void componentShown(ComponentEvent e)
+  {
+
+  }
+
+  @Override
+  public void componentHidden(ComponentEvent e)
+  {
+
+  }
 }
