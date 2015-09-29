@@ -101,7 +101,7 @@ public class Constants {
 
   int SPRITE_SPREAD_DISTANCE = 64;
 
-  double MASTER_ZOMBIE_SPEED = 1.5;
+  double MASTER_ZOMBIE_SPEED = 1.0;
   double ZOMBIE_DEFAULT_SPEED = .50;
   double ZOMBIE_SMELL = 7.0;
   double ZOMBIE_SPAWN_RATE = .010;
