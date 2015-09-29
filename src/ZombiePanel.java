@@ -58,9 +58,20 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
   public boolean gameState = false;
   private int levelNumber = 1;
   ZombieFrame frame;
+  BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+
+  // Create a new blank cursor.
+  Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+          cursorImg, new java.awt.Point(0, 0), "blank cursor");
+
 
   public ZombiePanel()
   {
+
+    // Set the blank cursor to the JFrame.
+    setCursorBlank();
+
+
     width = DEFAULT_WIDTH;
     height = DEFAULT_HEIGHT;
 
@@ -95,6 +106,11 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
     frame = f;
   }
 
+  public void setCursorBlank()
+  {
+    this.setCursor(blankCursor);
+  }
+
   /**
    * Shows level complete dialog
    */
@@ -126,6 +142,7 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
     {
       //set the game state to false to notify that the player
       //did not die and to hold the new map values
+      setCursorBlank();
       gameState = false;
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
@@ -186,8 +203,9 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
             JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, icon);//icon can be any saved image
 
     //If user chooses to reset then reset everyting and create a new gameController
-    if (reply == JOptionPane.YES_OPTION)
-    {
+    if (reply == JOptionPane.YES_OPTION) {
+      setCursorBlank();
+
       gameState = true;
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();

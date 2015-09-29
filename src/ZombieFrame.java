@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 /**
  * Created by Jalen on 9/9/2015.
  */
@@ -96,7 +95,7 @@ public class ZombieFrame extends JFrame implements KeyListener{
 
 
 
-
+  //message for pup up spinners
   Object[] message = {
           "Player sight:", playerSight,
           "Player speed:", playerSpeed,
