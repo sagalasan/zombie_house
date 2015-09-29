@@ -17,7 +17,6 @@ public class GameControl extends Constants
 {
 
   static Player userPlayer;
- //static Zombie zombie1;
   ZombiePanel reference;
 
   static ArrayList<Zombie> zombieList;
@@ -27,7 +26,8 @@ public class GameControl extends Constants
   double walkTotalPanValue;
   double hitWallTotalPanValue;
 
-  private Tile[][] mapCopy; //this will be used if the player dies to preserve the map
+  private Tile[][] mapCopy;
+  //this will be used if the player dies to preserve the map
 
   Level level;
 
@@ -108,7 +108,6 @@ public class GameControl extends Constants
       walkTotalPanValue = 0;
       for(Zombie zombie : zombieList)
       {
-
         if (zombie.isAlive())
         {
           zombie.move();
@@ -136,11 +135,8 @@ public class GameControl extends Constants
             zombie.setAlive(false);
             zombie.startDeathAnimation();
           }
-
-
           if(zombie.getX() == userPlayer.getX() && zombie.getY() == userPlayer.getY())
           {
-            //set player death to true so we can reload the map
             reference.resetGame();
           }
         }
@@ -202,7 +198,6 @@ public class GameControl extends Constants
         z.setXPixel(z.getStartX()*SIZE);
         z.setYPixel(z.getStartY()*SIZE);
       }
-      //TODO make sure the traps come back!
     }
     else
     {
@@ -223,7 +218,6 @@ public class GameControl extends Constants
     reference.setExitX(level.getExitRoomX());
     reference.setExitY(level.getStartExitY());
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
-    //could possibly clone zombielist so level will always have the original info for reloading
     zombieReactionTimer.setInitialDelay(0);
     zombieReactionTimer.start();
 
@@ -278,8 +272,5 @@ public class GameControl extends Constants
   {
     return userPlayer;
   }
-
-
-  //astar probably will go here.  Zombie arrays and players can be referenced from here
 
 }
