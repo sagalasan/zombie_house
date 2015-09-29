@@ -591,18 +591,6 @@ public class ZombiePanel extends JPanel implements KeyListener
     }
   }
 
-  private boolean areArrayMapEqaul()
-  {
-    for(int i = 0; i < Level.width; i++)
-    {
-      for(int j = 0; j < Level.height; j++)
-      {
-
-      }
-    }
-    return true;
-  }
-
   private void createVisibilityMask(int offsetX, int offsetY)
   {
     ArrayList<Polygon> visibilityPolygons;
