@@ -58,7 +58,7 @@ public class Visibility extends Constants
 
   public ArrayList<Polygon> returnVisibilityPolygon()
   {
-    System.out.println(origin);
+    //System.out.println(origin);
     vertices.clear();
     finalPoints.clear();
     segments.clear();
@@ -70,7 +70,7 @@ public class Visibility extends Constants
     Point.removeDuplicateAngles(vertices);
 
     extendRaysToBounds(visibilityPolygons);
-    System.out.println(finalPoints.size());
+    //System.out.println(finalPoints.size());
 
     //Polygon shadow = createPointPolygon(finalPoints);
     //visibilityPolygons.add(shadow);
@@ -140,11 +140,11 @@ public class Visibility extends Constants
       }
 
 
-      System.out.println("Point" + point);
+      //System.out.println("Point" + point);
 
       //Point p = shortenExtension(point);
 
-      System.out.println("\n\n");
+      //System.out.println("\n\n");
     }
 
     //Collections.sort(actualPoints, Point.PointAngleComparator);
@@ -180,12 +180,12 @@ public class Visibility extends Constants
 
     Point shortest = getShortest(possiblePoints);
 
-    System.out.println("Extension: " + extension);
-    for(Point p : possiblePoints)
-    {
-      System.out.println("Possible: " + p);
-    }
-    if(shortest != null) System.out.println("Shortest: " + shortest);
+    //System.out.println("Extension: " + extension);
+    ////for(Point p : possiblePoints)
+    //{
+      //System.out.println("Possible: " + p);
+    //}
+    //if(shortest != null) System.out.println("Shortest: " + shortest);
 
 
     if(shortest == null)
