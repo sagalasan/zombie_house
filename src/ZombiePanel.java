@@ -517,9 +517,9 @@ public class ZombiePanel extends JPanel implements KeyListener
     colorBlackTransparent = new Color(0, 0, 0, 0);
     Color[] colors = {colorBlackTransparent, colorBlackPartial, colorBlackOpaque};
 
-    //playerGradient = new RadialGradientPaint(getWidth() / 2, getHeight() / 2, playerSight, fractions, colors);
-    //g2d.setPaint(playerGradient);
-    //g2d.fillRect(0, 0, getWidth(), getHeight());
+    playerGradient = new RadialGradientPaint(getWidth() / 2, getHeight() / 2, playerSight, fractions, colors);
+    g2d.setPaint(playerGradient);
+    g2d.fillRect(0, 0, getWidth(), getHeight());
     g2d.drawImage(lightingMask, 0, 0, null);
   }
 
