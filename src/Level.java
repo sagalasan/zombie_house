@@ -146,7 +146,7 @@ public class Level extends Constants {
                   }
                   else
                   {
-                    masterZombieSpawnRate += .02;
+                    masterZombieSpawnRate += .001;
                   }
                 }
               }
