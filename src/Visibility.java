@@ -1,11 +1,9 @@
 import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Created by kasac on 9/27/2015.
+ * Created by christiaan on 9/27/2015.
  * Class is designed to compute shadows
  */
 public class Visibility extends Constants
