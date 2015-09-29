@@ -5,9 +5,7 @@ import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Jalen on 9/10/2015.
@@ -83,7 +81,6 @@ public class GameControl extends Constants
       }
       //get feet of user player and test if feet are walking on the tile
       Tile playerTile = Level.map[userPlayer.getX()][userPlayer.getY()];
-      //Tile abovePlayer = Level.map[userPlayer.getX()][userPlayer.getY()+1];
       if (userPlayer.isRunning() && userPlayer.getFeetBoundingRectangle().intersects(playerTile.getRectangleForFiretrap())
           && playerTile.getType() == FIRETRAP)
       {
@@ -229,7 +226,7 @@ public class GameControl extends Constants
   {
     try
     {
-      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(fileName));
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
       FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);

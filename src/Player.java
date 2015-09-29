@@ -4,7 +4,6 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * Created by Jalen on 9/9/2015.
@@ -15,7 +14,7 @@ public class Player extends Entity
   private boolean running = false;
   private boolean moving = false;
   private boolean canMove = true;
-  private int runSoundSpeed = 400;
+  private int runSoundSpeed = 600;
   private int walkSoundSpeed = 800;
 
   private boolean movePlayerUp = false;
@@ -31,7 +30,6 @@ public class Player extends Entity
   {
     super("Player", x, y);
     setSpeed(getPLAYER_DEFAULT_SPEED());
-    System.out.println("set player default speed to "+ PLAYER_DEFAULT_SPEED+ " "+ getPLAYER_DEFAULT_SPEED());
     setSpriteSheet(playerSpriteSheet);
     resetCurrentFrame();
   }
@@ -203,7 +201,7 @@ public class Player extends Entity
   {
     try
     {
-      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(fileName));
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
       clip.start();

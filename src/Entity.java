@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -49,7 +48,7 @@ public abstract class Entity extends Constants
   {
     try
     {
-      this.spriteSheet = ImageIO.read(new File(spriteSheet));
+      this.spriteSheet = ImageIO.read(getClass().getResource(spriteSheet));
     }
     catch (IOException e)
     {

@@ -5,7 +5,6 @@ import java.util.*;
  */
 public class Zombie extends Entity
 {
-  private LinkedList<Tile> movementQueue;
 
   private Random rand = new Random();
 
@@ -20,7 +19,6 @@ public class Zombie extends Entity
   private boolean moveZombieRight;
   private boolean moveZombieLeft;
 
-  private int hitWallCounter = 0;
   private int startX, startY;
 
   private String lineZombieSpriteSheet = "character_images/line_zombie_sprite_sheet.png";
@@ -219,7 +217,6 @@ public class Zombie extends Entity
     }
     if (hitwall())
     {
-      hitWallCounter+=1;
       startAnimation();
     }
     if (smellPlayer)

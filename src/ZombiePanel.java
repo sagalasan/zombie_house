@@ -268,39 +268,40 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
     floorImages = new BufferedImage[12];
     try
     {
-      floorImages[0] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_0.png"));
-      floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_90.png"));
-      floorImages[1] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_90.png"));
-      floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_180.png"));
-      floorImages[2] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_180.png"));
-      floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_270.png"));
-      floorImages[3] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_0_270.png"));
+      //change getClass().getresource to new file if you want to run in intellij
+      floorImages[0] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_0.png"));
+      floorImages[1] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_90.png"));
+      floorImages[1] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_90.png"));
+      floorImages[2] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_180.png"));
+      floorImages[2] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_180.png"));
+      floorImages[3] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_270.png"));
+      floorImages[3] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_0_270.png"));
 
-      floorImages[4] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_0.png"));
-      floorImages[5] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_90.png"));
-      floorImages[6] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_180.png"));
-      floorImages[7] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_1_270.png"));
+      floorImages[4] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_1_0.png"));
+      floorImages[5] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_1_90.png"));
+      floorImages[6] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_1_180.png"));
+      floorImages[7] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_1_270.png"));
 
-      floorImages[8] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_0.png"));
-      floorImages[9] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_90.png"));
-      floorImages[10] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_180.png"));
-      floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
+      floorImages[8] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_2_0.png"));
+      floorImages[9] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_2_90.png"));
+      floorImages[10] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_2_180.png"));
+      floorImages[11] = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_floor_2_270.png"));
 
-      wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+      wallImage = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_wall_test.png"));
       //firetrap image from http://opengameart.org/node/8941
-      firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
+      firetrapImage = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_firetrap.png"));
       firetrapImage = firetrapImage.getScaledInstance(gameController.SIZE, gameController.SIZE, Image.SCALE_DEFAULT);
       //Image for firetrap from http://opengameart.org/content/camp-fire-animation-finished
 
-      exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
+      exitImage = ImageIO.read(getClass().getResource("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       pillarImage = wallImage;
       //all player/zombie sprites are made from
       // http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/
-      playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
+      playerSprite = ImageIO.read(getClass().getResource("character_images/player_sprite_sheet.png"));
 
-      scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
-      //playerVisibleMask = ImageIO.read(new File("opacity_masks/zombie_house_player_mask.png"));
+      scorchedMask = ImageIO.read(getClass().getResource("tile_images/scorched_mask.png"));
+      //playerVisibleMask = ImageIO.read(getClass().getResource("opacity_masks/zombie_house_player_mask.png"));
     }
     catch (IOException e)
     {

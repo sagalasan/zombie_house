@@ -118,15 +118,18 @@ public class ZombieFrame extends JFrame implements KeyListener{
 
 
     this.setLayout(new BorderLayout());
-    //this.setContentPane(new JLabel(new ImageIcon("tile_images/background.png")));
-    JLabel background = new JLabel(new ImageIcon(("tile_images/background.png")));
+    JLabel background = new JLabel(new ImageIcon(getClass().getResource(("tile_images/background.png"))));
+    //JLabel background = new JLabel(new ImageIcon(("tile_images/background.png")));
     background.setLayout(new BorderLayout());
-    this.setContentPane( background );
+    this.setContentPane(background);
     background.setOpaque(false);
     addKeyListener(this);
     setFocusable(true);
-    buttonBackground = new ImageIcon("tile_images/game_start.gif");
-    headerBackground = new ImageIcon("tile_images/header.gif");
+
+    //buttonBackground = new ImageIcon("tile_images/game_start.gif");
+    //headerBackground = new ImageIcon("tile_images/header.gif");
+    buttonBackground = new ImageIcon(getClass().getResource("tile_images/game_start.gif"));
+    headerBackground = new ImageIcon(getClass().getResource("tile_images/header.gif"));
 
     welcomeText = new JLabel("", SwingConstants.CENTER);
     welcomeText.setPreferredSize(new Dimension(this.getWidth(), 200));

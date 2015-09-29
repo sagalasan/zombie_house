@@ -122,7 +122,7 @@ public class Tile extends Constants {
   {
     try
     {
-      this.spriteSheet = ImageIO.read(new File("tile_images/fire.png"));
+      this.spriteSheet = ImageIO.read(getClass().getResource("tile_images/fire.png"));
     }
     catch (IOException e)
     {
