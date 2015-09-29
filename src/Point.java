@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * Created by kasac on 9/25/2015.
+ * Created by christiaan on 9/25/2015.
  */
 public class Point implements Comparator<Point>
 {
@@ -18,6 +18,12 @@ public class Point implements Comparator<Point>
   private boolean outerPoint = false;
   private boolean rightSide;
 
+  /**
+   * Public constructor used for non origin points
+   * @param x
+   * @param y
+   * @param origin
+   */
   public Point(double x, double y, Point origin)
   {
     this.x = x;
@@ -26,62 +32,92 @@ public class Point implements Comparator<Point>
     if(!this.noAngle) calculateAngle(origin);
   }
 
+  /**
+   * Public constructor used for the origin
+   * @param x
+   * @param y
+   */
   public Point(double x, double y)
   {
     this(x, y, null);
   }
 
+  /**
+   * Sets whether the point is an outer point
+   * @param outerPoint
+   */
   public void setOuterPoint(boolean outerPoint)
   {
     this.outerPoint = outerPoint;
   }
 
+  /**
+   * Sets whether the point is on the right
+   * @param rightSide
+   */
   public void setRight(boolean rightSide)
   {
     this.rightSide = rightSide;
   }
 
+  /**
+   * True when the point does not stop light
+   * @return
+   */
   public boolean getOuterPoint()
   {
     return outerPoint;
   }
 
+  /**
+   * True when the visible portion is on the right
+   * @return
+   */
   public boolean getRight()
   {
     return rightSide;
   }
 
+  /**
+   * Gets the x coordinate
+   * @return
+   */
   public double getX()
   {
     return x;
   }
 
+  /**
+   * Gets the Y coordinate
+   * @return
+   */
   public double getY()
   {
     return y;
   }
 
+  /**
+   * Gets the angle of the point from +x axis
+   * @return
+   */
   public double getAngle()
   {
     return angle;
   }
 
+  /**
+   * Gets the distance of the point from the origin
+   * @return
+   */
   public double getDistance()
   {
     return distance;
   }
 
-  public void translate(double dx, double dy)
-  {
-    this.x += dx;
-    this.y += dy;
-  }
-
-  public int compareAngle(Point origin, Point p1, Point p2)
-  {
-    return 0;
-  }
-
+  /**
+   * Used to see points on the commandline
+   * @return
+   */
   @Override
   public String toString()
   {
@@ -128,6 +164,9 @@ public class Point implements Comparator<Point>
     return (int) (p1.getAngle() - p2.getAngle());
   }
 
+  /**
+   * Static comparator for sorting points by angle
+   */
   public static Comparator<Point> PointAngleComparator = new Comparator<Point>()
   {
     @Override
@@ -158,6 +197,10 @@ public class Point implements Comparator<Point>
     }
   };
 
+  /**
+   * Static method that removes duplicate angles from a sorted arraylist
+   * @param points
+   */
   public static void removeDuplicateAngles(ArrayList<Point> points)
   {
     for(int i = 0; i < points.size() - 1; i++)
