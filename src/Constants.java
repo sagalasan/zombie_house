@@ -12,7 +12,7 @@ public class Constants {
   final int BLACKNESS = 6;
   final int FIRETRAP = 7;
 
-  static double PLAYER_DEFAULT_SPEED = 3.0;
+  static double PLAYER_DEFAULT_SPEED = 1.0;
   static double PLAYER_RUN_SPEED = 2.0;
   static double PLAYER_DEFAULT_STAMINA = 5.0;
   static double PLAYER_REGEN_STAMINA = .20;

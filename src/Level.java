@@ -149,6 +149,7 @@ public class Level extends Constants {
             }
             if(rooms == 0)
             {
+
               setStartX(startX = rec.room.x + j);
               setStartY(startY = rec.room.y + i);
               System.out.println("Starting room" + startX + "x" + startY);
