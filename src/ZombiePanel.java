@@ -181,7 +181,10 @@ public class ZombiePanel extends JPanel implements KeyListener
       frame.welcomeText.setVisible(true);
       frame.button.setVisible(true);
       frame.exit.setVisible(true);
+      frame.setFocusable(true);
       this.setVisible(false);
+      frame.setPanelIsOpen(false);
+
     }
 
   }
