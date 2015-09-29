@@ -134,30 +134,32 @@ public abstract class Entity extends Constants
   {
     return y;
   }
+
+  /**
+   *
+   * @return returns the rectangle around the feet of the sprite
+   */
   public Rectangle getFeetBoundingRectangle()
   {
     Rectangle feet = new Rectangle((int)xPixel + PLAYER_FEET_PIXEL_X,
         (int)yPixel + PLAYER_FEET_PIXEL_Y, PLAYER_SPRITE_WIDTH - PLAYER_FEET_PIXEL_X, PLAYER_SPRITE_HEIGHT - PLAYER_FEET_PIXEL_Y );
     return feet;
   }
-  //returns true rectangle made with possible x and y pixelse intersect with a nearby wall
-  //false if does not intersect with wall
+
+  /**
+   *
+   * @return returns an altered rectangle that roughly covers the area of the
+   * legs of a sprite
+   */
   public Rectangle getBoundingRectangleForFire()
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel - 5, (int)yPixel + 40, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT - 50);
     return legalRectangle;
   }
+
   public Rectangle getBoundingRectangle()
   {
     return new java.awt.Rectangle((int)xPixel + 5, (int)yPixel +5 , PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT -5 );
-  }
-  public void setX(int x)
-  {
-    this.x = x;
-  }
-  public void setY(int y)
-  {
-    this.y = y;
   }
 
   public void setAlive(boolean aliveStatus)
@@ -181,24 +183,6 @@ public abstract class Entity extends Constants
   {
     this.speed = speed;
   }
-
-  /**
-  public boolean legalMove(int x, int y) {
-    //if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
-    //        || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
-    //if wall, black, or pillar
-    //and does not collide with another object
-    if (x >= 0 && x < Level.width && y >= 0 && y < Level.height)
-    {
-      if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
-          || Level.map[x][y].getType() == PILLAR)
-      {
-        return false;
-      }
-    }
-    return true;
-  }
-**/
 
   private boolean legalXMove(int possibleX)
   {
@@ -228,40 +212,9 @@ public abstract class Entity extends Constants
   /**
    *
    * @param possibleXPixel
-   * @param possibleYPixel
    * @return returns true if the rectangle made with the possible x and y pixels intersects with a nearby wall
    *   If it does not intersect with a wall, returns false
    */
-  /**
-  private boolean intersectsWithWall(double possibleXPixel, double possibleYPixel)
-  {
-    java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel, (int)possibleYPixel , PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-    ArrayList<Tile> surroundingWalls = new ArrayList<>();
-    //check in 9 directions if legalrect intersects with a wall.
-    for (int i = -1; i < 2;i++)
-    {
-      for (int j = -1; j < 2; j++)
-      {
-        if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
-        {
-          if (Level.map[i+x][j+y].getType() == WALL || Level.map[i+x][j+y].getType() == PILLAR )
-          {
-            surroundingWalls.add(Level.map[i + x][j + y]);
-          }
-        }
-      }
-    }
-    for (Tile wall : surroundingWalls)
-    {
-      if (legalRectangle.intersects(wall.getBoundingRectangle()))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
-   **/
   private boolean intersectsWithZombieXPixel(double possibleXPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel +5, (int)yPixel+5, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT-5);
@@ -276,6 +229,12 @@ public abstract class Entity extends Constants
     }
     return false;
   }
+  /**
+   *
+   * @param possibleYPixel
+   * @return returns true if the rectangle made with the possible x and y pixels intersects with a nearby wall
+   *   If it does not intersect with a wall, returns false
+   */
   private boolean intersectsWithZombieYPixel(double possibleYPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel +5, (int)possibleYPixel+5, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT-5);
@@ -290,6 +249,12 @@ public abstract class Entity extends Constants
     }
     return false;
   }
+
+  /**
+   *
+   * @param possibleXPixel
+   * @return used to check if the possible x pixel will intersect with a wall
+   */
   private boolean intersectsWithWallXPixel(double possibleXPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)possibleXPixel +5, (int)yPixel+5, PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT-5);
@@ -318,6 +283,12 @@ public abstract class Entity extends Constants
     return false;
   }
 
+  /**
+   *
+   * @param possibleYPixel
+   * @return used to check if the possible y pixle will intersect
+   * with a wall above or below the zombies position
+   */
   private boolean intersectsWithWallYPixel(double possibleYPixel)
   {
     java.awt.Rectangle legalRectangle = new java.awt.Rectangle((int)xPixel+5, (int)possibleYPixel+5 , PLAYER_SPRITE_WIDTH-5, PLAYER_SPRITE_HEIGHT - 5);
@@ -384,48 +355,32 @@ public abstract class Entity extends Constants
     int possibleX = (int)possibleXPixel / SIZE;
     int possibleY = (int)possibleYPixel / SIZE;
 
-    //if (legalMove(possibleX, possibleY))
-    //{
-      //if legal x move, and legal y move
-      if(legalXMove(possibleX))
-      {
-        x = possibleX;
-      }
-      if(legalYMove(possibleY))
-      {
-        y = possibleY;
-      }
-      //x = possibleX;
-      //y = possibleY;
-      //if (!intersectsWithWall(possibleXPixel, possibleYPixel))
-      if (!intersectsWithWallXPixel(possibleXPixel) && !intersectsWithZombieXPixel(possibleXPixel))
-      {
-        //hitWall = true;
-        //check left and right, if open, move x pixel right
-        xPixel = possibleXPixel;
-        //yPixel = possibleYPixel;
-      }
-      else
-      {
-        //stopAnimation();
-        hitWall = true;
-      }
-      if (!intersectsWithWallYPixel(possibleYPixel) && !intersectsWithZombieYPixel(possibleYPixel))
-      {
-        yPixel = possibleYPixel;
-      }
-      else
-      {
-        //stopAnimation();
-        hitWall = true;
-      }
+    if(legalXMove(possibleX))
+    {
+      x = possibleX;
     }
-    //else
-    //{
-     // stopAnimation();
-     // hitWall = true;
-    //}
+    if(legalYMove(possibleY))
+    {
+      y = possibleY;
+    }
+    if (!intersectsWithWallXPixel(possibleXPixel) && !intersectsWithZombieXPixel(possibleXPixel))
+    {
+      xPixel = possibleXPixel;
+    }
+    else
+    {
+      hitWall = true;
+    }
+    if (!intersectsWithWallYPixel(possibleYPixel) && !intersectsWithZombieYPixel(possibleYPixel))
+    {
+      yPixel = possibleYPixel;
+    }
+    else
+    {
+      hitWall = true;
+    }
   }
+}
 
 
 

@@ -161,6 +161,11 @@ public class Tile extends Constants {
     currentFrame = spriteSheet.getSubimage(15 + (indexForPicture * SPRITE_SPREAD_DISTANCE),
         0, FIRE_ANIMATION_WIDTH, FIRE_ANIMATION_HEIGHT);
   }
+
+  /**
+   *
+   * @return returns the current frame that needs to be drawn of this tile
+   */
   public Image getCurrentFrame()
   {
     return currentFrame.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
@@ -172,12 +177,9 @@ public class Tile extends Constants {
     public void actionPerformed(ActionEvent e)
     {
       totalRunTime += 150;
-      //System.out.println(totalRunTime);
       if (totalRunTime >= 15000)
       {
         combusting = false;
-        //combusted = true;
-        //System.out.println("finsihed combusting");
         stopCombust();
       }
       combusting = true;
@@ -224,7 +226,6 @@ public class Tile extends Constants {
           {
             checkingTile.explode();
           }
-          //checkingTile.combusting = true;
           checkingTile.combust();
         }
       }
@@ -306,7 +307,6 @@ public class Tile extends Constants {
    */
   public void setFrontier(PriorityQueue<Tile> frontier, Tile end, Tile[][] map,int numberOfFrontierDirections)
   {
-    //change directions to 4 if reg astar stuff
     directions = new Tile[numberOfFrontierDirections];
     for (int i = 0; i< numberOfFrontierDirections; i++)
     {
@@ -318,10 +318,9 @@ public class Tile extends Constants {
             && map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]].type != WALL)
         {
           directions[i] = map[x + X_DIRECTIONS[i]][y + Y_DIRECTIONS[i]];
-          //if it hasnt been visited before
+          //This will set the parent if it hasnt been done so already
           if (directions[i].parent == null)
           {
-           // visited = true;
             directions[i].parent = this;
             directions[i].costSoFar = this.costSoFar + directions[i].tileTravelCost;
             frontier.add(directions[i]);

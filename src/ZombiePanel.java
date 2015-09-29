@@ -249,11 +249,16 @@ public class ZombiePanel extends JPanel implements KeyListener
       floorImages[11] = ImageIO.read(new File("tile_images/zombie_house_tile_floor_2_270.png"));
 
       wallImage = ImageIO.read(new File("tile_images/zombie_house_tile_wall_test.png"));
+      //firetrap image from http://opengameart.org/node/8941
       firetrapImage = ImageIO.read(new File("tile_images/zombie_house_tile_firetrap.png"));
       firetrapImage = firetrapImage.getScaledInstance(gameController.SIZE, gameController.SIZE, Image.SCALE_DEFAULT);
+      //Image for firetrap from http://opengameart.org/content/camp-fire-animation-finished
+
       exitImage = ImageIO.read(new File("tile_images/zombie_house_tile_exit.png"));
       blacknessImage = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
       pillarImage = wallImage;
+      //all player/zombie sprites are made from
+      // http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/
       playerSprite = ImageIO.read(new File("character_images/player_sprite_sheet.png"));
 
       scorchedMask = ImageIO.read(new File("tile_images/scorched_mask.png"));
@@ -269,17 +274,13 @@ public class ZombiePanel extends JPanel implements KeyListener
     g2d.fillRect(0, 0, blacknessImage.getWidth(), blacknessImage.getHeight());
 
   }
-  public BufferedImage getPlayerImage()
-  {
-    return playerSprite;
-  }
+
   private int fiveSeconds = 5000;
   private Timer pickUpFiretrap = new Timer(fiveSeconds, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e)
     {
       gameController.userPlayer.takeFiretrap();
-      //System.out.println("Picking up firetrap " + gameController.userPlayer.getTotalFiretraps());
       Level.map[gameController.userPlayer.getX()][gameController.userPlayer.getY()].setType(gameController.FLOOR);
       gameController.userPlayer.setCanMove(true);
     }
@@ -405,7 +406,6 @@ public class ZombiePanel extends JPanel implements KeyListener
   @Override
   public void keyTyped(KeyEvent e)
   {
-
   }
 
   private void debugPrintLocations()
@@ -500,7 +500,6 @@ public class ZombiePanel extends JPanel implements KeyListener
       //    }
     }
 
-    //combusting a tile slightly causes some lag
 
     for (int i =0; i < Level.width;i++)
     {
@@ -632,8 +631,7 @@ public class ZombiePanel extends JPanel implements KeyListener
     g2d.setComposite(alphaComposite);
     //g2d.setPaint(Color.BLUE);
 
-    for(int i = 0; i < visibilityPolygons.size(); i++)
-    {
+    for(int i = 0; i < visibilityPolygons.size(); i++) {
       g2d.fillPolygon(visibilityPolygons.get(i));
     }
 

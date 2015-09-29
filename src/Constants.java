@@ -5,7 +5,6 @@ public class Constants {
 
   final int FLOOR = 0;
   final int WALL = 1;
-  //NOTICE THIS IS 1 FOR NOW SO MAP LOADING DOESNT GET MESSED UP  WILL NEED TO HAVE MASK APPLIED LATER
   final int SCORCHED_WALL = 1;
   final int PILLAR = 2;
   final int EXIT = 3;
@@ -103,8 +102,6 @@ public class Constants {
   int SIZE = 80;
 
   final int TOTAL_DIRECTIONS = 8;
-  final int FOUR_CARDINAL_DIRECTIONS = 4;
-
 
   //used to find blocks around tile
   //Directions          NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST

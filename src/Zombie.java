@@ -217,9 +217,6 @@ public class Zombie extends Entity
     {
       sniffForPlayer();
     }
-
-    //since animation stops on wall hit,
-    //this restarts animation for zombies
     if (hitwall())
     {
       hitWallCounter+=1;
@@ -227,18 +224,6 @@ public class Zombie extends Entity
     }
     if (smellPlayer)
     {
-      //if (hitwall())
-     // {
-       // setHitWall(false);
-    //    chasePlayer(FOUR_CARDINAL_DIRECTIONS);
-    //  }
-   //   else
-   //   {
-
- //     }
-      //movement queue is created when chaseplayer is called
-      //the movement queue is a list of shortest path tiles to player
-      //this if statment figures out what direction the zombie needs to face and animate in
       Tile nextTile = chasePlayer(TOTAL_DIRECTIONS);
       if (nextTile != null)
       {
@@ -264,7 +249,6 @@ public class Zombie extends Entity
           setAnimationDirection(ANIMATION_TOP_WALKING);
           moveZombieUp = true;
         }
-          //movementQueue.removeLast();
       }
     }
     else if (lineZombie)
@@ -300,8 +284,8 @@ public class Zombie extends Entity
     startAnimation();
   }
 
-  public void move() {
-
+  public void move()
+  {
     super.move(moveZombieUp, moveZombieDown, moveZombieRight, moveZombieLeft);
   }
 
@@ -322,17 +306,7 @@ public class Zombie extends Entity
         map[i][j].parent = null;
       }
     }
-    //movementQueue = new LinkedList<>();
     findBestPath(start, end, map, numberOfFrontierDirections);
-    //while (next != null )
-    //{
-   // /  movementQueue.addLast(next);
-   // /  next = next.parent;
-    //  if (next == start)
-  //    {
- //       break;
- //     }
-   // }
     return end.parent;
   }
 
