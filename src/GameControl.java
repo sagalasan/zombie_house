@@ -228,7 +228,6 @@ public class GameControl extends Constants
     reference.setStartY(level.getStartRoomY());
     reference.setExitX(level.getExitRoomX());
     reference.setExitY(level.getStartExitY());
-
     userPlayer = new Player(level.getStartRoomX(), level.getStartRoomY());
     //could possibly clone zombielist so level will always have the original info for reloading
     zombieReactionTimer.setInitialDelay(0);

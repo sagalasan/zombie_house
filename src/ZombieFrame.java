@@ -16,21 +16,85 @@ public class ZombieFrame extends JFrame implements KeyListener{
   JButton button;
   JButton exit;
   JLabel welcomeText;
-  ImageIcon buttonBackground;
-  ImageIcon headerBackground;
-  boolean panelIsOpen = false;
+  private ImageIcon buttonBackground;
+  private ImageIcon headerBackground;
 
-  JSpinner playerSight = new JSpinner();
-  JSpinner playerSpeed = new JSpinner();
-  JSpinner playerRunSpeed = new JSpinner();
-  JSpinner playerHearing = new JSpinner();
-  JSpinner playerStamina = new JSpinner();
-  JSpinner playerStaminaRegen = new JSpinner();
-  JSpinner zombieSpawnRate = new JSpinner();
-  JSpinner zombieSpeed = new JSpinner();
-  JSpinner zombieDecisionRate = new JSpinner();
-  JSpinner zombieSmell = new JSpinner();
-  JSpinner firetrapSpawnRate = new JSpinner();
+  //values for playerStaminaRegen
+  private double min1 = 0.000;
+  private double value1 = 0.2;
+  private double max1 = 1.000;
+  private double stepSize1 = 0.05;
+  private SpinnerNumberModel modelPlayerStaminaRegen = new SpinnerNumberModel(value1, min1, max1, stepSize1);
+  //Player speed
+  private double min2 = 0.000;
+  private double value2 = 1.0;
+  private double max2 = 10.00;
+  private double stepSize2 = 0.25;
+  SpinnerNumberModel modelPlayerSpeed = new SpinnerNumberModel(value2, min2, max2, stepSize2);
+  //Player run speed
+  private double min4 = 0.000;
+  private double value4 = 2.0;
+  private double max4 = 12.00;
+  private double stepSize4 = 0.25;
+  SpinnerNumberModel modelPlayerRunSpeed = new SpinnerNumberModel(value4, min4, max4, stepSize4);
+  //Player hearing
+  private double min5 = 0.000;
+  private double value5 = 10.0;
+  private double max5 = 20.00;
+  private double stepSize5 = 1.0;
+  SpinnerNumberModel modelPlayerHearing = new SpinnerNumberModel(value5, min5, max5, stepSize5);
+  //Player stamina
+  private double min6 = 0.000;
+  private double value6 = 10.0;
+  private double max6 = 20.00;
+  private double stepSize6 = 1.0;
+  SpinnerNumberModel modelPlayerStamina = new SpinnerNumberModel(value6, min6, max6, stepSize6);
+  //Zombie Speed
+  private double min7 = 0.000;
+  private double value7 = 5.0;
+  private double max7 = 20.00;
+  private double stepSize7 = 0.5;
+  SpinnerNumberModel modelZombieSpeed = new SpinnerNumberModel(value7, min7, max7, stepSize7);
+  //Zombie Spawn Rate
+  private double min8 = 0.000;
+  private double value8 = 0.010;
+  private double max8 = 1.00;
+  private double stepSize8 = 0.01;
+  SpinnerNumberModel modelZombieSpawnRate = new SpinnerNumberModel(value8, min8, max8, stepSize8);
+  //Firetrap spawn rate
+  private double min9 = 0.000;
+  private double value9 = 0.010;
+  private double max9 = 1.00;
+  private double stepSize9 = 0.01;
+  SpinnerNumberModel modelFiretrapSpawnRate= new SpinnerNumberModel(value9, min9, max9, stepSize9);
+  //spinners with int values
+  private JSpinner playerSight = new JSpinner();
+  private JSpinner zombieDecisionRate = new JSpinner();
+  private JSpinner zombieSmell = new JSpinner();
+
+  //spinners with double values
+  private JSpinner playerSpeed = new JSpinner(modelPlayerSpeed);
+  private JSpinner playerRunSpeed = new JSpinner(modelPlayerRunSpeed);
+  private JSpinner playerHearing = new JSpinner(modelPlayerHearing);
+  private JSpinner playerStamina = new JSpinner(modelPlayerStamina);
+  private JSpinner playerStaminaRegen = new JSpinner(modelPlayerStaminaRegen);
+  private JSpinner zombieSpawnRate = new JSpinner(modelZombieSpawnRate);
+  private JSpinner zombieSpeed = new JSpinner(modelZombieSpeed);
+  private JSpinner firetrapSpawnRate = new JSpinner(modelFiretrapSpawnRate);
+
+  private int pSight = 5;
+  private double pSpeed = 1;
+  private double pRunSpeed = 2;
+  private double pHearing = 10;
+  private double pStamina = 5;
+  private double pStaminaRegen = .20;
+  private double zSpawnRate = 0.010;
+  private double zSpeed = 0.5;
+  private int zDecisionRate = 2000;
+  private int zSmell = 7;
+  private double firetrapSpawn = 0.010;
+
+
 
 
   Object[] message = {
@@ -42,13 +106,18 @@ public class ZombieFrame extends JFrame implements KeyListener{
           "Player stamina regen:", playerStaminaRegen,
           "Zombie spawn rate:", zombieSpawnRate,
           "Zombie speed:", zombieSpeed,
-          "Zombie decision rate:", zombieDecisionRate,
+          "Zombie decision rate (seconds):", zombieDecisionRate,
           "Zombie smell", zombieSmell,
           "Firetrap spawn rate", firetrapSpawnRate,
   };
 
   public ZombieFrame()
   {
+    playerSight.setValue(new Integer(5));
+    zombieDecisionRate.setValue(new Integer(2));
+    zombieSmell.setValue(new Integer(7));
+
+
     this.setLayout(new BorderLayout());
     //this.setContentPane(new JLabel(new ImageIcon("tile_images/background.png")));
     JLabel background = new JLabel(new ImageIcon(("tile_images/background.png")));
@@ -105,8 +174,6 @@ public class ZombieFrame extends JFrame implements KeyListener{
         sendRefernece();
         setFocusable(false);
 
-
-
       }
     });
 
@@ -117,13 +184,8 @@ public class ZombieFrame extends JFrame implements KeyListener{
       }
     });
 
-
-
     this.setVisible(true);
     this.pack();
-
-
-
 
   }
 
@@ -131,35 +193,47 @@ public class ZombieFrame extends JFrame implements KeyListener{
   public void keyReleased(KeyEvent e) {
     if(e.getKeyCode()== KeyEvent.VK_I)
     {
-        int option = JOptionPane.showConfirmDialog(this, message, "Enter all your values", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION)
-        {
-          //set constants
-          panel.gameController.constants.setPlayerSight((int)playerSight.getValue());
-          panel.gameController.constants.setPlayerDefaultSpeed((int)playerSpeed.getValue());
-          panel.gameController.constants.setPlayerRunSpeed((int)playerRunSpeed.getValue());
-          panel.gameController.constants.setPlayerHearing((int)playerHearing.getValue());
-          panel.gameController.constants.setPlayerStamina((int)playerStamina.getValue());
-          panel.gameController.constants.setPlayerStaminaRegen((int)playerStaminaRegen.getValue());
-          panel.gameController.constants.setZombieSpawnRate((int)zombieSpawnRate.getValue());
-          panel.gameController.constants.setZombieDefaultSpeed((int)zombieSpeed.getValue());
-          panel.gameController.constants.setZombieDecisionRate((int)zombieDecisionRate.getValue());
-          panel.gameController.constants.setFireTrapSpawnRate((int)zombieSmell.getValue());
-
-      }
-
+      changeDefaultValues();
     }
   }
 
-  public void setPanelIsOpen(boolean b)
-  {
 
-    panelIsOpen = b;
-  }
-  public boolean getPanelIsOpen()
+  public void changeDefaultValues()
   {
-    return panelIsOpen;
+    int option = JOptionPane.showConfirmDialog(this, message, "Enter all your values", JOptionPane.OK_CANCEL_OPTION);
+    if (option == JOptionPane.OK_OPTION)
+    {
+      //set constants
+      pSight = (int) playerSight.getValue();
+      pSpeed = (double) playerSpeed.getValue();
+      pRunSpeed = (double) playerRunSpeed.getValue();
+      pHearing = (double) playerHearing.getValue();
+      pStamina = (double) playerStamina.getValue();
+      pStaminaRegen = (double) playerStaminaRegen.getValue();
+      zSpawnRate = (double) zombieSpawnRate.getValue();
+      zSpeed = (double) zombieSpeed.getValue();
+      zDecisionRate = (int) zombieDecisionRate.getValue()*1000;
+      zSmell = (int) zombieSmell.getValue();
+      firetrapSpawn = (double) firetrapSpawnRate.getValue();
+    }
   }
+
+
+  public void setConstants()
+  {
+    panel.gameController.setPlayerSight(pSight);
+    panel.gameController.setPlayerDefaultSpeed(pSpeed);
+    panel.gameController.setPlayerRunSpeed(pRunSpeed);
+    panel.gameController.setPlayerHearing(pHearing);
+    panel.gameController.setPlayerStamina(pStamina);
+    panel.gameController.setPlayerStaminaRegen(pStaminaRegen);
+    panel.gameController.setZombieSpawnRate(zSpawnRate);
+    panel.gameController.setZombieDefaultSpeed(zSpeed);
+    panel.gameController.setZombieDecisionRate(zDecisionRate);
+    panel.gameController.setZombieSmell(zSmell);
+    panel.gameController.setFiretrapSpawnRate(firetrapSpawn);
+  }
+
 
   public void sendRefernece()
   {
