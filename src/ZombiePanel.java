@@ -19,7 +19,6 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
   private static final int DEFAULT_WIDTH = 1920;
   private static final int DEFAULT_HEIGHT = 1080;
   private int width, height;
-  //Level level = new Level();
 
   //paints buffered image of map and characters on top
   GameControl gameController;
@@ -65,10 +64,10 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
     width = DEFAULT_WIDTH;
     height = DEFAULT_HEIGHT;
 
-
+    //create a new game controller and add initial images
+    //and key listner, create visibility class
     gameController = new GameControl(this);
     tileSize = gameController.SIZE;
-    //addComponentListener(this);
     addKeyListener(this);
     initializeImages();
     constructArrayImages();
@@ -116,34 +115,36 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
             choices,
             defaultChoice);
 
+    //if user chooses 1 then they get a dialog to change the in game settings
     if(response == 1)
     {
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
       frame.changeDefaultValues();
-
     }
-    else if(response == 0)
+    else if(response == 0) //proceede to the next level
     {
-
-
+      //set the game state to false to notify that the player
+      //did not die and to hold the new map values
       gameState = false;
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
-
       levelNumber++;
+      //reset the players firetraps to 0
       gameController.userPlayer.setTotalFiretraps(0);
       setLevelNumber(levelNumber);
+      //reset sounds
       gameController.zombieHitWallSound.stop();
       gameController.zombieWalkSound.stop();
       gameController.userPlayer.stopWalkingSound();
       gameController.userPlayer.stopRunningSound();
       gameController.userPlayer.speed = 0;
-      //****************************************************************************************
+      //************************************************************
       //this line is associated with causing the clone() method to
       //cuause a concurrent exception.
       gameController.zombieList.clear();
 
+      //reset player stats when a new level starts
       gameController.userPlayer.setMovePlayerLeft(false);
       gameController.userPlayer.setMovePlayerRight(false);
       gameController.userPlayer.setMovePlayerUp(false);

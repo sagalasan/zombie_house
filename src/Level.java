@@ -10,8 +10,6 @@ import java.util.Random;
  *
  */
 
-
-//gaurav.munjal.us/universal-LPC-Spritesheet-Character-Generator/#
 public class Level extends Constants {
 
   static Tile[][] map;
@@ -30,13 +28,14 @@ public class Level extends Constants {
 
   ArrayList<Tile> possiblePlayerTiles = new ArrayList<>();
 
-
+  /**@param n takes the level number and uses it to change variables
+   *          as the player progresses through different levels
+   *
+   * */
   public Level(int n)
   {
-    //creates map, use helper methods later
+    //creates map, useing helper methods later
     levelNumber = n;
-
-    //System.out.println("Using NEW map");
 
     map = new Tile[width][height];
 
@@ -48,16 +47,15 @@ public class Level extends Constants {
       }
     }
 
-    //TODO if level is complete reset this, maybe.
     mapGen();
 
   }
 
-  //this constructor is used if the player dies
-  public Level(int n, Tile[][] t)
+  /**This constructor is used if the player dies
+  */
+   public Level(int n, Tile[][] t)
   {
     levelNumber = n;
-    //System.out.println("Using old map");
     map = t;
   }
 
@@ -151,8 +149,8 @@ public class Level extends Constants {
             }
             if(rooms == 0)
             {
-              setStartX(startX = rec.room.x + j);
-              setStartY(startY = rec.room.y + i);
+              setStartX(startX = rec.room.x+1 + j);
+              setStartY(startY = rec.room.y+1 + i);
               System.out.println("Starting room" + startX + "x" + startY);
             }
             rooms++;
@@ -163,19 +161,18 @@ public class Level extends Constants {
     zombieList.add(masterZombie);
 
 
-
-    //this loop created the halls and is not working correctly, currently is
-    //allows the hall to be created out of bounds and sometimes does not complete the room
+    /**This code creates the hallways
+     * */
     int currentRoom = 0;
     for (Rectangle rec : r)
     {
       if (rec.room != null)
       {
         Rectangle c = findClosest(rec.room, currentRoom);
-        int firstX = rnd.nextInt((rec.room.height+rec.room.x) - rec.room.x)+rec.room.x;
-        int firstY = rnd.nextInt((rec.room.width+rec.room.y) - rec.room.y)+rec.room.y;
-        int secondX = rnd.nextInt((c.room.height+c.room.x) - c.room.x)+c.room.x;
-        int secondY = rnd.nextInt((c.room.width+c.room.y) - c.room.y)+c.room.y;
+        int firstX = rnd.nextInt((rec.room.height-2+rec.room.x+2) - rec.room.x)+rec.room.x;
+        int firstY = rnd.nextInt((rec.room.width-2+rec.room.y+2) - rec.room.y)+rec.room.y;
+        int secondX = rnd.nextInt((c.room.height-2+c.room.x+2) - c.room.x)+c.room.x;
+        int secondY = rnd.nextInt((c.room.width-2+c.room.y+2) - c.room.y)+c.room.y;
 
         //walk to the nearest x then to the nearest y
         while(secondX != firstX || secondY != firstY)
@@ -323,6 +320,9 @@ public class Level extends Constants {
   }
 
 
+  /**
+   * game copy of the map for use if player is dead
+   * */
   public void setGameCopy(Tile[][] cm)
   {
     map = cm;
@@ -332,7 +332,9 @@ public class Level extends Constants {
   {
     return map;
   }
-
+  /**
+   * game copy of zombies
+   * */
   public void setZombieList(ArrayList<Zombie> zl)
   {
     zombieList = zl;
