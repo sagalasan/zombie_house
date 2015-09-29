@@ -13,12 +13,12 @@ public class Constants {
   final int BLACKNESS = 6;
   final int FIRETRAP = 7;
 
-  double PLAYER_DEFAULT_SPEED = 10.0;
-  double PLAYER_RUN_SPEED = 2.0;
-  double PLAYER_DEFAULT_STAMINA = 5.0;
-  double PLAYER_REGEN_STAMINA = .20;
-  double PLAYER_HEARING_DISTANCE = 10;
-  int PLAYER_SIGHT = 5;
+  static double PLAYER_DEFAULT_SPEED = 10.0;
+  static double PLAYER_RUN_SPEED = 2.0;
+  static double PLAYER_DEFAULT_STAMINA = 5.0;
+  static double PLAYER_REGEN_STAMINA = .20;
+  static double PLAYER_HEARING_DISTANCE = 10;
+  static int PLAYER_SIGHT = 5;
 
   /**
    *
@@ -79,6 +79,11 @@ public class Constants {
   {
     FIRETRAP_SPAWN_RATE = newFiretrapSpawnRate;
   }
+
+  public double getPLAYER_DEFAULT_SPEED()
+  {
+    return PLAYER_DEFAULT_SPEED;
+  }
   final int PLAYER_SPRITE_HEIGHT = 60;
   final int PLAYER_SPRITE_WIDTH = 40;
   final int PLAYER_FEET_PIXEL_Y = 40;
@@ -94,20 +99,20 @@ public class Constants {
   final int ANIMATION_WIDTH = 33;
   final int ANIMATION_HEIGHT= 50;
 
-  double FIRETRAP_SPAWN_RATE = 0.010;
+  static double FIRETRAP_SPAWN_RATE = 0.010;
   final int FIRE_ANIMATION_HEIGHT = 60;
   final  int FIRE_ANIMATION_WIDTH = 40;
 
-  double PILLAR_SPAWN_RATE = 0.080;
+  static double PILLAR_SPAWN_RATE = 0.080;
 
   int SPRITE_SPREAD_DISTANCE = 64;
 
-  double MASTER_ZOMBIE_SPEED = 1.0;
-  double ZOMBIE_DEFAULT_SPEED = .50;
-  double ZOMBIE_SMELL = 7.0;
-  double ZOMBIE_SPAWN_RATE = .010;
+  static double MASTER_ZOMBIE_SPEED = 1.0;
+  static double ZOMBIE_DEFAULT_SPEED = .50;
+  static double ZOMBIE_SMELL = 7.0;
+  static double ZOMBIE_SPAWN_RATE = .010;
   final double ZOMBIE_RANDOM_OR_LINE_RATE = .50;
-  int ZOMBIE_DECISION_RATE = 2000;
+  static int ZOMBIE_DECISION_RATE = 2000;
 
   int SIZE = 80;
 

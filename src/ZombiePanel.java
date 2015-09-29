@@ -108,10 +108,15 @@ public class ZombiePanel extends JPanel implements KeyListener
 
     if(response == 1)
     {
+      gameController.zombieReactionTimer.stop();
+      gameController.guiTimer.stop();
       frame.changeDefaultValues();
+
     }
     else if(response == 0)
     {
+
+
       gameState = false;
       gameController.zombieReactionTimer.stop();
       gameController.guiTimer.stop();
@@ -139,10 +144,13 @@ public class ZombiePanel extends JPanel implements KeyListener
       gameController.masterZombie = null;
       gameController.userPlayer = null;
 
+      frame.setConstants();
 
       gameController = new GameControl(this);
+
       constructArrayImages();
       constructBufferedImage();
+
       }
 
     }

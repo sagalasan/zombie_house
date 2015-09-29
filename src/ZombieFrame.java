@@ -171,7 +171,7 @@ public class ZombieFrame extends JFrame implements KeyListener{
         button.setVisible(false);
         welcomeText.setVisible(false);
         exit.setVisible(false);
-        sendRefernece();
+        sendReference();
         setFocusable(false);
 
       }
@@ -235,7 +235,7 @@ public class ZombieFrame extends JFrame implements KeyListener{
   }
 
 
-  public void sendRefernece()
+  public void sendReference()
   {
     panel.setReference(this);
   }

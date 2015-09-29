@@ -88,12 +88,6 @@ public class GameControl extends Constants
           && playerTile.getType() == FIRETRAP)
       {
         playerTile.explode();
-        //userPlayer.setAlive(false);
-        //todo reset game if player dead
-        //
-        // resetGame
-
-        //reference.resetGame();
       }
       if (playerTile.isCombusting() && userPlayer.getBoundingRectangleForFire().intersects(playerTile.getBoundingRectangle()))
       {

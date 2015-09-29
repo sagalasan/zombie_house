@@ -182,6 +182,7 @@ public abstract class Entity extends Constants
     //if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
     //        || Level.map[x][y].getType() == PILLAR || Level.map[x][y+1].getType() == EXIT)
     //if wall, black, or pillar
+    //and does not collide with another object
     if (x >= 0 && x < Level.width && y >= 0 && y < Level.height)
     {
       if (Level.map[x][y].getType() == WALL || Level.map[x][y].getType() == BLACKNESS
@@ -210,9 +211,9 @@ public abstract class Entity extends Constants
     {
       for (int j = -1; j < 2; j++)
       {
-        if (Level.map[i+x][j+y].getType() == WALL || Level.map[i+x][j+y].getType() == PILLAR )
+        if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
         {
-          if (x+i >= 0 && x+i < Level.width && y+j >= 0 && y+j < Level.height)
+          if (Level.map[i+x][j+y].getType() == WALL || Level.map[i+x][j+y].getType() == PILLAR )
           {
             surroundingWalls.add(Level.map[i + x][j + y]);
           }
