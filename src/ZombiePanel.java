@@ -87,13 +87,18 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
 
   }
 
+  /**
+   * Sets reference for accessing
+   * @param f
+   */
   public void setReference(ZombieFrame f)
   {
     frame = f;
   }
 
-
-
+  /**
+   * Shows level complete dialog
+   */
   public void levelComplete()
   {
 
@@ -157,14 +162,12 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
       constructBufferedImage();
 
       }
-
     }
-
-
-
-
   }
 
+  /**
+   * Resests the game to the original state
+   */
   public void resetGame()
   {
     ImageIcon icon = null;
@@ -222,10 +225,19 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
 
   }
 
+  /**
+   * Manually set the current level
+   * @param n
+   */
   public void setLevelNumber(int n)
   {
    levelNumber = n;
   }
+
+  /**
+   * Returns the current level
+   * @return current level
+   */
   public int getLevelNumber()
   {
     return levelNumber;
@@ -305,6 +317,11 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
   });
 
 
+  /**
+   * All keys are tracked here.
+   * Global booleans are set in their respective classes.
+   * @param e
+   */
   //todo fix player walking so it looks more natural
   @Override
   public void keyPressed(KeyEvent e)
@@ -367,6 +384,10 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
     }
   }
 
+  /**
+   * Same as keyPressed except everything is set false instead
+   * @param e
+   */
   @Override
   public void keyReleased(KeyEvent e)
   {
@@ -430,7 +451,10 @@ public class ZombiePanel extends JPanel implements KeyListener, ComponentListene
   }
 
 
-
+  /**
+   * Draws everything on the the screen
+   * @param g
+   */
   @Override
   public void paintComponent(Graphics g)
   {
