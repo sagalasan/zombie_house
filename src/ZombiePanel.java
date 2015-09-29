@@ -92,43 +92,72 @@ public class ZombiePanel extends JPanel implements KeyListener
   public void levelComplete()
   {
 
-    JOptionPane.showMessageDialog(null, "Level " + levelNumber +
-            " Complete!\nLevel " + (levelNumber+1) +
-            " will begin loading after you press 'OK'.",
-            null,JOptionPane.PLAIN_MESSAGE);
+    Object[] choices = {"OK", "Change Defaults"};
+    Object defaultChoice = choices[0];
+    int response = 5;
+    while(response>0)
+    {
+    response = JOptionPane.showOptionDialog(null, "Level " + levelNumber +
+                    " Complete!\nLevel " + (levelNumber + 1) +
+                    " will begin loading after you press 'OK'.",
+            null,JOptionPane.PLAIN_MESSAGE,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            choices,
+            defaultChoice);
+
+    if(response == 1)
+    {
+      gameController.zombieReactionTimer.stop();
+      gameController.guiTimer.stop();
+      frame.changeDefaultValues();
+
+    }
+    else if(response == 0)
+    {
 
 
-    gameState = false;
-    gameController.zombieReactionTimer.stop();
-    gameController.guiTimer.stop();
+      gameState = false;
+      gameController.zombieReactionTimer.stop();
+      gameController.guiTimer.stop();
 
-    levelNumber++;
-    gameController.userPlayer.setTotalFiretraps(0);
-    setLevelNumber(levelNumber);
-    gameController.zombieHitWallSound.stop();
-    gameController.zombieWalkSound.stop();
-    gameController.userPlayer.stopWalkingSound();
-    gameController.userPlayer.stopRunningSound();
-    gameController.userPlayer.speed = 0;
-    //****************************************************************************************
-    //this line is associated with causing the clone() method to
-    //cuause a concurrent exception.
-    gameController.zombieList.clear();
+      levelNumber++;
+      gameController.userPlayer.setTotalFiretraps(0);
+      setLevelNumber(levelNumber);
+      gameController.zombieHitWallSound.stop();
+      gameController.zombieWalkSound.stop();
+      gameController.userPlayer.stopWalkingSound();
+      gameController.userPlayer.stopRunningSound();
+      gameController.userPlayer.speed = 0;
+      //****************************************************************************************
+      //this line is associated with causing the clone() method to
+      //cuause a concurrent exception.
+      gameController.zombieList.clear();
 
-    gameController.userPlayer.setMovePlayerLeft(false);
-    gameController.userPlayer.setMovePlayerRight(false);
-    gameController.userPlayer.setMovePlayerUp(false);
-    gameController.userPlayer.setMovePlayerDown(false);
-
-
-    gameController.userPlayer.setCanMove(false);
-    gameController.masterZombie = null;
-    gameController.userPlayer = null;
+      gameController.userPlayer.setMovePlayerLeft(false);
+      gameController.userPlayer.setMovePlayerRight(false);
+      gameController.userPlayer.setMovePlayerUp(false);
+      gameController.userPlayer.setMovePlayerDown(false);
 
 
-    gameController = new GameControl(this);
-    constructArrayImages();
-    constructBufferedImage();
+      gameController.userPlayer.setCanMove(false);
+      gameController.masterZombie = null;
+      gameController.userPlayer = null;
+
+      frame.setConstants();
+
+      gameController = new GameControl(this);
+
+      constructArrayImages();
+      constructBufferedImage();
+
+      }
+
+    }
+
+
+
+
   }
 
   public void resetGame()
@@ -147,7 +176,7 @@ public class ZombiePanel extends JPanel implements KeyListener
                     + "Would you like to play again?", "You're dead bro.",
             JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, icon);//icon can be any saved image
 
-    //If user chooses to reset then reset everythong and create a new gameController
+    //If user chooses to reset then reset everyting and create a new gameController
     if (reply == JOptionPane.YES_OPTION)
     {
       gameState = true;
@@ -183,7 +212,6 @@ public class ZombiePanel extends JPanel implements KeyListener
       frame.exit.setVisible(true);
       frame.setFocusable(true);
       this.setVisible(false);
-      frame.setPanelIsOpen(false);
 
     }
 
@@ -287,6 +315,10 @@ public class ZombiePanel extends JPanel implements KeyListener
     if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W)
     {
       gameController.userPlayer.setMovePlayerUp(true);
+    }
+    if (e.getKeyCode() == KeyEvent.VK_I)
+    {
+      frame.changeDefaultValues();
     }
     if(gameController.checkIfPlayerMoving() && gameController.userPlayer.canMove())
     {

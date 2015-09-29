@@ -30,7 +30,8 @@ public class Player extends Entity
   public Player(int x, int y)
   {
     super("Player", x, y);
-    setSpeed(PLAYER_DEFAULT_SPEED);
+    setSpeed(getPLAYER_DEFAULT_SPEED());
+    System.out.println("set player default speed to "+ PLAYER_DEFAULT_SPEED+ " "+ getPLAYER_DEFAULT_SPEED());
     setSpriteSheet(playerSpriteSheet);
     resetCurrentFrame();
   }

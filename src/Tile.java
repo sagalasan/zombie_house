@@ -15,9 +15,6 @@ import java.util.PriorityQueue;
  */
 public class Tile extends Constants {
 
-
-
-
   int x, y;
 
   //used for aStar pathfinding
