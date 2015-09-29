@@ -522,38 +522,12 @@ public class ZombiePanel extends JPanel implements KeyListener
 
     g.drawImage(gameController.userPlayer.getCurrentFrame() ,d.width / 2, d.height / 2,null );
 
-
-    /**
-    int zombieXPixel = GameControl.zombie1.getXPixel();
-    int zombieYPixel = GameControl.zombie1.getYPixel();
-    int zombieDrawX = offsetX + zombieXPixel;
-    int zombieDrawY = offsetY + zombieYPixel;
-    g.drawImage(GameControl.zombie1.getCurrentFrame() ,zombieDrawX, zombieDrawY ,null );
-
-     **/
-    // Will finish this later, I need to subtract this from a black image to get the proper visibility.
-    //drawCenteredImg(g, playerVisibleMask, d.width / 2, d.height / 2);
-    //g2d.setPaint(playerGradient);
-    //g2d.fillRect(d.width / 2, d.height / 2, playerSight, playerSight);\
-    //g2d.fillRect(0, 0, getWidth(), getHeight());
-
-    //Point2D center = new Point2D.Float(d.width / 2, d.height / 2);
-    //float radius = 150;
-    //float[] dist = {0.0f, 0.2f, 1.0f};
-    //Color[] colors = {Color.RED, Color.WHITE, Color.BLUE};
-    //RadialGradientPaint p =
-    //        new RadialGradientPaint(center, radius, dist, colors);
-    //g2d.setPaint(p);
-    //g2d.fillRect(d.width / 2, d.height / 2, (int) radius, (int) radius);
-    //createRayTracingPolygons(offsetX, offsetY);
-    long start = System.currentTimeMillis();
     createVisibilityMask(offsetX, offsetY);
 
     playerGradient = new RadialGradientPaint(getWidth() / 2, getHeight() / 2, playerSight, fractions, colors);
     g2d.setPaint(playerGradient);
     g2d.fillRect(0, 0, getWidth(), getHeight());
     g2d.drawImage(lightingMask, 0, 0, null);
-    System.out.println(System.currentTimeMillis() - start);
   }
 
   private void constructArrayImages()
