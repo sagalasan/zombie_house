@@ -558,14 +558,6 @@ public class ZombiePanel extends JPanel implements KeyListener
     g2d.drawImage(lightingMask, 0, 0, null);
   }
 
-  private void drawCenteredImg(Graphics g, BufferedImage img, int x, int y)
-  {
-    int drawX = img.getWidth() / 2;
-    int drawY = img.getHeight() / 2;
-
-    g.drawImage(img, x - drawX, y - drawY, null);
-  }
-
   private void constructArrayImages()
   {
     mapImages = new BufferedImage[Level.width][Level.height];
