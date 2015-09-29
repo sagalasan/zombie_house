@@ -20,7 +20,7 @@ public class GameControl extends Constants
  //static Zombie zombie1;
   ZombiePanel reference;
 
-  ArrayList<Zombie> zombieList;
+  static ArrayList<Zombie> zombieList;
   Zombie masterZombie;
   String zombieStepsFileName = "sound_files/zombie_footsteps.wav";
   String zombieWallBump= "sound_files/wall_hit_zombie.wav";

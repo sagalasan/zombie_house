@@ -20,6 +20,7 @@ public class Zombie extends Entity
   private boolean moveZombieRight;
   private boolean moveZombieLeft;
 
+  private int hitWallCounter = 0;
   private int startX, startY;
 
   private String lineZombieSpriteSheet = "character_images/line_zombie_sprite_sheet.png";
@@ -221,45 +222,49 @@ public class Zombie extends Entity
     //this restarts animation for zombies
     if (hitwall())
     {
+      hitWallCounter+=1;
       startAnimation();
     }
     if (smellPlayer)
     {
-      if (hitwall())
-      {
+      //if (hitwall())
+     // {
        // setHitWall(false);
-        chasePlayer(FOUR_CARDINAL_DIRECTIONS);
-      }
-      else
-      {
-        chasePlayer(TOTAL_DIRECTIONS);
-      }
+    //    chasePlayer(FOUR_CARDINAL_DIRECTIONS);
+    //  }
+   //   else
+   //   {
+
+ //     }
       //movement queue is created when chaseplayer is called
       //the movement queue is a list of shortest path tiles to player
       //this if statment figures out what direction the zombie needs to face and animate in
-      if (!movementQueue.isEmpty())
+      Tile nextTile = chasePlayer(TOTAL_DIRECTIONS);
+      if (nextTile != null)
       {
-        if (getX() > movementQueue.getLast().x)
+        setHitWall(false);
+
+        if (getXPixel() > nextTile.x * SIZE)
         {
           setAnimationDirection(ANIMATION_LEFT_WALKING);
           moveZombieLeft = true;
         }
-        if (getX() < movementQueue.getLast().x)
+        if (getXPixel()< nextTile.x * SIZE)
         {
           setAnimationDirection(ANIMATION_RIGHT_WALKING);
           moveZombieRight = true;
         }
-        if (getY() < movementQueue.getLast().y)
+        if (getY() < nextTile.y)
         {
           setAnimationDirection(ANIMATION_DOWN_WALKING);
           moveZombieDown = true;
         }
-        if (getY() > movementQueue.getLast().y)
+        if (getY() > nextTile.y)
         {
           setAnimationDirection(ANIMATION_TOP_WALKING);
           moveZombieUp = true;
         }
-        movementQueue.removeLast();
+          //movementQueue.removeLast();
       }
     }
     else if (lineZombie)
@@ -295,8 +300,7 @@ public class Zombie extends Entity
     startAnimation();
   }
 
-  public void move()
-  {
+  public void move() {
 
     super.move(moveZombieUp, moveZombieDown, moveZombieRight, moveZombieLeft);
   }
@@ -305,11 +309,11 @@ public class Zombie extends Entity
    * finds the shortest path to player
    * puts results in a queue that is called later to draw movements of zombie
    */
-  private void chasePlayer(int numberOfFrontierDirections)
+  private Tile chasePlayer(int numberOfFrontierDirections)
   {
-    Tile[][] map = Level.map.clone();
-    Tile start = map[getX()][getY()];
-    Tile end = map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()];
+    Tile[][] map = Level.map;//.clone();
+    Tile end = map[getX()][getY()];
+    Tile start = map[GameControl.userPlayer.getX()][GameControl.userPlayer.getY()];
     for (int i = 0; i< Level.width;i++)
     {
       for (int j = 0; j<Level.height;j++)
@@ -318,17 +322,18 @@ public class Zombie extends Entity
         map[i][j].parent = null;
       }
     }
-    movementQueue = new LinkedList<>();
-    Tile next = findBestPath(start, end, map, numberOfFrontierDirections);
-    while (next != null )
-    {
-      movementQueue.addLast(next);
-      next = next.parent;
-      if (next == start)
-      {
-        break;
-      }
-    }
+    //movementQueue = new LinkedList<>();
+    findBestPath(start, end, map, numberOfFrontierDirections);
+    //while (next != null )
+    //{
+   // /  movementQueue.addLast(next);
+   // /  next = next.parent;
+    //  if (next == start)
+  //    {
+ //       break;
+ //     }
+   // }
+    return end.parent;
   }
 
   /**
@@ -369,7 +374,7 @@ public class Zombie extends Entity
    *
    * @param start - the start zombie tile
    * @param end - the player tile
-   * @return the player tile which should have updated parents that follow up to the start zombie tile
+   * @return the end tile which's parent has the next tile to move in the direction of
    * @throws IndexOutOfBoundsException
    * Finds the shortest path between a zombie and player
    */

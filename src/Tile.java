@@ -145,11 +145,11 @@ public class Tile extends Constants {
 
   public java.awt.Rectangle getBoundingRectangle()
   {
-    return new Rectangle((int)getXPixel(), (int)getYPixel(), SIZE, SIZE);
+    return new Rectangle((int)getXPixel(), (int)getYPixel() , SIZE, SIZE);
   }
   public java.awt.Rectangle getRectangleForFiretrap()
   {
-    return new Rectangle((int)getXPixel(), (int)getYPixel() + SIZE /2, SIZE , SIZE );
+    return new Rectangle((int)getXPixel(), (int)getYPixel() + SIZE /2, SIZE , SIZE);
   }
 
   /**
